@@ -1,0 +1,23 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
+    
+
+namespace VBSAdmin.Models.VBSAdminModels
+{
+    public class Class
+    {
+        public int Id { get; set; }
+
+        [Required]
+        public string Name { get; set; }
+
+        [Required]
+        public Enums.ClassGrade Grade { get; set; }
+
+        [Required]
+        public Enums.ClassGender Gender { get; set; }
+    }
+}
