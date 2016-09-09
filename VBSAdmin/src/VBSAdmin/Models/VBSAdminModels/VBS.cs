@@ -21,11 +21,15 @@ namespace VBSAdmin.Models.VBSAdminModels
 
         public List<Session> Sessions { get; set; }
 
+        public List<Child> Children { get; set; }
+
+        public List<Guardian> Guardians { get; set; }
+
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime CreatedDate { get; set; }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public DateTime Timestamp { get; set; }
+        [Timestamp]
+        public byte[] Timestamp { get; set; }
 
 
         //TODO:

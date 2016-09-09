@@ -19,8 +19,10 @@ namespace VBSAdmin.Models.VBSAdminModels
         [Required]
         public string ContactName { get; set; }
         [Required]
+        [Phone]
         public string ContactPhone { get; set; }
         [Required]
+        [EmailAddress]
         public string ContactEmail { get; set; }
 
         public List<VBS> VBSList { get; set; }
@@ -28,7 +30,7 @@ namespace VBSAdmin.Models.VBSAdminModels
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime CreatedDate { get; set; }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public DateTime Timestamp { get; set; }
+        [Timestamp]
+        public byte[] Timestamp { get; set; }
     }
 }

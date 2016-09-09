@@ -15,7 +15,7 @@ namespace VBSAdmin.Models.VBSAdminModels
 
         public enum ClassGrade
         {
-            ThreeToFourYears=0,
+            PreSchool=0,
             PreK=1,
             Kindergarten=2,
             First=3,
