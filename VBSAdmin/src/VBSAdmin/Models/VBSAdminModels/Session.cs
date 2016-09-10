@@ -23,5 +23,7 @@ namespace VBSAdmin.Models.VBSAdminModels
         public int MaxChildren { get; set; }
 
         public List<Class> Classes { get; set; }
+
+        public List<Child> Children { get; set; }
     }
 }

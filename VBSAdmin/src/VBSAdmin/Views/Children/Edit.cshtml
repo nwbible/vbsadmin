@@ -1,0 +1,166 @@
+@model VBSAdmin.Models.VBSAdminModels.Child
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edit</h2>
+
+<form asp-action="Edit">
+    <div class="form-horizontal">
+        <h4>Child</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="Id" />
+        <div class="form-group">
+            <label asp-for="AllergiesDescription" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="AllergiesDescription" class="form-control" />
+                <span asp-validation-for="AllergiesDescription" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="ClassId" class="control-label col-md-2"></label>
+            <div class="col-md-10">
+                <select asp-for="ClassId" class="form-control" asp-items="ViewBag.ClassId"></select>
+                <span asp-validation-for="ClassId" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="CreatedDate" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="CreatedDate" class="form-control" />
+                <span asp-validation-for="CreatedDate" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="DateOfBirth" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="DateOfBirth" class="form-control" />
+                <span asp-validation-for="DateOfBirth" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <div class="checkbox">
+                    <input asp-for="DecisionMade" />
+                    <label asp-for="DecisionMade"></label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="FirstName" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Gender" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="Gender" class="form-control"></select>
+                <span asp-validation-for="Gender" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="GradeCompleted" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="GradeCompleted" class="form-control"></select>
+                <span asp-validation-for="GradeCompleted" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="GuardianId" class="control-label col-md-2"></label>
+            <div class="col-md-10">
+                <select asp-for="GuardianId" class="form-control" asp-items="ViewBag.GuardianId"></select>
+                <span asp-validation-for="GuardianId" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <div class="checkbox">
+                    <input asp-for="HasAllergies" />
+                    <label asp-for="HasAllergies"></label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <div class="checkbox">
+                    <input asp-for="HasMedicalCondition" />
+                    <label asp-for="HasMedicalCondition"></label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <div class="checkbox">
+                    <input asp-for="HasMedications" />
+                    <label asp-for="HasMedications"></label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="LastName" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="MedicalConditionDescription" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="MedicalConditionDescription" class="form-control" />
+                <span asp-validation-for="MedicalConditionDescription" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="MedicationDescription" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="MedicationDescription" class="form-control" />
+                <span asp-validation-for="MedicationDescription" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="PlaceChildWithRequest" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="PlaceChildWithRequest" class="form-control" />
+                <span asp-validation-for="PlaceChildWithRequest" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="SessionId" class="control-label col-md-2"></label>
+            <div class="col-md-10">
+                <select asp-for="SessionId" class="form-control" asp-items="ViewBag.SessionId"></select>
+                <span asp-validation-for="SessionId" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Timestamp" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Timestamp" class="form-control" />
+                <span asp-validation-for="Timestamp" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="VBSId" class="control-label col-md-2"></label>
+            <div class="col-md-10">
+                <select asp-for="VBSId" class="form-control" asp-items="ViewBag.VBSId"></select>
+                <span asp-validation-for="VBSId" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

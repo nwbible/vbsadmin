@@ -1,0 +1,119 @@
+@model IEnumerable<VBSAdmin.Models.VBSAdminModels.Child>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.AllergiesDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateOfBirth)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DecisionMade)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Gender)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GradeCompleted)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HasAllergies)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HasMedicalCondition)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HasMedications)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MedicalConditionDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MedicationDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PlaceChildWithRequest)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Timestamp)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.AllergiesDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateOfBirth)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DecisionMade)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Gender)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GradeCompleted)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HasAllergies)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HasMedicalCondition)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HasMedications)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MedicalConditionDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MedicationDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PlaceChildWithRequest)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Timestamp)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

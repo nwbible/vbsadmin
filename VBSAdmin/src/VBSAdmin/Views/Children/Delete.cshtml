@@ -1,0 +1,112 @@
+@model VBSAdmin.Models.VBSAdminModels.Child
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Child</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.AllergiesDescription)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AllergiesDescription)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CreatedDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DateOfBirth)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DateOfBirth)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DecisionMade)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DecisionMade)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Gender)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Gender)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.GradeCompleted)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.GradeCompleted)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.HasAllergies)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.HasAllergies)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.HasMedicalCondition)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.HasMedicalCondition)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.HasMedications)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.HasMedications)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.MedicalConditionDescription)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.MedicalConditionDescription)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.MedicationDescription)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.MedicationDescription)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PlaceChildWithRequest)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PlaceChildWithRequest)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Timestamp)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Timestamp)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </form>
+</div>

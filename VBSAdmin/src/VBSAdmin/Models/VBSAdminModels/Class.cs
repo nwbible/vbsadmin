@@ -21,7 +21,7 @@ namespace VBSAdmin.Models.VBSAdminModels
         [Required]
         public Enums.ClassGender Gender { get; set; }
 
-        [Required]
+        
         public int VBSId { get; set; }
 
         public int SessionId { get; set; }
