@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using VBSAdmin.Data;
 using VBSAdmin.Models;
 using VBSAdmin.Services;
+using VBSAdmin.Authorization;
 
 namespace VBSAdmin
 {
@@ -39,6 +41,10 @@ namespace VBSAdmin
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Add our custom authorization handler.
+            services.AddSingleton<IAuthorizationHandler, BelongsToTenantHandler>();
+
+
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
@@ -48,6 +54,12 @@ namespace VBSAdmin
                 .AddDefaultTokenProviders();
 
             services.AddMvc();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("SystemAdminOnly", policy => policy.RequireClaim("SystemAdmin"));
+                options.AddPolicy("BelongToTenant", policy => policy.Requirements.Add(new Authorization.BelongsToTenantRequirement()));
+            }); 
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();

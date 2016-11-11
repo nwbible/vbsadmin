@@ -22,7 +22,8 @@ namespace VBSAdmin
         // GET: Guardians
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Guardians.ToListAsync());
+            var applicationDbContext = _context.Guardians.Include(g => g.Session).Include(g => g.VBS);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Guardians/Details/5
@@ -45,6 +46,8 @@ namespace VBSAdmin
         // GET: Guardians/Create
         public IActionResult Create()
         {
+            ViewData["SessionId"] = new SelectList(_context.Sessions, "Id", "Period");
+            ViewData["VBSId"] = new SelectList(_context.VBS, "Id", "ThemeName");
             return View();
         }
 
@@ -53,7 +56,7 @@ namespace VBSAdmin
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Address1,Address2,AttendHostChurch,ChildRelationship,City,CreatedDate,Email,EmergencyContact,FirstName,HomeChurch,InvitedBy,LastName,PrimaryPhone,SecondaryPhone,SessionId,State,Timestamp,VBSId,Zip")] Guardian guardian)
+        public async Task<IActionResult> Create([Bind("Id,Address1,Address2,AttendHostChurch,ChildRelationship,City,Email,EmergencyContact,FirstName,HomeChurch,InvitedBy,LastName,PrimaryPhone,SecondaryPhone,SessionId,State,VBSId,Zip")] Guardian guardian)
         {
             if (ModelState.IsValid)
             {
@@ -61,6 +64,8 @@ namespace VBSAdmin
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
+            ViewData["SessionId"] = new SelectList(_context.Sessions, "Id", "Period", guardian.SessionId);
+            ViewData["VBSId"] = new SelectList(_context.VBS, "Id", "ThemeName", guardian.VBSId);
             return View(guardian);
         }
 
@@ -77,6 +82,8 @@ namespace VBSAdmin
             {
                 return NotFound();
             }
+            ViewData["SessionId"] = new SelectList(_context.Sessions, "Id", "Period", guardian.SessionId);
+            ViewData["VBSId"] = new SelectList(_context.VBS, "Id", "ThemeName", guardian.VBSId);
             return View(guardian);
         }
 
@@ -85,7 +92,7 @@ namespace VBSAdmin
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Address1,Address2,AttendHostChurch,ChildRelationship,City,CreatedDate,Email,EmergencyContact,FirstName,HomeChurch,InvitedBy,LastName,PrimaryPhone,SecondaryPhone,SessionId,State,Timestamp,VBSId,Zip")] Guardian guardian)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Address1,Address2,AttendHostChurch,ChildRelationship,City,Email,EmergencyContact,FirstName,HomeChurch,InvitedBy,LastName,PrimaryPhone,SecondaryPhone,SessionId,State,VBSId,Zip")] Guardian guardian)
         {
             if (id != guardian.Id)
             {
@@ -112,6 +119,8 @@ namespace VBSAdmin
                 }
                 return RedirectToAction("Index");
             }
+            ViewData["SessionId"] = new SelectList(_context.Sessions, "Id", "Period", guardian.SessionId);
+            ViewData["VBSId"] = new SelectList(_context.VBS, "Id", "ThemeName", guardian.VBSId);
             return View(guardian);
         }
 

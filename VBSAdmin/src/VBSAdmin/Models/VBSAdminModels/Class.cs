@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace VBSAdmin.Models.VBSAdminModels
 {
-    public class Class
+    public class Classroom
     {
         public int Id { get; set; }
 
@@ -21,17 +21,14 @@ namespace VBSAdmin.Models.VBSAdminModels
         [Required]
         public Enums.ClassGender Gender { get; set; }
 
-        
+        [Required]
         public int VBSId { get; set; }
+        public VBS VBS { get; set; }
 
+        [Required]
         public int SessionId { get; set; }
+        public Session Session { get; set; }
 
         public List<Child> Children { get; set; }
-
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public DateTime CreatedDate { get; set; }
-
-        [Timestamp]
-        public byte[] Timestamp { get; set; }
     }
 }

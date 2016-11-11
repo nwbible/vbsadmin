@@ -5,12 +5,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using VBSAdmin.Data;
 
-namespace VBSAdmin.Data.Migrations
+namespace VBSAdmin.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20161005220421_vbsadmin2")]
+    partial class vbsadmin2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.0-rtm-21431")
@@ -179,10 +180,7 @@ namespace VBSAdmin.Data.Migrations
 
                     b.Property<string>("AllergiesDescription");
 
-                    b.Property<int>("ClassId");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int?>("ClassroomId");
 
                     b.Property<DateTime>("DateOfBirth");
 
@@ -214,15 +212,11 @@ namespace VBSAdmin.Data.Migrations
 
                     b.Property<int>("SessionId");
 
-                    b.Property<byte[]>("Timestamp")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
-
                     b.Property<int>("VBSId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClassId");
+                    b.HasIndex("ClassroomId");
 
                     b.HasIndex("GuardianId");
 
@@ -233,12 +227,9 @@ namespace VBSAdmin.Data.Migrations
                     b.ToTable("Children");
                 });
 
-            modelBuilder.Entity("VBSAdmin.Models.VBSAdminModels.Class", b =>
+            modelBuilder.Entity("VBSAdmin.Models.VBSAdminModels.Classroom", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("Gender");
@@ -250,15 +241,13 @@ namespace VBSAdmin.Data.Migrations
 
                     b.Property<int>("SessionId");
 
-                    b.Property<byte[]>("Timestamp")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
-
                     b.Property<int>("VBSId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("SessionId");
+
+                    b.HasIndex("VBSId");
 
                     b.ToTable("Classes");
                 });
@@ -273,16 +262,13 @@ namespace VBSAdmin.Data.Migrations
 
                     b.Property<string>("Address2");
 
-                    b.Property<string>("AttendHostChurch");
+                    b.Property<bool>("AttendHostChurch");
 
                     b.Property<string>("ChildRelationship")
                         .IsRequired();
 
                     b.Property<string>("City")
                         .IsRequired();
-
-                    b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Email")
                         .IsRequired();
@@ -310,16 +296,14 @@ namespace VBSAdmin.Data.Migrations
                     b.Property<string>("State")
                         .IsRequired();
 
-                    b.Property<byte[]>("Timestamp")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
-
                     b.Property<int>("VBSId");
 
                     b.Property<string>("Zip")
                         .IsRequired();
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SessionId");
 
                     b.HasIndex("VBSId");
 
@@ -339,7 +323,7 @@ namespace VBSAdmin.Data.Migrations
 
                     b.Property<DateTime>("StartTime");
 
-                    b.Property<int?>("VBSId");
+                    b.Property<int>("VBSId");
 
                     b.HasKey("Id");
 
@@ -365,15 +349,8 @@ namespace VBSAdmin.Data.Migrations
                     b.Property<string>("ContactPhone")
                         .IsRequired();
 
-                    b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd();
-
                     b.Property<string>("Name")
                         .IsRequired();
-
-                    b.Property<byte[]>("Timestamp")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
 
                     b.HasKey("Id");
 
@@ -385,9 +362,6 @@ namespace VBSAdmin.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd();
-
                     b.Property<DateTime>("EndDate");
 
                     b.Property<DateTime>("StartDate");
@@ -396,10 +370,6 @@ namespace VBSAdmin.Data.Migrations
 
                     b.Property<string>("ThemeName")
                         .IsRequired();
-
-                    b.Property<byte[]>("Timestamp")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
 
                     b.HasKey("Id");
 
@@ -447,15 +417,13 @@ namespace VBSAdmin.Data.Migrations
 
             modelBuilder.Entity("VBSAdmin.Models.VBSAdminModels.Child", b =>
                 {
-                    b.HasOne("VBSAdmin.Models.VBSAdminModels.Class", "Class")
+                    b.HasOne("VBSAdmin.Models.VBSAdminModels.Classroom", "Classroom")
                         .WithMany("Children")
-                        .HasForeignKey("ClassId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ClassroomId");
 
                     b.HasOne("VBSAdmin.Models.VBSAdminModels.Guardian", "Guardian")
                         .WithMany("Children")
-                        .HasForeignKey("GuardianId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("GuardianId");
 
                     b.HasOne("VBSAdmin.Models.VBSAdminModels.Session", "Session")
                         .WithMany("Children")
@@ -466,27 +434,36 @@ namespace VBSAdmin.Data.Migrations
                         .HasForeignKey("VBSId");
                 });
 
-            modelBuilder.Entity("VBSAdmin.Models.VBSAdminModels.Class", b =>
+            modelBuilder.Entity("VBSAdmin.Models.VBSAdminModels.Classroom", b =>
                 {
-                    b.HasOne("VBSAdmin.Models.VBSAdminModels.Session")
+                    b.HasOne("VBSAdmin.Models.VBSAdminModels.Session", "Session")
                         .WithMany("Classes")
                         .HasForeignKey("SessionId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("VBSAdmin.Models.VBSAdminModels.VBS", "VBS")
+                        .WithMany("Classrooms")
+                        .HasForeignKey("VBSId");
                 });
 
             modelBuilder.Entity("VBSAdmin.Models.VBSAdminModels.Guardian", b =>
                 {
-                    b.HasOne("VBSAdmin.Models.VBSAdminModels.VBS")
-                        .WithMany("Guardians")
-                        .HasForeignKey("VBSId")
+                    b.HasOne("VBSAdmin.Models.VBSAdminModels.Session", "Session")
+                        .WithMany()
+                        .HasForeignKey("SessionId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("VBSAdmin.Models.VBSAdminModels.VBS", "VBS")
+                        .WithMany("Guardians")
+                        .HasForeignKey("VBSId");
                 });
 
             modelBuilder.Entity("VBSAdmin.Models.VBSAdminModels.Session", b =>
                 {
-                    b.HasOne("VBSAdmin.Models.VBSAdminModels.VBS")
+                    b.HasOne("VBSAdmin.Models.VBSAdminModels.VBS", "VBS")
                         .WithMany("Sessions")
-                        .HasForeignKey("VBSId");
+                        .HasForeignKey("VBSId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("VBSAdmin.Models.VBSAdminModels.VBS", b =>

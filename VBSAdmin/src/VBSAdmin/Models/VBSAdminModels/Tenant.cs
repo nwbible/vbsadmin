@@ -26,11 +26,5 @@ namespace VBSAdmin.Models.VBSAdminModels
         public string ContactEmail { get; set; }
 
         public List<VBS> VBSList { get; set; }
-
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public DateTime CreatedDate { get; set; }
-
-        [Timestamp]
-        public byte[] Timestamp { get; set; }
     }
 }

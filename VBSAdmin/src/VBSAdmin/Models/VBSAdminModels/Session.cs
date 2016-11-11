@@ -22,8 +22,12 @@ namespace VBSAdmin.Models.VBSAdminModels
         [Required]
         public int MaxChildren { get; set; }
 
-        public List<Class> Classes { get; set; }
+        public List<Classroom> Classes { get; set; }
 
         public List<Child> Children { get; set; }
+
+        [Required]
+        public int VBSId { get; set; }
+        public VBS VBS { get; set; }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,8 @@ using VBSAdmin.Models.VBSAdminModels;
 
 namespace VBSAdmin
 {
+
+    [Authorize(Policy = "BelongToTenant")]
     public class VBSController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -55,7 +58,7 @@ namespace VBSAdmin
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CreatedDate,EndDate,StartDate,TenantId,ThemeName,Timestamp")] VBS vBS)
+        public async Task<IActionResult> Create([Bind("Id,EndDate,StartDate,TenantId,ThemeName")] VBS vBS)
         {
             if (ModelState.IsValid)
             {
@@ -89,7 +92,7 @@ namespace VBSAdmin
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CreatedDate,EndDate,StartDate,TenantId,ThemeName,Timestamp")] VBS vBS)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,EndDate,StartDate,TenantId,ThemeName")] VBS vBS)
         {
             if (id != vBS.Id)
             {

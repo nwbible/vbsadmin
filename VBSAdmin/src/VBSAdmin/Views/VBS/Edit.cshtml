@@ -13,27 +13,6 @@
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="Id" />
         <div class="form-group">
-            <label asp-for="CreatedDate" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="CreatedDate" class="form-control" />
-                <span asp-validation-for="CreatedDate" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="EndDate" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="EndDate" class="form-control" />
-                <span asp-validation-for="EndDate" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="StartDate" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="StartDate" class="form-control" />
-                <span asp-validation-for="StartDate" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
             <label asp-for="TenantId" class="control-label col-md-2"></label>
             <div class="col-md-10">
                 <select asp-for="TenantId" class="form-control" asp-items="ViewBag.TenantId"></select>
@@ -48,10 +27,17 @@
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="Timestamp" class="col-md-2 control-label"></label>
+            <label asp-for="StartDate" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Timestamp" class="form-control" />
-                <span asp-validation-for="Timestamp" class="text-danger" />
+                <input asp-for="StartDate" class="form-control" />
+                <span asp-validation-for="StartDate" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="EndDate" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="EndDate" class="form-control" />
+                <span asp-validation-for="EndDate" class="text-danger" />
             </div>
         </div>
         <div class="form-group">

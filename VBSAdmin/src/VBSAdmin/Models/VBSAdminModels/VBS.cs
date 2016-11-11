@@ -11,6 +11,7 @@ namespace VBSAdmin.Models.VBSAdminModels
     {
         public int Id { get; set; }
         public Tenant Tenant { get; set; }
+        [Required]
         public int TenantId { get; set; }
         [Required]
         public string ThemeName { get; set; }
@@ -25,12 +26,7 @@ namespace VBSAdmin.Models.VBSAdminModels
 
         public List<Guardian> Guardians { get; set; }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public DateTime CreatedDate { get; set; }
-
-        [Timestamp]
-        public byte[] Timestamp { get; set; }
-
+        public List<Classroom> Classrooms { get; set; }
 
         //TODO:
         //Theme image

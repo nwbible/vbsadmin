@@ -3,13 +3,48 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
+using VBSAdmin.Models;
 
 namespace VBSAdmin.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly ILogger _logger;
+        private readonly IAuthorizationService authorizationService;
+
+
+        public HomeController(
+           UserManager<ApplicationUser> userMgr,
+           SignInManager<ApplicationUser> signInMgr,
+           ILoggerFactory loggerFactory,
+           IAuthorizationService authorizationSvc)
+        {
+            userManager = userMgr;
+            signInManager = signInMgr;
+            authorizationService = authorizationSvc;
+            _logger = loggerFactory.CreateLogger<AccountController>();
+        }
+
         public IActionResult Index()
         {
+            if(signInManager.IsSignedIn(User))
+            {
+                var sysAdminClaim = User.Claims.FirstOrDefault(c => c.Type == "SystemAdmin");
+                if(sysAdminClaim != null && sysAdminClaim.Value.ToLower() == "true")
+                {
+                    return RedirectToAction("Index", "Tenants");
+                }
+                else
+                {
+                    return RedirectToAction("Index", "VBS");
+                }
+
+            }
             return View();
         }
 

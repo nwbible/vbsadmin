@@ -12,6 +12,26 @@
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
+            <label asp-for="VBSId" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="VBSId" class="form-control" asp-items="ViewBag.VBSId"></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Period" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="Period" class="form-control" asp-items="Html.GetEnumSelectList<VBSAdmin.Models.VBSAdminModels.Enums.SessionPeriod>()"></select>
+                <span asp-validation-for="Period" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="StartTime" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="StartTime" class="form-control" />
+                <span asp-validation-for="StartTime" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
             <label asp-for="EndTime" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <input asp-for="EndTime" class="form-control" />
@@ -23,20 +43,6 @@
             <div class="col-md-10">
                 <input asp-for="MaxChildren" class="form-control" />
                 <span asp-validation-for="MaxChildren" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Period" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <select asp-for="Period" class="form-control"></select>
-                <span asp-validation-for="Period" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="StartTime" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="StartTime" class="form-control" />
-                <span asp-validation-for="StartTime" class="text-danger" />
             </div>
         </div>
         <div class="form-group">

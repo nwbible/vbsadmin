@@ -36,8 +36,9 @@ namespace VBSAdmin.Models.VBSAdminModels
         public int GuardianId { get; set; }
         public Guardian Guardian { get; set; }
 
-        public int ClassId { get; set; }
-        public VBSAdminModels.Class Class { get; set; }
+        
+        public int? ClassroomId { get; set; }
+        public Classroom Classroom { get; set; }
 
         [Required]
         public int SessionId { get; set; }
@@ -46,11 +47,5 @@ namespace VBSAdmin.Models.VBSAdminModels
         [Required]
         public int VBSId { get; set; }
         public VBS VBS { get; set; }
-
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public DateTime CreatedDate { get; set; }
-
-        [Timestamp]
-        public byte[] Timestamp { get; set; }
     }
 }

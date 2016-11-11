@@ -22,7 +22,7 @@ namespace VBSAdmin
         // GET: Children
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Children.Include(c => c.Class).Include(c => c.Guardian).Include(c => c.Session).Include(c => c.VBS);
+            var applicationDbContext = _context.Children.Include(c => c.Guardian).Include(c => c.Session).Include(c => c.VBS);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -46,10 +46,10 @@ namespace VBSAdmin
         // GET: Children/Create
         public IActionResult Create()
         {
-            ViewData["ClassId"] = new SelectList(_context.Classes, "Id", "Name");
-            ViewData["GuardianId"] = new SelectList(_context.Guardians, "Id", "Address1");
-            ViewData["SessionId"] = new SelectList(_context.Sessions, "Id", "Id");
+            ViewData["GuardianId"] = new SelectList(_context.Guardians, "Id", "LastName");
+            ViewData["SessionId"] = new SelectList(_context.Sessions, "Id", "Period");
             ViewData["VBSId"] = new SelectList(_context.VBS, "Id", "ThemeName");
+            ViewData["ClassroomId"] = new SelectList(_context.Classes, "Id", "Name");
             return View();
         }
 
@@ -58,7 +58,7 @@ namespace VBSAdmin
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,AllergiesDescription,ClassId,CreatedDate,DateOfBirth,DecisionMade,FirstName,Gender,GradeCompleted,GuardianId,HasAllergies,HasMedicalCondition,HasMedications,LastName,MedicalConditionDescription,MedicationDescription,PlaceChildWithRequest,SessionId,Timestamp,VBSId")] Child child)
+        public async Task<IActionResult> Create([Bind("Id,AllergiesDescription,ClassroomId,DateOfBirth,DecisionMade,FirstName,Gender,GradeCompleted,GuardianId,HasAllergies,HasMedicalCondition,HasMedications,LastName,MedicalConditionDescription,MedicationDescription,PlaceChildWithRequest,SessionId,VBSId")] Child child)
         {
             if (ModelState.IsValid)
             {
@@ -66,10 +66,10 @@ namespace VBSAdmin
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewData["ClassId"] = new SelectList(_context.Classes, "Id", "Name", child.ClassId);
-            ViewData["GuardianId"] = new SelectList(_context.Guardians, "Id", "Address1", child.GuardianId);
-            ViewData["SessionId"] = new SelectList(_context.Sessions, "Id", "Id", child.SessionId);
+            ViewData["GuardianId"] = new SelectList(_context.Guardians, "Id", "LastName", child.GuardianId);
+            ViewData["SessionId"] = new SelectList(_context.Sessions, "Id", "Period", child.SessionId);
             ViewData["VBSId"] = new SelectList(_context.VBS, "Id", "ThemeName", child.VBSId);
+            ViewData["ClassroomId"] = new SelectList(_context.Classes, "Id", "Name");
             return View(child);
         }
 
@@ -86,10 +86,10 @@ namespace VBSAdmin
             {
                 return NotFound();
             }
-            ViewData["ClassId"] = new SelectList(_context.Classes, "Id", "Name", child.ClassId);
-            ViewData["GuardianId"] = new SelectList(_context.Guardians, "Id", "Address1", child.GuardianId);
-            ViewData["SessionId"] = new SelectList(_context.Sessions, "Id", "Id", child.SessionId);
+            ViewData["GuardianId"] = new SelectList(_context.Guardians, "Id", "LastName", child.GuardianId);
+            ViewData["SessionId"] = new SelectList(_context.Sessions, "Id", "Period", child.SessionId);
             ViewData["VBSId"] = new SelectList(_context.VBS, "Id", "ThemeName", child.VBSId);
+            ViewData["ClassroomId"] = new SelectList(_context.Classes, "Id", "Name");
             return View(child);
         }
 
@@ -98,7 +98,7 @@ namespace VBSAdmin
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,AllergiesDescription,ClassId,CreatedDate,DateOfBirth,DecisionMade,FirstName,Gender,GradeCompleted,GuardianId,HasAllergies,HasMedicalCondition,HasMedications,LastName,MedicalConditionDescription,MedicationDescription,PlaceChildWithRequest,SessionId,Timestamp,VBSId")] Child child)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,AllergiesDescription,ClassroomId,DateOfBirth,DecisionMade,FirstName,Gender,GradeCompleted,GuardianId,HasAllergies,HasMedicalCondition,HasMedications,LastName,MedicalConditionDescription,MedicationDescription,PlaceChildWithRequest,SessionId,VBSId")] Child child)
         {
             if (id != child.Id)
             {
@@ -125,10 +125,10 @@ namespace VBSAdmin
                 }
                 return RedirectToAction("Index");
             }
-            ViewData["ClassId"] = new SelectList(_context.Classes, "Id", "Name", child.ClassId);
-            ViewData["GuardianId"] = new SelectList(_context.Guardians, "Id", "Address1", child.GuardianId);
-            ViewData["SessionId"] = new SelectList(_context.Sessions, "Id", "Id", child.SessionId);
+            ViewData["GuardianId"] = new SelectList(_context.Guardians, "Id", "LastName", child.GuardianId);
+            ViewData["SessionId"] = new SelectList(_context.Sessions, "Id", "Period", child.SessionId);
             ViewData["VBSId"] = new SelectList(_context.VBS, "Id", "ThemeName", child.VBSId);
+            ViewData["ClassroomId"] = new SelectList(_context.Classes, "Id", "Name", child.ClassroomId);
             return View(child);
         }
 

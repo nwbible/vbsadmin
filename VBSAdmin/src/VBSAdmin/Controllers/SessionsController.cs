@@ -22,7 +22,8 @@ namespace VBSAdmin
         // GET: Sessions
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Sessions.ToListAsync());
+            var applicationDbContext = _context.Sessions.Include(s => s.VBS);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Sessions/Details/5
@@ -45,6 +46,7 @@ namespace VBSAdmin
         // GET: Sessions/Create
         public IActionResult Create()
         {
+            ViewData["VBSId"] = new SelectList(_context.VBS, "Id", "ThemeName");
             return View();
         }
 
@@ -53,7 +55,7 @@ namespace VBSAdmin
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,EndTime,MaxChildren,Period,StartTime")] Session session)
+        public async Task<IActionResult> Create([Bind("Id,EndTime,MaxChildren,Period,StartTime,VBSId")] Session session)
         {
             if (ModelState.IsValid)
             {
@@ -61,6 +63,7 @@ namespace VBSAdmin
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
+            ViewData["VBSId"] = new SelectList(_context.VBS, "Id", "ThemeName", session.VBSId);
             return View(session);
         }
 
@@ -77,6 +80,7 @@ namespace VBSAdmin
             {
                 return NotFound();
             }
+            ViewData["VBSId"] = new SelectList(_context.VBS, "Id", "ThemeName", session.VBSId);
             return View(session);
         }
 
@@ -85,7 +89,7 @@ namespace VBSAdmin
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,EndTime,MaxChildren,Period,StartTime")] Session session)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,EndTime,MaxChildren,Period,StartTime,VBSId")] Session session)
         {
             if (id != session.Id)
             {
@@ -112,6 +116,7 @@ namespace VBSAdmin
                 }
                 return RedirectToAction("Index");
             }
+            ViewData["VBSId"] = new SelectList(_context.VBS, "Id", "ThemeName", session.VBSId);
             return View(session);
         }
 

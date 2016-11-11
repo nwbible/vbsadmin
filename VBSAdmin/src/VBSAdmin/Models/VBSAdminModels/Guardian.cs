@@ -37,19 +37,17 @@ namespace VBSAdmin.Models.VBSAdminModels
         [Required]
         public string ChildRelationship { get; set; }
         public string HomeChurch { get; set; }
-        public string AttendHostChurch { get; set; }
+        public bool AttendHostChurch { get; set; }
         public string InvitedBy { get; set; }
 
+        [Required]
         public int VBSId { get; set; }
+        public VBS VBS { get; set; }
+
+        [Required]
         public int SessionId { get; set; }
+        public Session Session { get; set; }
 
         public List<Child> Children { get; set; }
-
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public DateTime CreatedDate { get; set; }
-
-        [Timestamp]
-        public byte[] Timestamp { get; set; }
-
     }
 }

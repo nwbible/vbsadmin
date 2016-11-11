@@ -1,4 +1,4 @@
-@model VBSAdmin.Models.VBSAdminModels.Class
+@model VBSAdmin.Models.VBSAdminModels.Classroom
 
 @{
     ViewData["Title"] = "Details";
@@ -7,15 +7,9 @@
 <h2>Details</h2>
 
 <div>
-    <h4>Class</h4>
+    <h4>Classroom</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.CreatedDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.CreatedDate)
-        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Gender)
         </dt>
@@ -33,18 +27,6 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Timestamp)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Timestamp)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.VBSId)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.VBSId)
         </dd>
     </dl>
 </div>

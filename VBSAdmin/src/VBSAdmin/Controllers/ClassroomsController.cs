@@ -10,22 +10,23 @@ using VBSAdmin.Models.VBSAdminModels;
 
 namespace VBSAdmin
 {
-    public class ClassesController : Controller
+    public class ClassroomsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public ClassesController(ApplicationDbContext context)
+        public ClassroomsController(ApplicationDbContext context)
         {
             _context = context;    
         }
 
-        // GET: Classes
+        // GET: Classrooms
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Classes.ToListAsync());
+            var applicationDbContext = _context.Classes.Include(c => c.Session).Include(c => c.VBS);
+            return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Classes/Details/5
+        // GET: Classrooms/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,38 +34,42 @@ namespace VBSAdmin
                 return NotFound();
             }
 
-            var @class = await _context.Classes.SingleOrDefaultAsync(m => m.Id == id);
-            if (@class == null)
+            var classroom = await _context.Classes.SingleOrDefaultAsync(m => m.Id == id);
+            if (classroom == null)
             {
                 return NotFound();
             }
 
-            return View(@class);
+            return View(classroom);
         }
 
-        // GET: Classes/Create
+        // GET: Classrooms/Create
         public IActionResult Create()
         {
+            ViewData["SessionId"] = new SelectList(_context.Sessions, "Id", "Period");
+            ViewData["VBSId"] = new SelectList(_context.VBS, "Id", "ThemeName");
             return View();
         }
 
-        // POST: Classes/Create
+        // POST: Classrooms/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CreatedDate,Gender,Grade,Name,SessionId,Timestamp,VBSId")] Class @class)
+        public async Task<IActionResult> Create([Bind("Id,Gender,Grade,Name,SessionId,VBSId")] Classroom classroom)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(@class);
+                _context.Add(classroom);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(@class);
+            ViewData["SessionId"] = new SelectList(_context.Sessions, "Id", "Period", classroom.SessionId);
+            ViewData["VBSId"] = new SelectList(_context.VBS, "Id", "ThemeName", classroom.VBSId);
+            return View(classroom);
         }
 
-        // GET: Classes/Edit/5
+        // GET: Classrooms/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -72,22 +77,24 @@ namespace VBSAdmin
                 return NotFound();
             }
 
-            var @class = await _context.Classes.SingleOrDefaultAsync(m => m.Id == id);
-            if (@class == null)
+            var classroom = await _context.Classes.SingleOrDefaultAsync(m => m.Id == id);
+            if (classroom == null)
             {
                 return NotFound();
             }
-            return View(@class);
+            ViewData["SessionId"] = new SelectList(_context.Sessions, "Id", "Period", classroom.SessionId);
+            ViewData["VBSId"] = new SelectList(_context.VBS, "Id", "ThemeName", classroom.VBSId);
+            return View(classroom);
         }
 
-        // POST: Classes/Edit/5
+        // POST: Classrooms/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CreatedDate,Gender,Grade,Name,SessionId,Timestamp,VBSId")] Class @class)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Gender,Grade,Name,SessionId,VBSId")] Classroom classroom)
         {
-            if (id != @class.Id)
+            if (id != classroom.Id)
             {
                 return NotFound();
             }
@@ -96,12 +103,12 @@ namespace VBSAdmin
             {
                 try
                 {
-                    _context.Update(@class);
+                    _context.Update(classroom);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ClassExists(@class.Id))
+                    if (!ClassroomExists(classroom.Id))
                     {
                         return NotFound();
                     }
@@ -112,10 +119,12 @@ namespace VBSAdmin
                 }
                 return RedirectToAction("Index");
             }
-            return View(@class);
+            ViewData["SessionId"] = new SelectList(_context.Sessions, "Id", "Period", classroom.SessionId);
+            ViewData["VBSId"] = new SelectList(_context.VBS, "Id", "ThemeName", classroom.VBSId);
+            return View(classroom);
         }
 
-        // GET: Classes/Delete/5
+        // GET: Classrooms/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -123,27 +132,27 @@ namespace VBSAdmin
                 return NotFound();
             }
 
-            var @class = await _context.Classes.SingleOrDefaultAsync(m => m.Id == id);
-            if (@class == null)
+            var classroom = await _context.Classes.SingleOrDefaultAsync(m => m.Id == id);
+            if (classroom == null)
             {
                 return NotFound();
             }
 
-            return View(@class);
+            return View(classroom);
         }
 
-        // POST: Classes/Delete/5
+        // POST: Classrooms/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var @class = await _context.Classes.SingleOrDefaultAsync(m => m.Id == id);
-            _context.Classes.Remove(@class);
+            var classroom = await _context.Classes.SingleOrDefaultAsync(m => m.Id == id);
+            _context.Classes.Remove(classroom);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        private bool ClassExists(int id)
+        private bool ClassroomExists(int id)
         {
             return _context.Classes.Any(e => e.Id == id);
         }

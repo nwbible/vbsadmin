@@ -16,7 +16,7 @@
                 @Html.DisplayNameFor(model => model.AllergiesDescription)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CreatedDate)
+                @Html.DisplayNameFor(model => model.ClassroomId)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.DateOfBirth)
@@ -54,9 +54,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.PlaceChildWithRequest)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Timestamp)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -67,7 +64,7 @@
                 @Html.DisplayFor(modelItem => item.AllergiesDescription)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CreatedDate)
+                @Html.DisplayFor(modelItem => item.ClassroomId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DateOfBirth)
@@ -104,9 +101,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.PlaceChildWithRequest)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Timestamp)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

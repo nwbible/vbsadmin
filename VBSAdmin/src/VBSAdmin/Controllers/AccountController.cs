@@ -63,6 +63,13 @@ namespace VBSAdmin.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(1, "User logged in.");
+
+                    //Add the tenant cookie
+                    var signedInUser = _userManager.FindByNameAsync(model.Email).Result;
+                    var claims = _userManager.GetClaimsAsync(signedInUser).Result;
+                    var tenantValue = claims.FirstOrDefault(c => c.Type == "Tenant").Value;
+                    Response.Cookies.Append("tenant", tenantValue);
+
                     return RedirectToLocal(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
@@ -109,6 +116,10 @@ namespace VBSAdmin.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    var claimResult = await _userManager.AddClaimAsync(user, new Claim(Authorization.ClaimsConstants.SystemAdmin, "True"));
+                    claimResult = await _userManager.AddClaimAsync(user, new Claim(Authorization.ClaimsConstants.Tenant, "*"));
+                    claimResult = await _userManager.AddClaimAsync(user, new Claim(Authorization.ClaimsConstants.TenantAdmin, "True"));
+
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
                     // Send an email with this link
                     //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

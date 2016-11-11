@@ -1,34 +1,28 @@
-@model VBSAdmin.Models.VBSAdminModels.Class
+@model VBSAdmin.Models.VBSAdminModels.Classroom
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
 }
 
-<h2>Create</h2>
+<h2>Edit</h2>
 
-<form asp-action="Create">
+<form asp-action="Edit">
     <div class="form-horizontal">
-        <h4>Class</h4>
+        <h4>Classroom</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form-group">
-            <label asp-for="CreatedDate" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="CreatedDate" class="form-control" />
-                <span asp-validation-for="CreatedDate" class="text-danger" />
-            </div>
-        </div>
+    <input type="hidden" asp-for="Id" />
         <div class="form-group">
             <label asp-for="Gender" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <select asp-for="Gender" class="form-control"></select>
+                <select asp-for="Gender" class="form-control" asp-items="Html.GetEnumSelectList<VBSAdmin.Models.VBSAdminModels.Enums.ClassGender>()"></select>
                 <span asp-validation-for="Gender" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
             <label asp-for="Grade" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <select asp-for="Grade" class="form-control"></select>
+                <select asp-for="Grade" class="form-control" asp-items="Html.GetEnumSelectList<VBSAdmin.Models.VBSAdminModels.Enums.ClassGrade>()"></select>
                 <span asp-validation-for="Grade" class="text-danger" />
             </div>
         </div>
@@ -40,21 +34,22 @@
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="SessionId" class="col-md-2 control-label"></label>
+            <label asp-for="SessionId" class="control-label col-md-2"></label>
             <div class="col-md-10">
-                <select asp-for="SessionId" class ="form-control" asp-items="ViewBag.SessionId"></select>
+                <select asp-for="SessionId" class="form-control" asp-items="ViewBag.SessionId"></select>
+                <span asp-validation-for="SessionId" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="VBSId" class="col-md-2 control-label"></label>
+            <label asp-for="VBSId" class="control-label col-md-2"></label>
             <div class="col-md-10">
-                <input asp-for="VBSId" class="form-control" />
+                <select asp-for="VBSId" class="form-control" asp-items="ViewBag.VBSId"></select>
                 <span asp-validation-for="VBSId" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Save" class="btn btn-default" />
             </div>
         </div>
     </div>

@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Authorization;
+
+@inject IAuthorizationService AuthorizationService
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -30,13 +34,10 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Tenants" asp-action="Index">Tenants</a></li>
-                    <li><a asp-area="" asp-controller="VBS" asp-action="Index">VBS</a></li>
-                    <li><a asp-area="" asp-controller="Sessions" asp-action="Index">Sessions</a></li>
-                    <li><a asp-area="" asp-controller="Classes" asp-action="Index">Classes</a></li>
-                    <li><a asp-area="" asp-controller="Guardians" asp-action="Index">Guardians</a></li>
-                    <li><a asp-area="" asp-controller="Children" asp-action="Index">Children</a></li>
+                    @if (await AuthorizationService.AuthorizeAsync(User, "SystemAdminOnly"))
+                    {
+                        <li><a asp-area="" asp-controller="Tenants" asp-action="Index">Tenant Management</a></li>
+                    }
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
                 </ul>
