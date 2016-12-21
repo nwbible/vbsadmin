@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using VBSAdmin.Data;
-using VBSAdmin.Models.VBSAdminModels;
+using VBSAdmin.Data.VBSAdminModels;
 
 namespace VBSAdmin
 {

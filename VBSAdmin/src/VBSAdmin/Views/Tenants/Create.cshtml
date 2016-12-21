@@ -1,4 +1,4 @@
-@model VBSAdmin.Models.VBSAdminModels.Tenant
+@model VBSAdmin.Models.TenantViewModels.CreateViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -44,6 +44,20 @@
             <div class="col-md-10">
                 <input asp-for="ContactPhone" class="form-control" />
                 <span asp-validation-for="ContactPhone" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Password" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="ConfirmPassword" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="ConfirmPassword" class="form-control" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">

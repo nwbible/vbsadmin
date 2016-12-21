@@ -10,7 +10,8 @@ namespace VBSAdmin.Authorization
     {
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, BelongsToTenantRequirement requirement)
         {
-            if (!context.User.HasClaim(c => c.Type == ClaimsConstants.Tenant))
+
+            if (!context.User.HasClaim(c => c.Type == Constants.TenantClaim))
             {
                 return Task.CompletedTask;
             }
@@ -22,10 +23,10 @@ namespace VBSAdmin.Authorization
 
             if(atzFilterContext != null)
             {
-                string tenantContext = atzFilterContext.HttpContext.Request.Cookies["tenant"];
+                string tenantContext = atzFilterContext.HttpContext.Request.Cookies[Constants.TenantClaim];
 
 
-                if (!String.IsNullOrEmpty(tenantContext) && context.User.HasClaim(ClaimsConstants.Tenant, tenantContext))
+                if (!String.IsNullOrEmpty(tenantContext) && context.User.HasClaim(Constants.TenantClaim, tenantContext))
                 {
                     context.Succeed(requirement);
                 }

@@ -1,4 +1,4 @@
-@model VBSAdmin.Models.VBSAdminModels.Classroom
+@model VBSAdmin.Data.VBSAdminModels.Classroom
 
 @{
     ViewData["Title"] = "Create";
@@ -12,16 +12,15 @@
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
-            <label asp-for="Gender" class="col-md-2 control-label"></label>
+            <label asp-for="SessionId" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <select asp-for="Gender" class="form-control" asp-items="Html.GetEnumSelectList<VBSAdmin.Models.VBSAdminModels.Enums.ClassGender>()"></select>
-                <span asp-validation-for="Gender" class="text-danger" />
+                <select asp-for="SessionId" class="form-control" asp-items="ViewBag.SessionId"></select>
             </div>
         </div>
         <div class="form-group">
             <label asp-for="Grade" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <select asp-for="Grade" class="form-control" asp-items="Html.GetEnumSelectList<VBSAdmin.Models.VBSAdminModels.Enums.ClassGrade>()"></select>
+                <select asp-for="Grade" class="form-control" asp-items="Html.GetEnumSelectList<VBSAdmin.Data.VBSAdminModels.Enums.ClassGrade>()"></select>
                 <span asp-validation-for="Grade" class="text-danger" />
             </div>
         </div>
@@ -33,15 +32,10 @@
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="SessionId" class="col-md-2 control-label"></label>
+            <label asp-for="Gender" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <select asp-for="SessionId" class ="form-control" asp-items="ViewBag.SessionId"></select>
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="VBSId" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <select asp-for="VBSId" class ="form-control" asp-items="ViewBag.VBSId"></select>
+                <select asp-for="Gender" class="form-control" asp-items="Html.GetEnumSelectList<VBSAdmin.Data.VBSAdminModels.Enums.ClassGender>()"></select>
+                <span asp-validation-for="Gender" class="text-danger" />
             </div>
         </div>
         <div class="form-group">

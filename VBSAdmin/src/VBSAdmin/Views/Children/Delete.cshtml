@@ -1,4 +1,4 @@
-@model VBSAdmin.Models.VBSAdminModels.Child
+@model VBSAdmin.Data.VBSAdminModels.Child
 
 @{
     ViewData["Title"] = "Delete";
@@ -12,28 +12,10 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.AllergiesDescription)
+            @Html.DisplayNameFor(model => model.LastName)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.AllergiesDescription)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ClassroomId)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ClassroomId)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.DateOfBirth)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.DateOfBirth)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.DecisionMade)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.DecisionMade)
+            @Html.DisplayFor(model => model.LastName)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.FirstName)
@@ -42,58 +24,28 @@
             @Html.DisplayFor(model => model.FirstName)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Gender)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Gender)
-        </dd>
-        <dt>
             @Html.DisplayNameFor(model => model.GradeCompleted)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.GradeCompleted)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.HasAllergies)
+            @Html.DisplayNameFor(model => model.DateOfBirth)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.HasAllergies)
+            @Html.DisplayFor(model => model.DateOfBirth)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.HasMedicalCondition)
+            @Html.DisplayNameFor(model => model.GuardianLastName)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.HasMedicalCondition)
+            @Html.DisplayFor(model => model.GuardianLastName)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.HasMedications)
+            @Html.DisplayNameFor(model => model.GuardianFirstName)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.HasMedications)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.MedicalConditionDescription)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.MedicalConditionDescription)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.MedicationDescription)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.MedicationDescription)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.PlaceChildWithRequest)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.PlaceChildWithRequest)
+            @Html.DisplayFor(model => model.GuardianFirstName)
         </dd>
     </dl>
     

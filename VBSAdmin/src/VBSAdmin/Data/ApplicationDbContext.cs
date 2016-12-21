@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using VBSAdmin.Models;
-using VBSAdmin.Models.VBSAdminModels;
+using VBSAdmin.Data.VBSAdminModels;
 
 namespace VBSAdmin.Data
 {
@@ -20,7 +20,6 @@ namespace VBSAdmin.Data
         public DbSet<VBS> VBS { get; set; }
         public DbSet<Session> Sessions { get; set; }
         public DbSet<Classroom> Classes { get; set; }
-        public DbSet<Guardian> Guardians { get; set; }
         public DbSet<Child> Children { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -39,18 +38,6 @@ namespace VBSAdmin.Data
             builder.Entity<Child>()
                 .HasOne(c => c.Session)
                 .WithMany(s => s.Children)
-                .IsRequired()
-                .OnDelete(Microsoft.EntityFrameworkCore.Metadata.DeleteBehavior.Restrict);
-
-            builder.Entity<Child>()
-                .HasOne(c => c.Guardian)
-                .WithMany(g => g.Children)
-                .IsRequired()
-                .OnDelete(Microsoft.EntityFrameworkCore.Metadata.DeleteBehavior.Restrict);
-
-            builder.Entity<Guardian>()
-                .HasOne(c => c.VBS)
-                .WithMany(v => v.Guardians)
                 .IsRequired()
                 .OnDelete(Microsoft.EntityFrameworkCore.Metadata.DeleteBehavior.Restrict);
 

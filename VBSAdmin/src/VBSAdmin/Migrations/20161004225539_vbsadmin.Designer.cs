@@ -173,7 +173,7 @@ namespace VBSAdmin.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("VBSAdmin.Models.VBSAdminModels.Child", b =>
+            modelBuilder.Entity("VBSAdmin.Data.VBSAdminModels.Child", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -227,7 +227,7 @@ namespace VBSAdmin.Migrations
                     b.ToTable("Children");
                 });
 
-            modelBuilder.Entity("VBSAdmin.Models.VBSAdminModels.Classroom", b =>
+            modelBuilder.Entity("VBSAdmin.Data.VBSAdminModels.Classroom", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -252,7 +252,7 @@ namespace VBSAdmin.Migrations
                     b.ToTable("Classes");
                 });
 
-            modelBuilder.Entity("VBSAdmin.Models.VBSAdminModels.Guardian", b =>
+            modelBuilder.Entity("VBSAdmin.Data.VBSAdminModels.Guardian", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -310,7 +310,7 @@ namespace VBSAdmin.Migrations
                     b.ToTable("Guardians");
                 });
 
-            modelBuilder.Entity("VBSAdmin.Models.VBSAdminModels.Session", b =>
+            modelBuilder.Entity("VBSAdmin.Data.VBSAdminModels.Session", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -332,7 +332,7 @@ namespace VBSAdmin.Migrations
                     b.ToTable("Sessions");
                 });
 
-            modelBuilder.Entity("VBSAdmin.Models.VBSAdminModels.Tenant", b =>
+            modelBuilder.Entity("VBSAdmin.Data.VBSAdminModels.Tenant", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -357,7 +357,7 @@ namespace VBSAdmin.Migrations
                     b.ToTable("Tenants");
                 });
 
-            modelBuilder.Entity("VBSAdmin.Models.VBSAdminModels.VBS", b =>
+            modelBuilder.Entity("VBSAdmin.Data.VBSAdminModels.VBS", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -415,60 +415,60 @@ namespace VBSAdmin.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("VBSAdmin.Models.VBSAdminModels.Child", b =>
+            modelBuilder.Entity("VBSAdmin.Data.VBSAdminModels.Child", b =>
                 {
-                    b.HasOne("VBSAdmin.Models.VBSAdminModels.Classroom", "Classroom")
+                    b.HasOne("VBSAdmin.Data.VBSAdminModels.Classroom", "Classroom")
                         .WithMany("Children")
                         .HasForeignKey("ClassroomId");
 
-                    b.HasOne("VBSAdmin.Models.VBSAdminModels.Guardian", "Guardian")
+                    b.HasOne("VBSAdmin.Data.VBSAdminModels.Guardian", "Guardian")
                         .WithMany("Children")
                         .HasForeignKey("GuardianId");
 
-                    b.HasOne("VBSAdmin.Models.VBSAdminModels.Session", "Session")
+                    b.HasOne("VBSAdmin.Data.VBSAdminModels.Session", "Session")
                         .WithMany("Children")
                         .HasForeignKey("SessionId");
 
-                    b.HasOne("VBSAdmin.Models.VBSAdminModels.VBS", "VBS")
+                    b.HasOne("VBSAdmin.Data.VBSAdminModels.VBS", "VBS")
                         .WithMany("Children")
                         .HasForeignKey("VBSId");
                 });
 
-            modelBuilder.Entity("VBSAdmin.Models.VBSAdminModels.Classroom", b =>
+            modelBuilder.Entity("VBSAdmin.Data.VBSAdminModels.Classroom", b =>
                 {
-                    b.HasOne("VBSAdmin.Models.VBSAdminModels.Session", "Session")
+                    b.HasOne("VBSAdmin.Data.VBSAdminModels.Session", "Session")
                         .WithMany("Classes")
                         .HasForeignKey("SessionId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("VBSAdmin.Models.VBSAdminModels.VBS", "VBS")
+                    b.HasOne("VBSAdmin.Data.VBSAdminModels.VBS", "VBS")
                         .WithMany("Classrooms")
                         .HasForeignKey("VBSId");
                 });
 
-            modelBuilder.Entity("VBSAdmin.Models.VBSAdminModels.Guardian", b =>
+            modelBuilder.Entity("VBSAdmin.Data.VBSAdminModels.Guardian", b =>
                 {
-                    b.HasOne("VBSAdmin.Models.VBSAdminModels.Session", "Session")
+                    b.HasOne("VBSAdmin.Data.VBSAdminModels.Session", "Session")
                         .WithMany()
                         .HasForeignKey("SessionId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("VBSAdmin.Models.VBSAdminModels.VBS", "VBS")
+                    b.HasOne("VBSAdmin.Data.VBSAdminModels.VBS", "VBS")
                         .WithMany("Guardians")
                         .HasForeignKey("VBSId");
                 });
 
-            modelBuilder.Entity("VBSAdmin.Models.VBSAdminModels.Session", b =>
+            modelBuilder.Entity("VBSAdmin.Data.VBSAdminModels.Session", b =>
                 {
-                    b.HasOne("VBSAdmin.Models.VBSAdminModels.VBS", "VBS")
+                    b.HasOne("VBSAdmin.Data.VBSAdminModels.VBS", "VBS")
                         .WithMany("Sessions")
                         .HasForeignKey("VBSId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("VBSAdmin.Models.VBSAdminModels.VBS", b =>
+            modelBuilder.Entity("VBSAdmin.Data.VBSAdminModels.VBS", b =>
                 {
-                    b.HasOne("VBSAdmin.Models.VBSAdminModels.Tenant", "Tenant")
+                    b.HasOne("VBSAdmin.Data.VBSAdminModels.Tenant", "Tenant")
                         .WithMany("VBSList")
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade);

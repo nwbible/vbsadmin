@@ -35,13 +35,23 @@ namespace VBSAdmin.Controllers
             if(signInManager.IsSignedIn(User))
             {
                 var sysAdminClaim = User.Claims.FirstOrDefault(c => c.Type == "SystemAdmin");
+                var tenantAdminClaim = User.Claims.FirstOrDefault(c => c.Type == "TenantAdmin");
+
                 if(sysAdminClaim != null && sysAdminClaim.Value.ToLower() == "true")
                 {
                     return RedirectToAction("Index", "Tenants");
                 }
                 else
                 {
-                    return RedirectToAction("Index", "VBS");
+                    if (tenantAdminClaim != null && tenantAdminClaim.Value.ToLower() == "true")
+                    {
+                        return RedirectToAction("Index", "VBS");
+                    }
+                    else
+                    {
+                        var currentVbsId = Convert.ToInt32(Request.Cookies[Constants.CurrentVBSIdCookie]);
+                        return RedirectToAction("Details", "VBS", new { Id = currentVbsId });
+                    }
                 }
 
             }

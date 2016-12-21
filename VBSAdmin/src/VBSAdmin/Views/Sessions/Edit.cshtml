@@ -1,4 +1,4 @@
-@model VBSAdmin.Models.VBSAdminModels.Session
+@model VBSAdmin.Data.VBSAdminModels.Session
 
 @{
     ViewData["Title"] = "Edit";
@@ -22,7 +22,7 @@
         <div class="form-group">
             <label asp-for="Period" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <select asp-for="Period" class="form-control" asp-items="Html.GetEnumSelectList<VBSAdmin.Models.VBSAdminModels.Enums.SessionPeriod>()"></select>
+                <select asp-for="Period" class="form-control" asp-items="Html.GetEnumSelectList<VBSAdmin.Data.VBSAdminModels.Enums.SessionPeriod>()"></select>
                 <span asp-validation-for="Period" class="text-danger" />
             </div>
         </div>

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
     
 
-namespace VBSAdmin.Models.VBSAdminModels
+namespace VBSAdmin.Data.VBSAdminModels
 {
     public class Classroom
     {

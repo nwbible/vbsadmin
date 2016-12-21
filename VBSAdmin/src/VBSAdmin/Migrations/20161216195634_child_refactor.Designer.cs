@@ -8,8 +8,8 @@ using VBSAdmin.Data;
 namespace VBSAdmin.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20161005220421_vbsadmin2")]
-    partial class vbsadmin2
+    [Migration("20161216195634_child_refactor")]
+    partial class child_refactor
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -124,67 +124,39 @@ namespace VBSAdmin.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("VBSAdmin.Models.ApplicationUser", b =>
-                {
-                    b.Property<string>("Id");
-
-                    b.Property<int>("AccessFailedCount");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken();
-
-                    b.Property<string>("Email")
-                        .HasAnnotation("MaxLength", 256);
-
-                    b.Property<bool>("EmailConfirmed");
-
-                    b.Property<bool>("LockoutEnabled");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasAnnotation("MaxLength", 256);
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasAnnotation("MaxLength", 256);
-
-                    b.Property<string>("PasswordHash");
-
-                    b.Property<string>("PhoneNumber");
-
-                    b.Property<bool>("PhoneNumberConfirmed");
-
-                    b.Property<string>("SecurityStamp");
-
-                    b.Property<bool>("TwoFactorEnabled");
-
-                    b.Property<string>("UserName")
-                        .HasAnnotation("MaxLength", 256);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasName("UserNameIndex");
-
-                    b.ToTable("AspNetUsers");
-                });
-
             modelBuilder.Entity("VBSAdmin.Data.VBSAdminModels.Child", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Address1")
+                        .IsRequired();
+
+                    b.Property<string>("Address2");
+
                     b.Property<string>("AllergiesDescription");
+
+                    b.Property<bool>("AttendHostChurch");
+
+                    b.Property<string>("City")
+                        .IsRequired();
 
                     b.Property<int?>("ClassroomId");
 
                     b.Property<DateTime>("DateOfBirth");
 
+                    b.Property<DateTime>("DateOfRegistration");
+
                     b.Property<bool>("DecisionMade");
+
+                    b.Property<string>("EmergencyContactFirstName")
+                        .IsRequired();
+
+                    b.Property<string>("EmergencyContactLastName")
+                        .IsRequired();
+
+                    b.Property<string>("EmergencyContactPhone")
+                        .IsRequired();
 
                     b.Property<string>("FirstName")
                         .IsRequired();
@@ -193,13 +165,30 @@ namespace VBSAdmin.Migrations
 
                     b.Property<int>("GradeCompleted");
 
-                    b.Property<int>("GuardianId");
+                    b.Property<string>("GuardianChildRelationship")
+                        .IsRequired();
+
+                    b.Property<string>("GuardianEmail")
+                        .IsRequired();
+
+                    b.Property<string>("GuardianFirstName")
+                        .IsRequired();
+
+                    b.Property<string>("GuardianLastName")
+                        .IsRequired();
+
+                    b.Property<string>("GuardianPhone")
+                        .IsRequired();
 
                     b.Property<bool>("HasAllergies");
 
                     b.Property<bool>("HasMedicalCondition");
 
                     b.Property<bool>("HasMedications");
+
+                    b.Property<string>("HomeChurch");
+
+                    b.Property<string>("InvitedBy");
 
                     b.Property<string>("LastName")
                         .IsRequired();
@@ -212,13 +201,17 @@ namespace VBSAdmin.Migrations
 
                     b.Property<int>("SessionId");
 
+                    b.Property<string>("State")
+                        .IsRequired();
+
                     b.Property<int>("VBSId");
+
+                    b.Property<string>("Zip")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClassroomId");
-
-                    b.HasIndex("GuardianId");
 
                     b.HasIndex("SessionId");
 
@@ -250,64 +243,6 @@ namespace VBSAdmin.Migrations
                     b.HasIndex("VBSId");
 
                     b.ToTable("Classes");
-                });
-
-            modelBuilder.Entity("VBSAdmin.Data.VBSAdminModels.Guardian", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Address1")
-                        .IsRequired();
-
-                    b.Property<string>("Address2");
-
-                    b.Property<bool>("AttendHostChurch");
-
-                    b.Property<string>("ChildRelationship")
-                        .IsRequired();
-
-                    b.Property<string>("City")
-                        .IsRequired();
-
-                    b.Property<string>("Email")
-                        .IsRequired();
-
-                    b.Property<string>("EmergencyContact")
-                        .IsRequired();
-
-                    b.Property<string>("FirstName")
-                        .IsRequired();
-
-                    b.Property<string>("HomeChurch");
-
-                    b.Property<string>("InvitedBy");
-
-                    b.Property<string>("LastName")
-                        .IsRequired();
-
-                    b.Property<string>("PrimaryPhone")
-                        .IsRequired();
-
-                    b.Property<string>("SecondaryPhone");
-
-                    b.Property<int>("SessionId");
-
-                    b.Property<string>("State")
-                        .IsRequired();
-
-                    b.Property<int>("VBSId");
-
-                    b.Property<string>("Zip")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SessionId");
-
-                    b.HasIndex("VBSId");
-
-                    b.ToTable("Guardians");
                 });
 
             modelBuilder.Entity("VBSAdmin.Data.VBSAdminModels.Session", b =>
@@ -378,6 +313,55 @@ namespace VBSAdmin.Migrations
                     b.ToTable("VBS");
                 });
 
+            modelBuilder.Entity("VBSAdmin.Models.ApplicationUser", b =>
+                {
+                    b.Property<string>("Id");
+
+                    b.Property<int>("AccessFailedCount");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken();
+
+                    b.Property<string>("Email")
+                        .HasAnnotation("MaxLength", 256);
+
+                    b.Property<bool>("EmailConfirmed");
+
+                    b.Property<bool>("LockoutEnabled");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasAnnotation("MaxLength", 256);
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasAnnotation("MaxLength", 256);
+
+                    b.Property<string>("PasswordHash");
+
+                    b.Property<string>("PhoneNumber");
+
+                    b.Property<bool>("PhoneNumberConfirmed");
+
+                    b.Property<string>("SecurityStamp");
+
+                    b.Property<bool>("TwoFactorEnabled");
+
+                    b.Property<string>("UserName")
+                        .HasAnnotation("MaxLength", 256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasName("UserNameIndex");
+
+                    b.ToTable("AspNetUsers");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole")
@@ -421,10 +405,6 @@ namespace VBSAdmin.Migrations
                         .WithMany("Children")
                         .HasForeignKey("ClassroomId");
 
-                    b.HasOne("VBSAdmin.Data.VBSAdminModels.Guardian", "Guardian")
-                        .WithMany("Children")
-                        .HasForeignKey("GuardianId");
-
                     b.HasOne("VBSAdmin.Data.VBSAdminModels.Session", "Session")
                         .WithMany("Children")
                         .HasForeignKey("SessionId");
@@ -443,18 +423,6 @@ namespace VBSAdmin.Migrations
 
                     b.HasOne("VBSAdmin.Data.VBSAdminModels.VBS", "VBS")
                         .WithMany("Classrooms")
-                        .HasForeignKey("VBSId");
-                });
-
-            modelBuilder.Entity("VBSAdmin.Data.VBSAdminModels.Guardian", b =>
-                {
-                    b.HasOne("VBSAdmin.Data.VBSAdminModels.Session", "Session")
-                        .WithMany()
-                        .HasForeignKey("SessionId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("VBSAdmin.Data.VBSAdminModels.VBS", "VBS")
-                        .WithMany("Guardians")
                         .HasForeignKey("VBSId");
                 });
 

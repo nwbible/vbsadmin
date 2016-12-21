@@ -2,15 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using VBSAdmin.Data;
-using VBSAdmin.Models.VBSAdminModels;
+using VBSAdmin.Data.VBSAdminModels;
 
-namespace VBSAdmin
+namespace VBSAdmin.Controllers
 {
-    public class ChildrenController : Controller
+    [Authorize(Policy = "BelongToTenant")]
+    public class ChildrenController : BaseController
     {
         private readonly ApplicationDbContext _context;
 
@@ -22,7 +24,12 @@ namespace VBSAdmin
         // GET: Children
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Children.Include(c => c.Guardian).Include(c => c.Session).Include(c => c.VBS);
+            var applicationDbContext = _context.Children.Include(c => c.Classroom)
+                .Include(c => c.Session)
+                .Include(c => c.VBS)
+                .Where(c => c.VBSId == this.CurrentVBSId && c.VBS.TenantId == this.TenantId)
+                .OrderBy(c => c.Id);
+
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -34,7 +41,12 @@ namespace VBSAdmin
                 return NotFound();
             }
 
-            var child = await _context.Children.SingleOrDefaultAsync(m => m.Id == id);
+            var child = await _context.Children
+                .Include(c => c.Session)
+                .Include(c => c.Classroom)
+                .Where(c => c.Id == id && c.VBSId == this.CurrentVBSId && c.VBS.TenantId == this.TenantId)
+                .SingleOrDefaultAsync();
+
             if (child == null)
             {
                 return NotFound();
@@ -46,10 +58,8 @@ namespace VBSAdmin
         // GET: Children/Create
         public IActionResult Create()
         {
-            ViewData["GuardianId"] = new SelectList(_context.Guardians, "Id", "LastName");
-            ViewData["SessionId"] = new SelectList(_context.Sessions, "Id", "Period");
-            ViewData["VBSId"] = new SelectList(_context.VBS, "Id", "ThemeName");
-            ViewData["ClassroomId"] = new SelectList(_context.Classes, "Id", "Name");
+            ViewData["ClassroomId"] = new SelectList(_context.Classes.Where(s => s.VBSId == this.CurrentVBSId), "Id", "Name");
+            ViewData["SessionId"] = new SelectList(_context.Sessions.Where(s => s.VBSId == this.CurrentVBSId), "Id", "Period");
             return View();
         }
 
@@ -58,18 +68,19 @@ namespace VBSAdmin
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,AllergiesDescription,ClassroomId,DateOfBirth,DecisionMade,FirstName,Gender,GradeCompleted,GuardianId,HasAllergies,HasMedicalCondition,HasMedications,LastName,MedicalConditionDescription,MedicationDescription,PlaceChildWithRequest,SessionId,VBSId")] Child child)
+        public async Task<IActionResult> Create([Bind("Id,Address1,Address2,AllergiesDescription,AttendHostChurch,City,ClassroomId,DateOfBirth,DecisionMade,EmergencyContactFirstName,EmergencyContactLastName,EmergencyContactPhone,FirstName,Gender,GradeCompleted,GuardianChildRelationship,GuardianEmail,GuardianFirstName,GuardianLastName,GuardianPhone,HasAllergies,HasMedicalCondition,HasMedications,HomeChurch,InvitedBy,LastName,MedicalConditionDescription,MedicationDescription,PlaceChildWithRequest,SessionId,State,Zip")] Child child)
         {
+            child.VBSId = this.CurrentVBSId;
+            child.DateOfRegistration = DateTime.UtcNow;
+
             if (ModelState.IsValid)
             {
                 _context.Add(child);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewData["GuardianId"] = new SelectList(_context.Guardians, "Id", "LastName", child.GuardianId);
-            ViewData["SessionId"] = new SelectList(_context.Sessions, "Id", "Period", child.SessionId);
-            ViewData["VBSId"] = new SelectList(_context.VBS, "Id", "ThemeName", child.VBSId);
-            ViewData["ClassroomId"] = new SelectList(_context.Classes, "Id", "Name");
+            ViewData["ClassroomId"] = new SelectList(_context.Classes.Where(s => s.VBSId == this.CurrentVBSId), "Id", "Name", child.ClassroomId);
+            ViewData["SessionId"] = new SelectList(_context.Sessions.Where(s => s.VBSId == this.CurrentVBSId), "Id", "Period", child.SessionId);
             return View(child);
         }
 
@@ -81,15 +92,16 @@ namespace VBSAdmin
                 return NotFound();
             }
 
-            var child = await _context.Children.SingleOrDefaultAsync(m => m.Id == id);
+            var child = await _context.Children
+                .Where(c => c.Id == id && c.VBSId == this.CurrentVBSId && c.VBS.TenantId == this.TenantId)
+                .SingleOrDefaultAsync();
+
             if (child == null)
             {
                 return NotFound();
             }
-            ViewData["GuardianId"] = new SelectList(_context.Guardians, "Id", "LastName", child.GuardianId);
-            ViewData["SessionId"] = new SelectList(_context.Sessions, "Id", "Period", child.SessionId);
-            ViewData["VBSId"] = new SelectList(_context.VBS, "Id", "ThemeName", child.VBSId);
-            ViewData["ClassroomId"] = new SelectList(_context.Classes, "Id", "Name");
+            ViewData["ClassroomId"] = new SelectList(_context.Classes.Where(s => s.VBSId == this.CurrentVBSId), "Id", "Name", child.ClassroomId);
+            ViewData["SessionId"] = new SelectList(_context.Sessions.Where(s => s.VBSId == this.CurrentVBSId), "Id", "Period", child.SessionId);
             return View(child);
         }
 
@@ -98,12 +110,14 @@ namespace VBSAdmin
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,AllergiesDescription,ClassroomId,DateOfBirth,DecisionMade,FirstName,Gender,GradeCompleted,GuardianId,HasAllergies,HasMedicalCondition,HasMedications,LastName,MedicalConditionDescription,MedicationDescription,PlaceChildWithRequest,SessionId,VBSId")] Child child)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Address1,Address2,AllergiesDescription,AttendHostChurch,City,ClassroomId,DateOfBirth,DecisionMade,EmergencyContactFirstName,EmergencyContactLastName,EmergencyContactPhone,FirstName,Gender,GradeCompleted,GuardianChildRelationship,GuardianEmail,GuardianFirstName,GuardianLastName,GuardianPhone,HasAllergies,HasMedicalCondition,HasMedications,HomeChurch,InvitedBy,LastName,MedicalConditionDescription,MedicationDescription,PlaceChildWithRequest,SessionId,State,Zip")] Child child)
         {
             if (id != child.Id)
             {
                 return NotFound();
             }
+
+            child.VBSId = this.CurrentVBSId;
 
             if (ModelState.IsValid)
             {
@@ -125,10 +139,8 @@ namespace VBSAdmin
                 }
                 return RedirectToAction("Index");
             }
-            ViewData["GuardianId"] = new SelectList(_context.Guardians, "Id", "LastName", child.GuardianId);
-            ViewData["SessionId"] = new SelectList(_context.Sessions, "Id", "Period", child.SessionId);
-            ViewData["VBSId"] = new SelectList(_context.VBS, "Id", "ThemeName", child.VBSId);
-            ViewData["ClassroomId"] = new SelectList(_context.Classes, "Id", "Name", child.ClassroomId);
+            ViewData["ClassroomId"] = new SelectList(_context.Classes.Where(s => s.VBSId == this.CurrentVBSId), "Id", "Name", child.ClassroomId);
+            ViewData["SessionId"] = new SelectList(_context.Sessions.Where(s => s.VBSId == this.CurrentVBSId), "Id", "Period", child.SessionId);
             return View(child);
         }
 
@@ -140,7 +152,12 @@ namespace VBSAdmin
                 return NotFound();
             }
 
-            var child = await _context.Children.SingleOrDefaultAsync(m => m.Id == id);
+            var child = await _context.Children
+                .Include(c => c.Session)
+                .Include(c => c.Classroom)
+                .Where(c => c.Id == id && c.VBSId == this.CurrentVBSId && c.VBS.TenantId == this.TenantId)
+                .SingleOrDefaultAsync();
+
             if (child == null)
             {
                 return NotFound();
@@ -154,7 +171,10 @@ namespace VBSAdmin
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var child = await _context.Children.SingleOrDefaultAsync(m => m.Id == id);
+            var child = await _context.Children
+                .Where(c => c.Id == id && c.VBSId == this.CurrentVBSId && c.VBS.TenantId == this.TenantId)
+                .SingleOrDefaultAsync();
+
             _context.Children.Remove(child);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");

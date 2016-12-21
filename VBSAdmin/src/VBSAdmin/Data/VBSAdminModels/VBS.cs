@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace VBSAdmin.Models.VBSAdminModels
+namespace VBSAdmin.Data.VBSAdminModels
 {
     public class VBS
     {
@@ -23,8 +23,6 @@ namespace VBSAdmin.Models.VBSAdminModels
         public List<Session> Sessions { get; set; }
 
         public List<Child> Children { get; set; }
-
-        public List<Guardian> Guardians { get; set; }
 
         public List<Classroom> Classrooms { get; set; }
 

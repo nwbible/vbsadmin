@@ -4,14 +4,28 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace VBSAdmin.Models.AccountViewModels
+namespace VBSAdmin.Models.TenantViewModels
 {
-    public class RegisterViewModel
+    public class CreateViewModel
     {
+
+        [Required]
+        public string Name { get; set; }
+
+        [Required]
+        public string ChurchName { get; set; }
+
+        [Required]
+        public string ContactName { get; set; }
+
+        [Required]
+        [Phone]
+        public string ContactPhone { get; set; }
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
-        public string Email { get; set; }
+        public string ContactEmail { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]

@@ -7,10 +7,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using VBSAdmin.Data;
 using VBSAdmin.Models;
+using VBSAdmin.Data.VBSAdminModels;
 using VBSAdmin.Models.AccountViewModels;
 using VBSAdmin.Services;
+using VBSAdmin.Authorization;
 
 namespace VBSAdmin.Controllers
 {
@@ -22,19 +26,22 @@ namespace VBSAdmin.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
+        private readonly ApplicationDbContext _context;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
             ISmsSender smsSender,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory,
+            ApplicationDbContext dbContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
+            _context = dbContext;
         }
 
         //
@@ -67,8 +74,15 @@ namespace VBSAdmin.Controllers
                     //Add the tenant cookie
                     var signedInUser = _userManager.FindByNameAsync(model.Email).Result;
                     var claims = _userManager.GetClaimsAsync(signedInUser).Result;
-                    var tenantValue = claims.FirstOrDefault(c => c.Type == "Tenant").Value;
-                    Response.Cookies.Append("tenant", tenantValue);
+                    var tenantId = claims.FirstOrDefault(c => c.Type == Constants.TenantClaim).Value;
+                    Response.Cookies.Append(Constants.TenantClaim, tenantId);
+
+                    //Add the current VBS id cookie
+                    //The default VBS is the one with the highest Id value (assuming that is the latest VBS for the tenant)
+                    var vbsContext = _context.VBS.Include(v => v.Tenant).Where(t => t.Tenant.Id == Convert.ToInt32(tenantId)).OrderByDescending(v => v.Id);
+                    var latestVbs = vbsContext.FirstOrDefault();
+                    Response.Cookies.Append(Constants.CurrentVBSIdCookie, latestVbs.Id.ToString());
+
 
                     return RedirectToLocal(returnUrl);
                 }
@@ -116,9 +130,9 @@ namespace VBSAdmin.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    var claimResult = await _userManager.AddClaimAsync(user, new Claim(Authorization.ClaimsConstants.SystemAdmin, "True"));
-                    claimResult = await _userManager.AddClaimAsync(user, new Claim(Authorization.ClaimsConstants.Tenant, "*"));
-                    claimResult = await _userManager.AddClaimAsync(user, new Claim(Authorization.ClaimsConstants.TenantAdmin, "True"));
+                    var claimResult = await _userManager.AddClaimAsync(user, new Claim(Constants.SystemAdminClaim, "True"));
+                    claimResult = await _userManager.AddClaimAsync(user, new Claim(Constants.TenantClaim, "*"));
+                    claimResult = await _userManager.AddClaimAsync(user, new Claim(Constants.TenantAdminClaim, "True"));
 
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
                     // Send an email with this link

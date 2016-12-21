@@ -2,15 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using VBSAdmin.Data;
-using VBSAdmin.Models.VBSAdminModels;
+using VBSAdmin.Data.VBSAdminModels;
 
-namespace VBSAdmin
+namespace VBSAdmin.Controllers
 {
-    public class ClassroomsController : Controller
+    [Authorize(Policy = "BelongToTenant")]
+    public class ClassroomsController : BaseController
     {
         private readonly ApplicationDbContext _context;
 
@@ -22,7 +24,11 @@ namespace VBSAdmin
         // GET: Classrooms
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Classes.Include(c => c.Session).Include(c => c.VBS);
+            var applicationDbContext = _context.Classes.Include(c => c.Session)
+                .Include(c => c.VBS)
+                .Where(c => c.VBSId == this.CurrentVBSId && c.VBS.TenantId == this.TenantId)
+                .OrderBy(c => c.SessionId)
+                .ThenBy(c => c.Grade);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -34,7 +40,7 @@ namespace VBSAdmin
                 return NotFound();
             }
 
-            var classroom = await _context.Classes.SingleOrDefaultAsync(m => m.Id == id);
+            var classroom = await _context.Classes.Include(c => c.Session).Where(c => c.Id == id && c.VBSId == this.CurrentVBSId && c.VBS.TenantId == this.TenantId).SingleOrDefaultAsync();
             if (classroom == null)
             {
                 return NotFound();
@@ -46,8 +52,7 @@ namespace VBSAdmin
         // GET: Classrooms/Create
         public IActionResult Create()
         {
-            ViewData["SessionId"] = new SelectList(_context.Sessions, "Id", "Period");
-            ViewData["VBSId"] = new SelectList(_context.VBS, "Id", "ThemeName");
+            ViewData["SessionId"] = new SelectList(_context.Sessions.Where(s => s.VBSId == this.CurrentVBSId), "Id", "Period");
             return View();
         }
 
@@ -56,16 +61,17 @@ namespace VBSAdmin
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Gender,Grade,Name,SessionId,VBSId")] Classroom classroom)
+        public async Task<IActionResult> Create([Bind("Id,Gender,Grade,Name,SessionId")] Classroom classroom)
         {
+            classroom.VBSId = this.CurrentVBSId;
+
             if (ModelState.IsValid)
             {
                 _context.Add(classroom);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewData["SessionId"] = new SelectList(_context.Sessions, "Id", "Period", classroom.SessionId);
-            ViewData["VBSId"] = new SelectList(_context.VBS, "Id", "ThemeName", classroom.VBSId);
+            ViewData["SessionId"] = new SelectList(_context.Sessions.Where(s => s.VBSId == this.CurrentVBSId), "Id", "Period", classroom.SessionId);
             return View(classroom);
         }
 
@@ -77,13 +83,12 @@ namespace VBSAdmin
                 return NotFound();
             }
 
-            var classroom = await _context.Classes.SingleOrDefaultAsync(m => m.Id == id);
+            var classroom = await _context.Classes.Where(c => c.Id == id && c.VBSId == this.CurrentVBSId && c.VBS.TenantId == this.TenantId).SingleOrDefaultAsync();
             if (classroom == null)
             {
                 return NotFound();
             }
-            ViewData["SessionId"] = new SelectList(_context.Sessions, "Id", "Period", classroom.SessionId);
-            ViewData["VBSId"] = new SelectList(_context.VBS, "Id", "ThemeName", classroom.VBSId);
+            ViewData["SessionId"] = new SelectList(_context.Sessions.Where(s => s.VBSId == this.CurrentVBSId), "Id", "Period", classroom.SessionId);
             return View(classroom);
         }
 
@@ -92,12 +97,14 @@ namespace VBSAdmin
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Gender,Grade,Name,SessionId,VBSId")] Classroom classroom)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Gender,Grade,Name,SessionId")] Classroom classroom)
         {
             if (id != classroom.Id)
             {
                 return NotFound();
             }
+
+            classroom.VBSId = this.CurrentVBSId;
 
             if (ModelState.IsValid)
             {
@@ -119,8 +126,7 @@ namespace VBSAdmin
                 }
                 return RedirectToAction("Index");
             }
-            ViewData["SessionId"] = new SelectList(_context.Sessions, "Id", "Period", classroom.SessionId);
-            ViewData["VBSId"] = new SelectList(_context.VBS, "Id", "ThemeName", classroom.VBSId);
+            ViewData["SessionId"] = new SelectList(_context.Sessions.Where(s => s.VBSId == this.CurrentVBSId), "Id", "Period", classroom.SessionId);
             return View(classroom);
         }
 
@@ -132,7 +138,11 @@ namespace VBSAdmin
                 return NotFound();
             }
 
-            var classroom = await _context.Classes.SingleOrDefaultAsync(m => m.Id == id);
+            var classroom = await _context.Classes
+                .Include(c => c.Session)
+                .Where(c => c.Id == id && c.VBSId == this.CurrentVBSId && c.VBS.TenantId == this.TenantId)
+                .SingleOrDefaultAsync();
+
             if (classroom == null)
             {
                 return NotFound();
@@ -146,7 +156,7 @@ namespace VBSAdmin
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var classroom = await _context.Classes.SingleOrDefaultAsync(m => m.Id == id);
+            var classroom = await _context.Classes.Where(c => c.Id == id && c.VBSId == this.CurrentVBSId && c.VBS.TenantId == this.TenantId).SingleOrDefaultAsync();
             _context.Classes.Remove(classroom);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");

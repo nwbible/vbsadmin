@@ -1,22 +1,16 @@
-@model VBSAdmin.Models.VBSAdminModels.VBS
+@model VBSAdmin.Models.VBSViewModels.CreateViewModel
 
 @{
     ViewData["Title"] = "Create";
 }
 
-<h2>Create</h2>
+<h2>Create VBS</h2>
 
 <form asp-action="Create">
     <div class="form-horizontal">
         <h4>VBS</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form-group">
-            <label asp-for="TenantId" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <select asp-for="TenantId" class="form-control" asp-items="ViewBag.TenantId"></select>
-            </div>
-        </div>
         <div class="form-group">
             <label asp-for="ThemeName" class="col-md-2 control-label"></label>
             <div class="col-md-10">
@@ -36,6 +30,48 @@
             <div class="col-md-10">
                 <input asp-for="EndDate" class="form-control" />
                 <span asp-validation-for="EndDate" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="AMStartTime" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="AMStartTime" class="form-control" />
+                <span asp-validation-for="AMStartTime" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="AMEndTime" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="AMEndTime" class="form-control" />
+                <span asp-validation-for="AMEndTime" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="AMMaxChildren" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="AMMaxChildren" class="form-control" />
+                <span asp-validation-for="AMMaxChildren" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="PMStartTime" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="PMStartTime" class="form-control" />
+                <span asp-validation-for="PMStartTime" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="PMEndTime" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="PMEndTime" class="form-control" />
+                <span asp-validation-for="PMEndTime" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="PMMaxChildren" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="PMMaxChildren" class="form-control" />
+                <span asp-validation-for="PMMaxChildren" class="text-danger" />
             </div>
         </div>
         <div class="form-group">

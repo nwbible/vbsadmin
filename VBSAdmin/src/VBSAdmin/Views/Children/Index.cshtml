@@ -1,4 +1,4 @@
-@model IEnumerable<VBSAdmin.Models.VBSAdminModels.Child>
+@model IEnumerable<VBSAdmin.Data.VBSAdminModels.Child>
 
 @{
     ViewData["Title"] = "Index";
@@ -13,46 +13,19 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.AllergiesDescription)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ClassroomId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateOfBirth)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DecisionMade)
+                @Html.DisplayNameFor(model => model.LastName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.FirstName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Gender)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.GradeCompleted)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HasAllergies)
+                @Html.DisplayNameFor(model => model.DateOfBirth)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HasMedicalCondition)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HasMedications)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MedicalConditionDescription)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MedicationDescription)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PlaceChildWithRequest)
+                @Html.DisplayNameFor(model => model.DateOfRegistration)
             </th>
             <th></th>
         </tr>
@@ -61,46 +34,19 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.AllergiesDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClassroomId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateOfBirth)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DecisionMade)
+                @Html.DisplayFor(modelItem => item.LastName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.FirstName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Gender)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.GradeCompleted)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.HasAllergies)
+                @Html.DisplayFor(modelItem => item.DateOfBirth)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.HasMedicalCondition)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HasMedications)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MedicalConditionDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MedicationDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PlaceChildWithRequest)
+                @Html.DisplayFor(modelItem => item.DateOfRegistration)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

@@ -1,4 +1,4 @@
-@model VBSAdmin.Models.VBSAdminModels.VBS
+@model VBSAdmin.Data.VBSAdminModels.VBS
 
 @{
     ViewData["Title"] = "Details";
@@ -33,4 +33,9 @@
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
+</div>
+<hr />
+<div>
+    <a asp-action="Index" asp-controller="Classrooms">Manage Classes</a>  |  
+    <a asp-action="Index" asp-controller="Children">Manage Children</a>
 </div>
