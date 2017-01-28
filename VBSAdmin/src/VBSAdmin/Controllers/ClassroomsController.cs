@@ -16,7 +16,7 @@ namespace VBSAdmin.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        public ClassroomsController(ApplicationDbContext context)
+        public ClassroomsController(ApplicationDbContext context) : base(context)
         {
             _context = context;    
         }

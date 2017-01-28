@@ -19,7 +19,7 @@ namespace VBSAdmin.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        public VBSController(ApplicationDbContext context)
+        public VBSController(ApplicationDbContext context) : base(context)
         {
             _context = context;    
         }
@@ -236,6 +236,9 @@ namespace VBSAdmin.Controllers
             //var vBS = await _context.VBS.SingleOrDefaultAsync(m => m.Id == id);
             _context.VBS.Remove(vBS);
             await _context.SaveChangesAsync();
+
+            //TODO: Need to reset the cookie if the current VBS was deleted.
+
             return RedirectToAction("Index");
         }
 

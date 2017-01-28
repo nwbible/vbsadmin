@@ -49,5 +49,36 @@ namespace VBSAdmin.Data.VBSAdminModels
             [Display(Name = "Girl")]
             Girl=1
         }
+
+        public enum AssignmentOptions
+        {
+            Assigned=0,
+            Unassigned=1,
+            All=2
+        }
+
+        public enum SessionOptions
+        {
+            AM=0,
+            PM=1,
+            All=2
+        }
+
+        public enum ClassGradeOptions
+        {
+            [Display(Name = "PreSchool")]
+            PreSchool = 0,
+            [Display(Name = "PreK")]
+            PreK = 1,
+            [Display(Name = "Kindergarten")]
+            Kindergarten = 2,
+            First = 3,
+            Second = 4,
+            Third = 5,
+            Fourth = 6,
+            Fifth = 7,
+            Sixth = 8,
+            All = 9
+        }
     }
 }

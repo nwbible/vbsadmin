@@ -19,7 +19,7 @@ using VBSAdmin.Authorization;
 namespace VBSAdmin.Controllers
 {
     [Authorize]
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -34,7 +34,7 @@ namespace VBSAdmin.Controllers
             IEmailSender emailSender,
             ISmsSender smsSender,
             ILoggerFactory loggerFactory,
-            ApplicationDbContext dbContext)
+            ApplicationDbContext dbContext) : base(dbContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -159,6 +159,8 @@ namespace VBSAdmin.Controllers
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation(4, "User logged out.");
+            Response.Cookies.Delete(Constants.CurrentVBSIdCookie);
+            Response.Cookies.Delete(Constants.TenantClaim);
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 

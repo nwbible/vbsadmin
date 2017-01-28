@@ -8,13 +8,13 @@ using Microsoft.EntityFrameworkCore;
 using VBSAdmin.Data;
 using VBSAdmin.Data.VBSAdminModels;
 
-namespace VBSAdmin
+namespace VBSAdmin.Controllers
 {
-    public class SessionsController : Controller
+    public class SessionsController : BaseController
     {
         private readonly ApplicationDbContext _context;
 
-        public SessionsController(ApplicationDbContext context)
+        public SessionsController(ApplicationDbContext context) : base(context)
         {
             _context = context;    
         }

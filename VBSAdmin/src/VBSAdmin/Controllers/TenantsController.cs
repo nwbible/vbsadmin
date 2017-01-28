@@ -14,16 +14,16 @@ using VBSAdmin.Data.VBSAdminModels;
 using VBSAdmin.Models.TenantViewModels;
 
 
-namespace VBSAdmin
+namespace VBSAdmin.Controllers
 {
     [Authorize(Policy = "SystemAdminOnly")]
-    public class TenantsController : Controller
+    public class TenantsController : BaseController
     {
         private readonly UserManager<ApplicationUser> _userManager;
 
         private readonly ApplicationDbContext _context;
 
-        public TenantsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public TenantsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager) : base(context)
         {
             _context = context;
             _userManager = userManager; 
