@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using VBSAdmin.Data;
 using VBSAdmin.Data.VBSAdminModels;
+using VBSAdmin.Models.ClassroomViewModels;
 
 namespace VBSAdmin.Controllers
 {
@@ -25,11 +26,29 @@ namespace VBSAdmin.Controllers
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Classes.Include(c => c.Session)
-                .Include(c => c.VBS)
+                .Include(c => c.Children)
                 .Where(c => c.VBSId == this.CurrentVBSId && c.VBS.TenantId == this.TenantId)
                 .OrderBy(c => c.SessionId)
                 .ThenBy(c => c.Grade);
-            return View(await applicationDbContext.ToListAsync());
+
+            //TODO: Use AutoMapper
+            List<Classroom> dbClassrooms = await applicationDbContext.ToListAsync();
+            List<IndexViewModel> classRoomVMs = new List<IndexViewModel>();
+
+            foreach(Classroom dbClass in dbClassrooms)
+            {
+                IndexViewModel vm = new IndexViewModel();
+                vm.Grade = dbClass.Grade;
+                vm.Id = dbClass.Id;
+                vm.Name = dbClass.Name;
+                vm.Session = dbClass.Session;
+                vm.SessionId = dbClass.SessionId;
+                vm.ChildCount = dbClass.Children.Count;
+
+                classRoomVMs.Add(vm);
+            }
+
+            return View(classRoomVMs);
         }
 
         // GET: Classrooms/Details/5
@@ -64,6 +83,9 @@ namespace VBSAdmin.Controllers
         public async Task<IActionResult> Create([Bind("Id,Gender,Grade,Name,SessionId")] Classroom classroom)
         {
             classroom.VBSId = this.CurrentVBSId;
+
+            //Only support mixed gender classrooms for now
+            classroom.Gender = Enums.ClassGender.Mixed;
 
             if (ModelState.IsValid)
             {
@@ -105,6 +127,9 @@ namespace VBSAdmin.Controllers
             }
 
             classroom.VBSId = this.CurrentVBSId;
+
+            //Only support mixed gender classrooms for now
+            classroom.Gender = Enums.ClassGender.Mixed;
 
             if (ModelState.IsValid)
             {

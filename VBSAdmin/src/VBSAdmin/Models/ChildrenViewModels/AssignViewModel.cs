@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using VBSAdmin.Data.VBSAdminModels;
@@ -9,9 +11,13 @@ namespace VBSAdmin.Models.ChildrenViewModels
 {
     public class AssignViewModel
     {
+        [Display(Name = "Grade")]
         public Enums.ClassGradeOptions FilterGrade { get; set; }
+        [Display(Name = "Name")]
         public string FilterName { get; set; }
+        [Display(Name = "Assignment")]
         public Enums.AssignmentOptions AssignmentOption { get; set; }
+        [Display(Name = "Session")]
         public Enums.SessionOptions SessionOption { get; set; }
         public List<SelectListItem> AMClassroomSelectItems { get; set; }
         public List<SelectListItem> PMClassroomSelectItems { get; set; }

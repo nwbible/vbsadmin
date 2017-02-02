@@ -5,115 +5,129 @@
 }
 
 <h2>Assign Children To Classrooms</h2>
-<h3>Choose search filters</h3>
 <form asp-action="Assign">
-    <label asp-for="FilterName" class="col-md-2 control-label"></label>
-    <div class="col-md-10">
-        <input asp-for="FilterName" class="form-control" />
-    </div>
-    <label asp-for="FilterGrade" class="col-md-2 control-label"></label>
-    <div class="col-md-10">
-        <select asp-for="FilterGrade" class="form-control" asp-items="Html.GetEnumSelectList<VBSAdmin.Data.VBSAdminModels.Enums.ClassGradeOptions>()"></select>
-    </div>
-    <label asp-for="SessionOption" class="col-md-2 control-label"></label>
-    <div class="col-md-10">
-        @foreach (var option in Enum.GetValues(typeof(VBSAdmin.Data.VBSAdminModels.Enums.SessionOptions)).Cast<VBSAdmin.Data.VBSAdminModels.Enums.SessionOptions>().Select(v => v.ToString()).ToList()) {
-            <input type="radio" asp-for="SessionOption" value="@option"/>@option
-        }
-    </div>
-    <label asp-for="AssignmentOption" class="col-md-2 control-label"></label>
-    <div class="col-md-10">
-        @foreach (var assignment in Enum.GetValues(typeof(VBSAdmin.Data.VBSAdminModels.Enums.AssignmentOptions)).Cast<VBSAdmin.Data.VBSAdminModels.Enums.AssignmentOptions>().Select(v => v.ToString()).ToList())
-        {
-            <input type="radio" asp-for="AssignmentOption" value="@assignment" />@assignment
-        }
-    </div>
-    <div class="col-md-offset-2 col-md-10">
-        <input type="submit" value="Apply Filters" name="ApplyFilters" id="ApplyFilters" class="btn btn-default" />
-    </div>
-
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    Name
-                </th>
-                <th>
-                    Grade Completed
-                </th>
-                <th>
-                    Date of Birth
-                </th>
-                <th>
-                    Place With Request
-                </th>
-                <th>
-                    Allergies
-                </th>
-                <th>
-                    Medical Conditions
-                </th>
-                <th>
-                    Session
-                </th>
-                <th>
-                    Current Class Assignment
-                </th>
-                <th>
-                    New Class Assignment
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-    @{var index = 0;}
-    @foreach (var item in Model.Children) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.GradeCompleted)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateOfBirth)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PlaceChildWithRequest)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Allergies)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MedicalConditions)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Session.Period)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CurrentClassName)
-            </td>
-            <td>
-                <input asp-for="@item.Id" name="Assignments[@index].ChildId" type="hidden"/>
-                <input asp-for="@item.CurrentClassId" name="Assignments[@index].CurrentClassId" type="hidden" />
-                @if (item.Session.Period == VBSAdmin.Data.VBSAdminModels.Enums.SessionPeriod.AM)
+    <!-- Search Filter Section -->
+    <div class="row panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">Search Filters</h3>
+        </div>
+        <div class="panel-body">
+            <div class="col-md-3 form-group form-inline">
+                <label asp-for="FilterGrade" class="control-label"></label>
+                <select asp-for="FilterGrade" class="form-control" asp-items="Html.GetEnumSelectList<VBSAdmin.Data.VBSAdminModels.Enums.ClassGradeOptions>()"></select><br />
+            </div>
+            <div class="col-md-9 form-group form-inline">
+                <label asp-for="FilterName" class="control-label"></label>
+                <input asp-for="FilterName" class="form-control" /><br />
+            </div>
+            <div class="col-md-3 form-group">
+                <label asp-for="SessionOption" class="control-label"></label>
+                @foreach (var option in Enum.GetValues(typeof(VBSAdmin.Data.VBSAdminModels.Enums.SessionOptions)).Cast<VBSAdmin.Data.VBSAdminModels.Enums.SessionOptions>().Select(v => v.ToString()).ToList())
                 {
-                    <select asp-for="@item.NewClassId" name="Assignments[@index].NewClassId" class="form-control" asp-items="@Model.AMClassroomSelectItems"></select>
+                    <input type="radio" asp-for="SessionOption" value="@option" />@option
                 }
-                else
+            </div>
+            <div class="col-md-9 form-group">
+                <label asp-for="AssignmentOption" class="control-label"></label>
+                @foreach (var assignment in Enum.GetValues(typeof(VBSAdmin.Data.VBSAdminModels.Enums.AssignmentOptions)).Cast<VBSAdmin.Data.VBSAdminModels.Enums.AssignmentOptions>().Select(v => v.ToString()).ToList())
                 {
-                    <select asp-for="@item.NewClassId" name="Assignments[@index].NewClassId" class="form-control" asp-items="@Model.PMClassroomSelectItems"></select>
+                    <input type="radio" asp-for="AssignmentOption" value="@assignment" />@assignment
                 }
-
-            </td>
-        </tr>
-        index++;
-    }
-        </tbody>
-    </table>
-
-    <div class="col-md-offset-2 col-md-10">
-        <input type="submit" value="Assign Children" name="Update" id="Update" class="btn btn-default" />
+            </div>
+            <div class="col-md-12">
+                <input type="submit" value="Apply Filters" name="ApplyFilters" id="ApplyFilters" class="btn btn-info" />
+            </div>
+        </div>
     </div>
 
+    <!-- Children List Section -->
+    <div class="row panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Results</h3>
+        </div>
+        <div class="panel-body">
+            <table class="table table-hover table-condensed">
+                <thead>
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Grade Completed
+                        </th>
+                        <th>
+                            Date of Birth
+                        </th>
+                        <th>
+                            Place With Request
+                        </th>
+                        <th>
+                            Allergies
+                        </th>
+                        <th>
+                            Medical Conditions
+                        </th>
+                        <th>
+                            Session
+                        </th>
+                        <th>
+                            Current Class Assignment
+                        </th>
+                        <th>
+                            New Class Assignment
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+            @{var index = 0;}
+            @foreach (var item in Model.Children) {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GradeCompleted)
+                    </td>
+                    <td>
+                        @item.DateOfBirth.Date.ToString("d")
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PlaceChildWithRequest)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Allergies)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MedicalConditions)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Session.Period)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CurrentClassName)
+                    </td>
+                    <td>
+                        <input asp-for="@item.Id" name="Assignments[@index].ChildId" type="hidden"/>
+                        <input asp-for="@item.CurrentClassId" name="Assignments[@index].CurrentClassId" type="hidden" />
+                        @if (item.Session.Period == VBSAdmin.Data.VBSAdminModels.Enums.SessionPeriod.AM)
+                        {
+                            <select asp-for="@item.NewClassId" name="Assignments[@index].NewClassId" class="form-control" asp-items="@Model.AMClassroomSelectItems"></select>
+                        }
+                        else
+                        {
+                            <select asp-for="@item.NewClassId" name="Assignments[@index].NewClassId" class="form-control" asp-items="@Model.PMClassroomSelectItems"></select>
+                        }
+
+                    </td>
+                </tr>
+                index++;
+            }
+                </tbody>
+            </table>
+
+            <div class="col-md-12">
+                <input type="submit" value="Assign Children" name="Update" id="Update" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
 </form>

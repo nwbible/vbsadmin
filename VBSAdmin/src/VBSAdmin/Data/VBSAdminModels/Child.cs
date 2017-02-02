@@ -26,6 +26,7 @@ namespace VBSAdmin.Data.VBSAdminModels
         public string Zip { get; set; }
         [Required]
         public Enums.ClassGrade GradeCompleted { get; set; }
+        [Column(TypeName = "Date")]
         [Required]
         public DateTime DateOfBirth { get; set; }
         [Required]
