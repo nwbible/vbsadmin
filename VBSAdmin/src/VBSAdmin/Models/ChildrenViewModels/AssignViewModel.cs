@@ -18,7 +18,7 @@ namespace VBSAdmin.Models.ChildrenViewModels
         [Display(Name = "Assignment")]
         public Enums.AssignmentOptions AssignmentOption { get; set; }
         [Display(Name = "Session")]
-        public Enums.SessionOptions SessionOption { get; set; }
+        public Enums.SessionPeriod SessionOption { get; set; }
         public List<SelectListItem> AMClassroomSelectItems { get; set; }
         public List<SelectListItem> PMClassroomSelectItems { get; set; }
         public Classroom GroupClassAssignment { get; set; }

@@ -1,41 +1,205 @@
-@model VBSAdmin.Data.VBSAdminModels.VBS
+@model VBSAdmin.Models.VBSViewModels.DetailsViewModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = Model.ThemeName;
 }
 
-<h2>Details</h2>
+<div class="row">
+    <div class="col-md-12">
+        <h2>@Model.ThemeName</h2>
+        <h4>@Model.StartDate.ToString("d") - @Model.EndDate.ToString("d")</h4>
+    </div>
+</div>
+<p></p>
+<div class="row">
+    <div class="col-md-4">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Registration Totals (@Model.TotalRegisteredChildren)</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <th>
+                                Grade
+                            </th>
+                            <th>
+                                AM
+                            </th>
+                            <th>
+                                PM
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                PreSchool
+                            </td>
+                            <td>
+                                @Model.TotalAMPreschool
+                            </td>
+                            <td>
+                                @Model.TotalPMPreschool
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                PreK
+                            </td>
+                            <td>
+                                @Model.TotalAMPreK
+                            </td>
+                            <td>
+                                @Model.TotalPMPreK
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Kindergarten
+                            </td>
+                            <td>
+                                @Model.TotalAMKindergarten
+                            </td>
+                            <td>
+                                @Model.TotalPMKindergarten
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                1st
+                            </td>
+                            <td>
+                                @Model.TotalAM1st
+                            </td>
+                            <td>
+                                @Model.TotalPM1st
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                2nd
+                            </td>
+                            <td>
+                                @Model.TotalAM2nd
+                            </td>
+                            <td>
+                                @Model.TotalPM2nd
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                3rd
+                            </td>
+                            <td>
+                                @Model.TotalAM3rd
+                            </td>
+                            <td>
+                                @Model.TotalPM3rd
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                4th
+                            </td>
+                            <td>
+                                @Model.TotalAM4th
+                            </td>
+                            <td>
+                                @Model.TotalPM4th
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                5th
+                            </td>
+                            <td>
+                                @Model.TotalAM5th
+                            </td>
+                            <td>
+                                @Model.TotalPM5th
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                6th
+                            </td>
+                            <td>
+                                @Model.TotalAM6th
+                            </td>
+                            <td>
+                                @Model.TotalPM6th
+                            </td>
+                        </tr>
+                        <tr class="info">
+                            <td>
+                                <strong>Total</strong>
+                            </td>
+                            <td>
+                                <strong>@Model.TotalAMRegisteredChildren</strong>
+                            </td>
+                            <td>
+                                <strong>@Model.TotalPMRegisteredChildren</strong>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Regular vs Visitor Totals</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <th>
+                            </th>
+                            <th>
+                                Total
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                NWB
+                            </td>
+                            <td>
+                                @Model.TotalAttendNWB
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Visitors
+                            </td>
+                            <td>
+                                @Model.TotalVisitors
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Quick Actions</h3>
+            </div>
+            <div class="panel-body list-group">
+                <a asp-action="ExportClassAttendanceToExcel" asp-controller="VBS" class="list-group-item">Generate Class Attendance Excel Spreadsheet <i class="fa fa-file-excel-o fa-lg"></i></a>
+                <a asp-action="ExportClassAssignmentEmailDataAsCsv" asp-controller="VBS" class="list-group-item">Generate Class Assignment Email CSV <i class="fa fa-file-code-o fa-lg"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+<p></p>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+</div>
 
-<div>
-    <h4>VBS</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.ThemeName)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ThemeName)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.StartDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.StartDate)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.EndDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.EndDate)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
-<hr />
-<div>
-    <a asp-action="Index" asp-controller="Classrooms">Manage Classes</a>  |  
-    <a asp-action="Index" asp-controller="Children">Manage Children</a>
-</div>

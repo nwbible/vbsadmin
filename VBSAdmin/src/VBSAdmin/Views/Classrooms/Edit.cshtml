@@ -1,19 +1,18 @@
 @model VBSAdmin.Data.VBSAdminModels.Classroom
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Classrrom";
 }
 
-<h2>Edit</h2>
+<h2>Edit Classroom</h2>
 
 <form asp-action="Edit">
     <div class="form-horizontal">
-        <h4>Classroom</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="Id" />
         <div class="form-group">
-            <label asp-for="SessionId" class="control-label col-md-2"></label>
+            <label asp-for="SessionId" class="control-label col-md-2">Session</label>
             <div class="col-md-10">
                 <select asp-for="SessionId" class="form-control" asp-items="ViewBag.SessionId"></select>
                 <span asp-validation-for="SessionId" class="text-danger" />
@@ -35,7 +34,7 @@
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </div>
     </div>

@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using VBSAdmin.Data;
 using VBSAdmin.Data.VBSAdminModels;
 using VBSAdmin.Models.ChildrenViewModels;
+using VBSAdmin.Filters;
 
 namespace VBSAdmin.Controllers
 {
@@ -19,7 +20,7 @@ namespace VBSAdmin.Controllers
 
         public ChildrenController(ApplicationDbContext context) : base(context)
         {
-            _context = context;    
+            _context = context;
         }
 
         // GET: Children
@@ -182,12 +183,20 @@ namespace VBSAdmin.Controllers
         }
 
         // GET: Children/AssignByGrade
-        public async Task<IActionResult> Assign()
+        public async Task<IActionResult> Assign(string session)
         {
+            Enums.SessionPeriod sessionPeriod = Enums.SessionPeriod.AM;
+
+            if (!string.IsNullOrEmpty(session) && session.ToUpper() == "PM")
+            {
+                sessionPeriod = Enums.SessionPeriod.PM;
+            }
+
             AssignViewModel assignByGradeViewModel = new Models.ChildrenViewModels.AssignViewModel();
-            
+
             //Set the default filter option values
             SetDefaultFilterOptions(assignByGradeViewModel);
+            assignByGradeViewModel.SessionOption = sessionPeriod;
 
             //Get the possible class assignments
             await GetPossibleClassrooms(assignByGradeViewModel);
@@ -202,6 +211,7 @@ namespace VBSAdmin.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [RequestFormSizeLimit(valueCountLimit: 4000)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Assign(AssignViewModel assignViewModel, string ApplyFilters, string Update)
         {
@@ -229,9 +239,9 @@ namespace VBSAdmin.Controllers
                 if (!string.IsNullOrWhiteSpace(Update))
                 {
                     //foreach(AssignChild child in assignViewModel.Children)
-                    foreach(ClassAssignment assignment in assignViewModel.Assignments)
+                    foreach (ClassAssignment assignment in assignViewModel.Assignments)
                     {
-                        if(assignment.CurrentClassId != assignment.NewClassId)
+                        if (assignment.CurrentClassId != assignment.NewClassId)
                         {
                             var dbChild = await _context.Children
                                 .Where(c => c.Id == assignment.ChildId && c.VBSId == this.CurrentVBSId && c.VBS.TenantId == this.TenantId)
@@ -266,6 +276,24 @@ namespace VBSAdmin.Controllers
             return View(assignViewModel);
         }
 
+        // POST: Children/Search
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Search(string searchText)
+        {
+            var applicationDbContext = _context.Children.Include(c => c.Classroom)
+                .Include(c => c.Session)
+                .Include(c => c.VBS)
+                .Where(c => c.VBSId == this.CurrentVBSId && c.VBS.TenantId == this.TenantId)
+                .Where(c => c.FirstName.Contains(searchText) || c.LastName.Contains(searchText))
+                .OrderBy(c => c.Id);
+
+            return View(await applicationDbContext.ToListAsync());
+        }
+
+
 
         private bool ChildExists(int id)
         {
@@ -277,7 +305,7 @@ namespace VBSAdmin.Controllers
         {
             model.AssignmentOption = Enums.AssignmentOptions.All;
             model.FilterGrade = Enums.ClassGradeOptions.All;
-            model.SessionOption = Enums.SessionOptions.All;
+            model.SessionOption = Enums.SessionPeriod.AM;
             model.FilterName = string.Empty;
         }
 
@@ -336,18 +364,9 @@ namespace VBSAdmin.Controllers
                 .Include(c => c.Session)
                 .Where(c => c.VBSId == this.CurrentVBSId && c.VBS.TenantId == this.TenantId);
 
-            if(model.SessionOption != Enums.SessionOptions.All)
-            {
-                if (model.SessionOption == Enums.SessionOptions.AM)
-                {
-                    applicationDbContext = applicationDbContext.Where(c => c.Session.Period == Enums.SessionPeriod.AM);
-                }
-                else
-                {
-                    applicationDbContext = applicationDbContext.Where(c => c.Session.Period == Enums.SessionPeriod.PM);
-                }
-            }
-
+            
+            applicationDbContext = applicationDbContext.Where(c => c.Session.Period == model.SessionOption);
+            
             if(model.AssignmentOption != Enums.AssignmentOptions.All)
             {
                 if (model.AssignmentOption == Enums.AssignmentOptions.Assigned)

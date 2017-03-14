@@ -10,6 +10,9 @@ using VBSAdmin.Data;
 using VBSAdmin.Data.VBSAdminModels;
 using VBSAdmin.Models.VBSViewModels;
 using VBSAdmin.Authorization;
+using VBSAdmin.Helpers;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
 
 namespace VBSAdmin.Controllers
 {
@@ -40,13 +43,43 @@ namespace VBSAdmin.Controllers
             }
 
             //Need to verify the requested VBS belongs to the tenant the user belongs to
-            var vBS = await _context.VBS.Include(v => v.Tenant).Where(vb => vb.Id == id && vb.TenantId == this.TenantId).SingleOrDefaultAsync();
+            var vBS = await _context.VBS.Include(c => c.Children).Include(s=> s.Sessions).Include(v => v.Tenant).Where(vb => vb.Id == id && vb.TenantId == this.TenantId).SingleOrDefaultAsync();
             if (vBS == null)
             {   
                 return NotFound();
             }
 
-            return View(vBS);
+            //todo: Use automapper
+            DetailsViewModel vm = new DetailsViewModel();
+            vm.Id = vBS.Id;
+            vm.ThemeName = vBS.ThemeName;
+            vm.StartDate = vBS.StartDate;
+            vm.EndDate = vBS.EndDate;
+            vm.TotalRegisteredChildren = vBS.Children.Count;
+            vm.TotalAMRegisteredChildren = vBS.Children.Where(c => c.Session.Period == Enums.SessionPeriod.AM).Count();
+            vm.TotalPMRegisteredChildren = vBS.Children.Where(c => c.Session.Period == Enums.SessionPeriod.PM).Count();
+            vm.TotalAMPreschool = vBS.Children.Where(c => c.Session.Period == Enums.SessionPeriod.AM && c.GradeCompleted == Enums.ClassGrade.PreSchool).Count();
+            vm.TotalAMPreK = vBS.Children.Where(c => c.Session.Period == Enums.SessionPeriod.AM && c.GradeCompleted == Enums.ClassGrade.PreK).Count();
+            vm.TotalAMKindergarten = vBS.Children.Where(c => c.Session.Period == Enums.SessionPeriod.AM && c.GradeCompleted == Enums.ClassGrade.Kindergarten).Count();
+            vm.TotalAM1st = vBS.Children.Where(c => c.Session.Period == Enums.SessionPeriod.AM && c.GradeCompleted == Enums.ClassGrade.First).Count();
+            vm.TotalAM2nd = vBS.Children.Where(c => c.Session.Period == Enums.SessionPeriod.AM && c.GradeCompleted == Enums.ClassGrade.Second).Count();
+            vm.TotalAM3rd = vBS.Children.Where(c => c.Session.Period == Enums.SessionPeriod.AM && c.GradeCompleted == Enums.ClassGrade.Third).Count();
+            vm.TotalAM4th = vBS.Children.Where(c => c.Session.Period == Enums.SessionPeriod.AM && c.GradeCompleted == Enums.ClassGrade.Fourth).Count();
+            vm.TotalAM5th = vBS.Children.Where(c => c.Session.Period == Enums.SessionPeriod.AM && c.GradeCompleted == Enums.ClassGrade.Fifth).Count();
+            vm.TotalAM6th = vBS.Children.Where(c => c.Session.Period == Enums.SessionPeriod.AM && c.GradeCompleted == Enums.ClassGrade.Sixth).Count();
+            vm.TotalPMPreschool = vBS.Children.Where(c => c.Session.Period == Enums.SessionPeriod.PM && c.GradeCompleted == Enums.ClassGrade.PreSchool).Count();
+            vm.TotalPMPreK = vBS.Children.Where(c => c.Session.Period == Enums.SessionPeriod.PM && c.GradeCompleted == Enums.ClassGrade.PreK).Count();
+            vm.TotalPMKindergarten = vBS.Children.Where(c => c.Session.Period == Enums.SessionPeriod.PM && c.GradeCompleted == Enums.ClassGrade.Kindergarten).Count();
+            vm.TotalPM1st = vBS.Children.Where(c => c.Session.Period == Enums.SessionPeriod.PM && c.GradeCompleted == Enums.ClassGrade.First).Count();
+            vm.TotalPM2nd = vBS.Children.Where(c => c.Session.Period == Enums.SessionPeriod.PM && c.GradeCompleted == Enums.ClassGrade.Second).Count();
+            vm.TotalPM3rd = vBS.Children.Where(c => c.Session.Period == Enums.SessionPeriod.PM && c.GradeCompleted == Enums.ClassGrade.Third).Count();
+            vm.TotalPM4th = vBS.Children.Where(c => c.Session.Period == Enums.SessionPeriod.PM && c.GradeCompleted == Enums.ClassGrade.Fourth).Count();
+            vm.TotalPM5th = vBS.Children.Where(c => c.Session.Period == Enums.SessionPeriod.PM && c.GradeCompleted == Enums.ClassGrade.Fifth).Count();
+            vm.TotalPM6th = vBS.Children.Where(c => c.Session.Period == Enums.SessionPeriod.PM && c.GradeCompleted == Enums.ClassGrade.Sixth).Count();
+            vm.TotalAttendNWB = vBS.Children.Where(c => c.AttendHostChurch == true).Count();
+            vm.TotalVisitors = vBS.Children.Where(c => c.AttendHostChurch == false).Count();
+
+            return View(vm);
         }
 
         // GET: VBS/Current/5
@@ -160,11 +193,11 @@ namespace VBSAdmin.Controllers
 
             //Need to verify the requested VBS belongs to the tenant the user belongs to
             var vBS = await _context.VBS.Include(v => v.Tenant).Where(vb => vb.Id == id && vb.TenantId == this.TenantId).SingleOrDefaultAsync();
-            //var vBS = await _context.VBS.SingleOrDefaultAsync(m => m.Id == id);
             if (vBS == null)
             {
                 return NotFound();
             }
+            
             ViewData["TenantId"] = new SelectList(_context.Tenants, "Id", "ChurchName", vBS.TenantId);
             return View(vBS);
         }
@@ -181,14 +214,21 @@ namespace VBSAdmin.Controllers
                 return NotFound();
             }
 
+            var vbsContext = _context.VBS.Where(v => v.Id == vBS.Id && v.TenantId == this.TenantId).FirstOrDefault();
+
             //Set the tenant id based on the current user context.
             vBS.TenantId = this.TenantId;
+
+            vbsContext.TenantId = this.TenantId;
+            vbsContext.EndDate = vBS.EndDate;
+            vbsContext.StartDate = vBS.StartDate;
+            vbsContext.ThemeName = vBS.ThemeName;
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(vBS);
+                    _context.Update(vbsContext);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -241,6 +281,59 @@ namespace VBSAdmin.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> ExportClassAttendanceToExcel()
+        {
+            var applicationDbContext = _context.Classes.Include(c => c.Session)
+                .Include(c => c.Children)
+                .Where(c => c.VBSId == this.CurrentVBSId && c.VBS.TenantId == this.TenantId)
+                .OrderBy(c => c.SessionId)
+                .ThenBy(c => c.Grade)
+                .ThenBy(c => c.Name);
+
+            List<Classroom> dbClassrooms = await applicationDbContext.ToListAsync();
+
+            string tenantName = _context.Tenants
+                .Where(t => t.Id == this.TenantId).First().Name;
+
+            string theme = _context.VBS
+                .Where(v => v.Id == this.CurrentVBSId).First().ThemeName;
+
+            string fileName = tenantName + " - " + theme + " - " + "Attendance.xlsx";
+
+            byte[] filecontent = ExcelExportHelper.ExportAttendanceExcel(dbClassrooms);
+            return File(filecontent, ExcelExportHelper.ExcelContentType, fileName);
+        }
+
+        [HttpGet]
+        [Route("ClassAssignmentEmailExport.csv")]
+        [Produces("text/csv")]
+        public async Task<IActionResult> ExportClassAssignmentEmailDataAsCsv()
+        {
+            var models = new List<ClassAssignmentEmailModel>();
+
+            List<Child> children = await _context.Children
+                .Include(c => c.Classroom)
+                .Include(c => c.Classroom.Session)
+                .Where(c => c.VBSId == this.CurrentVBSId && c.VBS.TenantId == this.TenantId && !String.IsNullOrEmpty(c.GuardianEmail) && c.ClassroomId != null)
+                .OrderBy(c => c.LastName)
+                .ThenBy(c => c.FirstName).ToListAsync();
+
+            foreach(Child child in children)
+            {
+                ClassAssignmentEmailModel model = new ClassAssignmentEmailModel();
+                model.Email = child.GuardianEmail;
+                model.ChildName = child.FirstName + " " + child.LastName;
+                model.AssignedClassName = child.Classroom.Session.Period + " " + child.Classroom.Grade + " " + child.Classroom.Name;
+                model.GuardianName = child.GuardianFirstName + " " + child.GuardianLastName;
+
+                models.Add(model);
+            }
+
+            return Ok(models);
+        }
+
 
         private bool VBSExists(int id)
         {

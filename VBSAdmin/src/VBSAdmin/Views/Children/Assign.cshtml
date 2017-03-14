@@ -22,7 +22,7 @@
             </div>
             <div class="col-md-3 form-group">
                 <label asp-for="SessionOption" class="control-label"></label>
-                @foreach (var option in Enum.GetValues(typeof(VBSAdmin.Data.VBSAdminModels.Enums.SessionOptions)).Cast<VBSAdmin.Data.VBSAdminModels.Enums.SessionOptions>().Select(v => v.ToString()).ToList())
+                @foreach (var option in Enum.GetValues(typeof(VBSAdmin.Data.VBSAdminModels.Enums.SessionPeriod)).Cast<VBSAdmin.Data.VBSAdminModels.Enums.SessionPeriod>().Select(v => v.ToString()).ToList())
                 {
                     <input type="radio" asp-for="SessionOption" value="@option" />@option
                 }

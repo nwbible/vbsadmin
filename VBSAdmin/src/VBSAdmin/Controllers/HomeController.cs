@@ -43,15 +43,14 @@ namespace VBSAdmin.Controllers
                 }
                 else
                 {
-                    if (tenantAdminClaim != null && tenantAdminClaim.Value.ToLower() == "true")
-                    {
-                        return RedirectToAction("Index", "VBS");
-                    }
-                    else
-                    {
+//                    {
+//                        return RedirectToAction("Index", "VBS");
+//                    }
+//                    else
+//                    {
                         var currentVbsId = Convert.ToInt32(Request.Cookies[Constants.CurrentVBSIdCookie]);
                         return RedirectToAction("Details", "VBS", new { Id = currentVbsId });
-                    }
+//                    }
                 }
 
             }

@@ -1,0 +1,27 @@
+@model IEnumerable<VBSAdmin.Models.ClassroomViewModels.RostersNameViewModel>
+
+@{
+    ViewData["Title"] = "Classroom Rosters - Name Only";
+}
+
+<h2>Classroom Rosters - Name Only</h2>
+
+@foreach (var item in Model)
+{
+    <div class="panel panel-primary">
+        <div class="panel-heading">@(item.SessionPeriod + " " + item.Grade + " " + item.Name)</div>
+        <table class="table table-bordered table-condensed">
+            <tbody>
+                @foreach (var name in item.ChildrenNames)
+                {
+                    <tr>
+                        <td>
+                            @name
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+<p />
+}

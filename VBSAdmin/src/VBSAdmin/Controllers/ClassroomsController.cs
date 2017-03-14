@@ -187,6 +187,194 @@ namespace VBSAdmin.Controllers
             return RedirectToAction("Index");
         }
 
+        // GET: Classroom Rosters with Name Only
+        public async Task<IActionResult> RostersName()
+        {
+            var applicationDbContext = _context.Classes.Include(c => c.Session)
+                .Include(c => c.Children)
+                .Where(c => c.VBSId == this.CurrentVBSId && c.VBS.TenantId == this.TenantId)
+                .OrderBy(c => c.SessionId)
+                .ThenBy(c => c.Grade)
+                .ThenBy(c => c.Name);
+
+            //TODO: Use AutoMapper
+            List<Classroom> dbClassrooms = await applicationDbContext.ToListAsync();
+            List<RostersNameViewModel> rosterNameVMs = new List<RostersNameViewModel>();
+
+            foreach (Classroom dbClass in dbClassrooms)
+            {
+                RostersNameViewModel vm = new RostersNameViewModel();
+                vm.Grade = dbClass.Grade;
+                vm.Id = dbClass.Id;
+                vm.Name = dbClass.Name;
+                vm.SessionPeriod = dbClass.Session.Period;
+                vm.ChildrenNames = new List<string>();
+
+                List<Child> sortedChildren = dbClass.Children.OrderBy(c => c.LastName).ToList();
+                foreach(Child child in sortedChildren)
+                {
+                    vm.ChildrenNames.Add(child.LastName + ", " + child.FirstName);
+                }
+                
+
+                rosterNameVMs.Add(vm);
+            }
+
+            return View(rosterNameVMs);
+        }
+
+        // GET: Classroom Rosters with Address
+        public async Task<IActionResult> RostersAddress()
+        {
+            var applicationDbContext = _context.Classes.Include(c => c.Session)
+                .Include(c => c.Children)
+                .Where(c => c.VBSId == this.CurrentVBSId && c.VBS.TenantId == this.TenantId)
+                .OrderBy(c => c.SessionId)
+                .ThenBy(c => c.Grade)
+                .ThenBy(c => c.Name);
+
+            //TODO: Use AutoMapper
+            List<Classroom> dbClassrooms = await applicationDbContext.ToListAsync();
+            List<RostersAddressViewModel> rosterAddressVMs = new List<RostersAddressViewModel>();
+
+            foreach (Classroom dbClass in dbClassrooms)
+            {
+                RostersAddressViewModel vm = new RostersAddressViewModel();
+                vm.Grade = dbClass.Grade;
+                vm.Id = dbClass.Id;
+                vm.Name = dbClass.Name;
+                vm.SessionPeriod = dbClass.Session.Period;
+                vm.Children = new List<RostersAddressChildrenViewModel>();
+
+                List<Child> sortedChildren = dbClass.Children.OrderBy(c => c.LastName).ToList();
+                foreach (Child child in sortedChildren)
+                {
+                    RostersAddressChildrenViewModel childVM = new RostersAddressChildrenViewModel();
+                    childVM.Name = child.LastName + ", " + child.FirstName;
+                    string address = child.Address1;
+                    if(!string.IsNullOrEmpty(child.Address2))
+                    {
+                        address = address + ", " + child.Address2;
+                    }
+                    childVM.Address = address;
+                    childVM.City = child.City;
+                    childVM.State = child.State;
+                    childVM.Zip = child.Zip;
+                    vm.Children.Add(childVM);
+                }
+
+
+                rosterAddressVMs.Add(vm);
+            }
+
+            return View(rosterAddressVMs);
+        }
+
+
+        // GET: Classroom Rosters with Allergies
+        public async Task<IActionResult> RostersAllergies(string session)
+        {
+            Enums.SessionPeriod sessionPeriod = Enums.SessionPeriod.AM;
+
+            if(!string.IsNullOrEmpty(session) && session.ToUpper() == "PM")
+            {
+                sessionPeriod = Enums.SessionPeriod.PM;
+            }
+
+            var applicationDbContext = _context.Classes.Include(c => c.Session)
+                .Include(c => c.Children)
+                .Where(c => c.VBSId == this.CurrentVBSId && c.VBS.TenantId == this.TenantId && c.Session.Period == sessionPeriod)
+                .OrderBy(c => c.SessionId)
+                .ThenBy(c => c.Grade)
+                .ThenBy(c => c.Name);
+
+            //TODO: Use AutoMapper
+            List<Classroom> dbClassrooms = await applicationDbContext.ToListAsync();
+            List<RostersAllergiesViewModel> rosterAllergiesVMs = new List<RostersAllergiesViewModel>();
+
+            foreach (Classroom dbClass in dbClassrooms)
+            {
+                RostersAllergiesViewModel vm = new RostersAllergiesViewModel();
+                vm.Grade = dbClass.Grade;
+                vm.Id = dbClass.Id;
+                vm.Name = dbClass.Name;
+                vm.SessionPeriod = dbClass.Session.Period;
+                vm.Children = new List<RostersAllergiesChildrenViewModel>();
+
+                List<Child> sortedChildren = dbClass.Children.OrderBy(c => c.LastName).ToList();
+                foreach (Child child in sortedChildren)
+                {
+                    if (child.HasAllergies || !string.IsNullOrEmpty(child.AllergiesDescription))
+                    {
+                        RostersAllergiesChildrenViewModel childVM = new RostersAllergiesChildrenViewModel();
+                        childVM.Name = child.LastName + ", " + child.FirstName;
+                        childVM.AllergyDescription = child.AllergiesDescription;
+                        vm.Children.Add(childVM);
+                    }
+                }
+
+
+                rosterAllergiesVMs.Add(vm);
+            }
+
+            return View(rosterAllergiesVMs);
+        }
+
+
+        // GET: Classroom Rosters with Medical Conditions and Medications
+        public async Task<IActionResult> RostersMedical(string session)
+        {
+            Enums.SessionPeriod sessionPeriod = Enums.SessionPeriod.AM;
+
+            if (!string.IsNullOrEmpty(session) && session.ToUpper() == "PM")
+            {
+                sessionPeriod = Enums.SessionPeriod.PM;
+            }
+
+            var applicationDbContext = _context.Classes.Include(c => c.Session)
+                .Include(c => c.Children)
+                .Where(c => c.VBSId == this.CurrentVBSId && c.VBS.TenantId == this.TenantId && c.Session.Period == sessionPeriod)
+                .OrderBy(c => c.SessionId)
+                .ThenBy(c => c.Grade)
+                .ThenBy(c => c.Name);
+
+            //TODO: Use AutoMapper
+            List<Classroom> dbClassrooms = await applicationDbContext.ToListAsync();
+            List<RostersMedicalViewModel> rosterMedicalVMs = new List<RostersMedicalViewModel>();
+
+            foreach (Classroom dbClass in dbClassrooms)
+            {
+                RostersMedicalViewModel vm = new RostersMedicalViewModel();
+                vm.Grade = dbClass.Grade;
+                vm.Id = dbClass.Id;
+                vm.Name = dbClass.Name;
+                vm.SessionPeriod = dbClass.Session.Period;
+                vm.Children = new List<RostersMedicalChildrenViewModel>();
+
+                List<Child> sortedChildren = dbClass.Children.OrderBy(c => c.LastName).ToList();
+                foreach (Child child in sortedChildren)
+                {
+                    if (child.HasMedicalCondition || 
+                        !string.IsNullOrEmpty(child.MedicalConditionDescription) ||
+                        child.HasMedications ||
+                        !string.IsNullOrEmpty(child.MedicationDescription))
+                    {
+                        RostersMedicalChildrenViewModel childVM = new RostersMedicalChildrenViewModel();
+                        childVM.Name = child.LastName + ", " + child.FirstName;
+                        childVM.MedicalConditionDescription = child.MedicalConditionDescription;
+                        childVM.MedicinesDescription = child.MedicationDescription;
+                        vm.Children.Add(childVM);
+                    }
+                }
+
+
+                rosterMedicalVMs.Add(vm);
+            }
+
+            return View(rosterMedicalVMs);
+        }
+
+
         private bool ClassroomExists(int id)
         {
             return _context.Classes.Any(e => e.Id == id);

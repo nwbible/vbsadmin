@@ -57,13 +57,6 @@ namespace VBSAdmin.Data.VBSAdminModels
             All=2
         }
 
-        public enum SessionOptions
-        {
-            AM=0,
-            PM=1,
-            All=2
-        }
-
         public enum ClassGradeOptions
         {
             [Display(Name = "PreSchool")]

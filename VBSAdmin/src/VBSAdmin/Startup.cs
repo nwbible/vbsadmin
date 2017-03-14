@@ -14,6 +14,7 @@ using VBSAdmin.Data;
 using VBSAdmin.Models;
 using VBSAdmin.Services;
 using VBSAdmin.Authorization;
+using WebApiContrib.Core.Formatter.Csv;
 
 namespace VBSAdmin
 {
@@ -54,6 +55,8 @@ namespace VBSAdmin
                 .AddDefaultTokenProviders();
 
             services.AddMvc();
+            services.AddMvc().AddCsvSerializerFormatters();
+
 
             services.AddAuthorization(options =>
             {
@@ -64,6 +67,7 @@ namespace VBSAdmin
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

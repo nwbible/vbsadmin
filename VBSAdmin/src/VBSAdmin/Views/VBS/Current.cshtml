@@ -21,13 +21,13 @@
                 @Html.DisplayNameFor(model => model.StartDate)
             </dt>
             <dd>
-                @Html.DisplayFor(model => model.StartDate)
+                @Model.StartDate.ToString("d")
             </dd>
             <dt>
                 @Html.DisplayNameFor(model => model.EndDate)
             </dt>
             <dd>
-                @Html.DisplayFor(model => model.EndDate)
+                @Model.EndDate.ToString("d")
             </dd>
         </dl>
         <div class="form-group">
