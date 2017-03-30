@@ -4,10 +4,12 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using VBSAdmin.Data.VBSAdminModels;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace VBSAdmin.Data.VBSAdminModels
+namespace VBSAdmin.Models.ChildrenViewModels
 {
-    public class Child
+    public class EditChildViewModel
     {
         //Child
         public int Id { get; set; }
@@ -31,21 +33,14 @@ namespace VBSAdmin.Data.VBSAdminModels
         public DateTime DateOfBirth { get; set; }
         [Required]
         public Enums.ChildGender Gender { get; set; }
-        [Required]
-        public bool HasAllergies { get; set; }
         public string AllergiesDescription { get; set; }
-        [Required]
-        public bool HasMedicalCondition { get; set; }
         public string MedicalConditionDescription { get; set; }
-        [Required]
-        public bool HasMedications { get; set; }
         public string MedicationDescription { get; set; }
         public string PlaceChildWithRequest { get; set; }
         public bool DecisionMade { get; set; }
         public string HomeChurch { get; set; }
         public bool AttendHostChurch { get; set; }
         public string InvitedBy { get; set; }
-        public DateTime DateOfRegistration { get; set; }
 
 
         //Guardian & Emergency Contact (They may be different)
@@ -67,20 +62,15 @@ namespace VBSAdmin.Data.VBSAdminModels
         [Required]
         [Phone]
         public string EmergencyContactPhone { get; set; }
-
-
-        //Classroom Assignment
         public int? ClassroomId { get; set; }
-        public Classroom Classroom { get; set; }
+
+
+        public List<SelectListItem> ClassroomSelectItems { get; set; }
 
 
         //VBS & Session
         [Required]
         public int SessionId { get; set; }
-        public Session Session { get; set; }
 
-        [Required]
-        public int VBSId { get; set; }
-        public VBS VBS { get; set; }
     }
 }

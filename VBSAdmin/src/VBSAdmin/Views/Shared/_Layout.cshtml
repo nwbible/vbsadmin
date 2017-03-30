@@ -12,7 +12,7 @@
 
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.css">
+        <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.css" />
         <link rel="stylesheet" href="~/css/site.css" />
     </environment>
     <environment names="Staging,Production">
@@ -20,7 +20,7 @@
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.css">
+        <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.css" />
     </environment>
 </head>
 <body>
@@ -44,15 +44,15 @@
                     @if (SignInManager.IsSignedIn(User))
                     {
                         <li>
-                            <a asp-area="" asp-controller="Classrooms" asp-action="Index"><i class="fa fa-address-book fa-lg"></i>  Classrooms</a>
+                            <a asp-area="" asp-controller="Classrooms" asp-action="Index"><i class="fa fa-address-book fa-lg"></i>  Classes</a>
                         </li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-users fa-lg"></i>  Children<span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a asp-area="" asp-controller="Children" asp-action="Index">Show All</a></li>
                                 <li><a asp-area="" asp-controller="Children" asp-action="Create">Register Child</a></li>
-                                <li><a asp-area="" asp-controller="Children" asp-action="Assign" asp-route-session="AM">Assign To AM Classrooms</a></li>
-                                <li><a asp-area="" asp-controller="Children" asp-action="Assign" asp-route-session="PM">Assign To PM Classrooms</a></li>
+                                <li><a asp-area="" asp-controller="Children" asp-action="Assign" asp-route-session="AM">Assign To AM Classes</a></li>
+                                <li><a asp-area="" asp-controller="Children" asp-action="Assign" asp-route-session="PM">Assign To PM Classes</a></li>
                             </ul>
                         </li>
                         <li class="dropdown">
@@ -69,12 +69,15 @@
                         </li>
                     }
                 </ul>
-                <form asp-action="Search" asp-controller="Children" class="navbar-form navbar-left" style="padding-left:70px">
-                    <div class="form-group">
-                        <input name="searchText" type="text" class="form-control" placeholder="Child Name">
-                    </div>
-                    <button type="submit" class="btn btn-primary"><i class="fa fa-search fa-lg"></i></button>
-                </form>
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <form asp-action="Search" asp-controller="Children" class="navbar-form navbar-left" style="padding-left:70px">
+                        <div class="form-group">
+                            <input name="searchText" type="text" class="form-control" placeholder="Child Name">
+                        </div>
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-search fa-lg"></i></button>
+                    </form>
+                }
 
                 @await Html.PartialAsync("_LoginPartial")
             </div>
@@ -104,6 +107,12 @@
         </script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
+    <script>
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+
 
     @RenderSection("scripts", required: false)
 </body>

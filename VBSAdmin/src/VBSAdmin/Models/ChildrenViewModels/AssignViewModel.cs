@@ -34,8 +34,7 @@ namespace VBSAdmin.Models.ChildrenViewModels
         public Enums.ClassGrade GradeCompleted { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string PlaceChildWithRequest { get; set; }
-        public string Allergies { get; set; }
-        public string MedicalConditions { get; set; }
+        public string HealthConcernsMarkup { get; set; }
         public string CurrentClassName { get; set; }
         public Session Session { get; set; }
         public int CurrentClassId { get; set; }

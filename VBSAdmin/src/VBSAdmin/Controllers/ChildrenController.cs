@@ -30,7 +30,8 @@ namespace VBSAdmin.Controllers
                 .Include(c => c.Session)
                 .Include(c => c.VBS)
                 .Where(c => c.VBSId == this.CurrentVBSId && c.VBS.TenantId == this.TenantId)
-                .OrderBy(c => c.Id);
+                .OrderBy(c => c.LastName)
+                .ThenBy(c => c.FirstName);
 
             return View(await applicationDbContext.ToListAsync());
         }
@@ -54,15 +55,68 @@ namespace VBSAdmin.Controllers
                 return NotFound();
             }
 
-            return View(child);
+            DetailsChildViewModel childVM = new DetailsChildViewModel
+            {
+                Id = child.Id,
+                Address1 = child.Address1,
+                Address2 = child.Address2,
+                AllergiesDescription = child.AllergiesDescription,
+                AttendHostChurch = child.AttendHostChurch,
+                City = child.City,
+                ClassroomName = (child.Classroom != null) ? child.Classroom.Session.Period + " " + child.Classroom.Grade + " " + child.Classroom.Name : "",
+                DateOfBirth = child.DateOfBirth,
+                DecisionMade = child.DecisionMade,
+                EmergencyContactName = child.EmergencyContactFirstName + " " + child.EmergencyContactLastName,
+                EmergencyContactPhone = child.EmergencyContactPhone,
+                Gender = child.Gender,
+                GradeCompleted = child.GradeCompleted,
+                GuardianChildRelationship = child.GuardianChildRelationship,
+                GuardianEmail = child.GuardianEmail,
+                GuardianName = child.GuardianFirstName + " " + child.GuardianLastName,
+                GuardianPhone = child.GuardianPhone,
+                HomeChurch = child.HomeChurch,
+                InvitedBy = child.InvitedBy,
+                MedicalConditionDescription = child.MedicalConditionDescription,
+                MedicationDescription = child.MedicationDescription,
+                Name = child.FirstName + " " + child.LastName,
+                Period = child.Session.Period,
+                PlaceChildWithRequest = child.PlaceChildWithRequest,
+                State = child.State,
+                Zip = child.Zip
+            };
+
+            return View(childVM);
         }
 
         // GET: Children/Create
         public IActionResult Create()
         {
-            ViewData["ClassroomId"] = new SelectList(_context.Classes.Where(s => s.VBSId == this.CurrentVBSId), "Id", "Name");
+            CreateChildViewModel createChildVM = new CreateChildViewModel();
+
+            List<Classroom> classrooms = _context.Classes
+                .Include(c => c.Session)
+                .Where(c => c.VBSId == this.CurrentVBSId)
+                .OrderBy(c => c.Session.Period)
+                .ThenBy(c => c.Grade)
+                .ThenBy(c => c.Name)
+                .ToList();
+
+            SelectListItem noneClassSelectItem = new SelectListItem { Value = "0", Text = "None", Selected = true };
+            List<SelectListItem> assignClassrooms = new List<SelectListItem>();
+            assignClassrooms.Add(noneClassSelectItem);
+
+            foreach (Classroom dbClass in classrooms)
+            {
+                SelectListItem assignClass = new SelectListItem();
+                assignClass.Value = dbClass.Id.ToString();
+                assignClass.Text = dbClass.Session.Period + " " + dbClass.Grade + " " + dbClass.Name;
+                assignClassrooms.Add(assignClass);
+            }
+
+            createChildVM.ClassroomSelectItems = assignClassrooms;
+
             ViewData["SessionId"] = new SelectList(_context.Sessions.Where(s => s.VBSId == this.CurrentVBSId), "Id", "Period");
-            return View();
+            return View(createChildVM);
         }
 
         // POST: Children/Create
@@ -70,20 +124,82 @@ namespace VBSAdmin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Address1,Address2,AllergiesDescription,AttendHostChurch,City,ClassroomId,DateOfBirth,DecisionMade,EmergencyContactFirstName,EmergencyContactLastName,EmergencyContactPhone,FirstName,Gender,GradeCompleted,GuardianChildRelationship,GuardianEmail,GuardianFirstName,GuardianLastName,GuardianPhone,HasAllergies,HasMedicalCondition,HasMedications,HomeChurch,InvitedBy,LastName,MedicalConditionDescription,MedicationDescription,PlaceChildWithRequest,SessionId,State,Zip")] Child child)
+        public async Task<IActionResult> Create([Bind("Id,Address1,Address2,AllergiesDescription,AttendHostChurch,City,ClassroomId,DateOfBirth,DecisionMade,EmergencyContactFirstName,EmergencyContactLastName,EmergencyContactPhone,FirstName,Gender,GradeCompleted,GuardianChildRelationship,GuardianEmail,GuardianFirstName,GuardianLastName,GuardianPhone,HomeChurch,InvitedBy,LastName,MedicalConditionDescription,MedicationDescription,PlaceChildWithRequest,SessionId,State,Zip")] CreateChildViewModel childVM)
         {
-            child.VBSId = this.CurrentVBSId;
-            child.DateOfRegistration = DateTime.UtcNow;
-
             if (ModelState.IsValid)
             {
+                Child child = new Child
+                {
+                    VBSId = this.CurrentVBSId,
+                    DateOfRegistration = DateTime.UtcNow,
+                    Address1 = childVM.Address1,
+                    Address2 = childVM.Address2,
+                    AllergiesDescription = childVM.AllergiesDescription,
+                    AttendHostChurch = childVM.AttendHostChurch,
+                    City = childVM.City,
+                    ClassroomId = childVM.ClassroomId,
+                    DateOfBirth = childVM.DateOfBirth,
+                    DecisionMade = childVM.DecisionMade,
+                    EmergencyContactFirstName = childVM.EmergencyContactFirstName,
+                    EmergencyContactLastName = childVM.EmergencyContactLastName,
+                    EmergencyContactPhone = childVM.EmergencyContactPhone,
+                    FirstName = childVM.FirstName,
+                    Gender = childVM.Gender,
+                    GradeCompleted = childVM.GradeCompleted,
+                    GuardianChildRelationship = childVM.GuardianChildRelationship,
+                    GuardianEmail = childVM.GuardianEmail,
+                    GuardianFirstName = childVM.GuardianFirstName,
+                    GuardianLastName = childVM.GuardianLastName,
+                    GuardianPhone = childVM.GuardianPhone,
+                    HomeChurch = childVM.HomeChurch,
+                    InvitedBy = childVM.InvitedBy,
+                    HasAllergies = false,
+                    HasMedicalCondition = false,
+                    HasMedications = false,
+                    LastName = childVM.LastName,
+                    MedicalConditionDescription = childVM.MedicalConditionDescription,
+                    MedicationDescription = childVM.MedicationDescription,
+                    PlaceChildWithRequest = childVM.PlaceChildWithRequest,
+                    SessionId = childVM.SessionId,
+                    State = childVM.State,
+                    Zip = childVM.Zip
+                };
+
+                if(child.ClassroomId == 0)
+                {
+                    child.ClassroomId = null;
+                }
+
                 _context.Add(child);
                 await _context.SaveChangesAsync();
+                childVM.Id = child.Id;
                 return RedirectToAction("Index");
             }
-            ViewData["ClassroomId"] = new SelectList(_context.Classes.Where(s => s.VBSId == this.CurrentVBSId), "Id", "Name", child.ClassroomId);
-            ViewData["SessionId"] = new SelectList(_context.Sessions.Where(s => s.VBSId == this.CurrentVBSId), "Id", "Period", child.SessionId);
-            return View(child);
+
+            List<Classroom> classrooms = _context.Classes
+                .Include(c => c.Session)
+                .Where(c => c.VBSId == this.CurrentVBSId)
+                .OrderBy(c => c.Session.Period)
+                .ThenBy(c => c.Grade)
+                .ThenBy(c => c.Name)
+                .ToList();
+
+            SelectListItem noneClassSelectItem = new SelectListItem { Value = "0", Text = "None", Selected = true };
+            List<SelectListItem> assignClassrooms = new List<SelectListItem>();
+            assignClassrooms.Add(noneClassSelectItem);
+
+            foreach (Classroom dbClass in classrooms)
+            {
+                SelectListItem assignClass = new SelectListItem();
+                assignClass.Value = dbClass.Id.ToString();
+                assignClass.Text = dbClass.Session.Period + " " + dbClass.Grade + " " + dbClass.Name;
+                assignClassrooms.Add(assignClass);
+            }
+
+            childVM.ClassroomSelectItems = assignClassrooms;
+
+            ViewData["SessionId"] = new SelectList(_context.Sessions.Where(s => s.VBSId == this.CurrentVBSId), "Id", "Period", childVM.SessionId);
+            return View(childVM);
         }
 
         // GET: Children/Edit/5
@@ -102,9 +218,64 @@ namespace VBSAdmin.Controllers
             {
                 return NotFound();
             }
-            ViewData["ClassroomId"] = new SelectList(_context.Classes.Where(s => s.VBSId == this.CurrentVBSId), "Id", "Name", child.ClassroomId);
+
+            EditChildViewModel editVM = new EditChildViewModel
+            {
+                Id = child.Id,
+                Address1 = child.Address1,
+                Address2 = child.Address2,
+                AllergiesDescription = child.AllergiesDescription,
+                AttendHostChurch = child.AttendHostChurch,
+                City = child.City,
+                ClassroomId = child.ClassroomId,
+                DateOfBirth = child.DateOfBirth,
+                DecisionMade = child.DecisionMade,
+                EmergencyContactFirstName = child.EmergencyContactFirstName,
+                EmergencyContactLastName = child.EmergencyContactLastName,
+                EmergencyContactPhone = child.EmergencyContactPhone,
+                FirstName = child.FirstName,
+                Gender = child.Gender,
+                GradeCompleted = child.GradeCompleted,
+                GuardianChildRelationship = child.GuardianChildRelationship,
+                GuardianEmail = child.GuardianEmail,
+                GuardianFirstName = child.GuardianFirstName,
+                GuardianLastName = child.GuardianLastName,
+                GuardianPhone = child.GuardianPhone,
+                HomeChurch = child.HomeChurch,
+                InvitedBy = child.InvitedBy,
+                LastName = child.LastName,
+                MedicalConditionDescription = child.MedicalConditionDescription,
+                MedicationDescription = child.MedicationDescription,
+                PlaceChildWithRequest = child.PlaceChildWithRequest,
+                SessionId = child.SessionId,
+                State = child.State,
+                Zip = child.Zip
+            };
+
+            List<Classroom> classrooms = _context.Classes
+                .Include(c => c.Session)
+                .Where(c => c.VBSId == this.CurrentVBSId)
+                .OrderBy(c => c.Session.Period)
+                .ThenBy(c => c.Grade)
+                .ThenBy(c => c.Name)
+                .ToList();
+
+            SelectListItem noneClassSelectItem = new SelectListItem { Value = "0", Text = "None", Selected = true };
+            List<SelectListItem> assignClassrooms = new List<SelectListItem>();
+            assignClassrooms.Add(noneClassSelectItem);
+
+            foreach (Classroom dbClass in classrooms)
+            {
+                SelectListItem assignClass = new SelectListItem();
+                assignClass.Value = dbClass.Id.ToString();
+                assignClass.Text = dbClass.Session.Period + " " + dbClass.Grade + " " + dbClass.Name;
+                assignClassrooms.Add(assignClass);
+            }
+
+            editVM.ClassroomSelectItems = assignClassrooms;
+
             ViewData["SessionId"] = new SelectList(_context.Sessions.Where(s => s.VBSId == this.CurrentVBSId), "Id", "Period", child.SessionId);
-            return View(child);
+            return View(editVM);
         }
 
         // POST: Children/Edit/5
@@ -112,17 +283,57 @@ namespace VBSAdmin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Address1,Address2,AllergiesDescription,AttendHostChurch,City,ClassroomId,DateOfBirth,DecisionMade,EmergencyContactFirstName,EmergencyContactLastName,EmergencyContactPhone,FirstName,Gender,GradeCompleted,GuardianChildRelationship,GuardianEmail,GuardianFirstName,GuardianLastName,GuardianPhone,HasAllergies,HasMedicalCondition,HasMedications,HomeChurch,InvitedBy,LastName,MedicalConditionDescription,MedicationDescription,PlaceChildWithRequest,SessionId,State,Zip")] Child child)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Address1,Address2,AllergiesDescription,AttendHostChurch,City,ClassroomId,DateOfBirth,DecisionMade,EmergencyContactFirstName,EmergencyContactLastName,EmergencyContactPhone,FirstName,Gender,GradeCompleted,GuardianChildRelationship,GuardianEmail,GuardianFirstName,GuardianLastName,GuardianPhone,HasAllergies,HasMedicalCondition,HasMedications,HomeChurch,InvitedBy,LastName,MedicalConditionDescription,MedicationDescription,PlaceChildWithRequest,SessionId,State,Zip")] EditChildViewModel childVM)
         {
-            if (id != child.Id)
+            if (id != childVM.Id)
             {
                 return NotFound();
             }
 
-            child.VBSId = this.CurrentVBSId;
-
             if (ModelState.IsValid)
             {
+                var child = await _context.Children
+                    .Where(c => c.Id == childVM.Id && c.VBSId == this.CurrentVBSId && c.VBS.TenantId == this.TenantId)
+                    .SingleOrDefaultAsync();
+
+                child.VBSId = this.CurrentVBSId;
+                child.Address1 = childVM.Address1;
+                child.Address2 = childVM.Address2;
+                child.AllergiesDescription = childVM.AllergiesDescription;
+                child.AttendHostChurch = childVM.AttendHostChurch;
+                child.City = childVM.City;
+                child.ClassroomId = childVM.ClassroomId;
+                child.DateOfBirth = childVM.DateOfBirth;
+                child.DecisionMade = childVM.DecisionMade;
+                child.EmergencyContactFirstName = childVM.EmergencyContactFirstName;
+                child.EmergencyContactLastName = childVM.EmergencyContactLastName;
+                child.EmergencyContactPhone = childVM.EmergencyContactPhone;
+                child.FirstName = childVM.FirstName;
+                child.Gender = childVM.Gender;
+                child.GradeCompleted = childVM.GradeCompleted;
+                child.GuardianChildRelationship = childVM.GuardianChildRelationship;
+                child.GuardianEmail = childVM.GuardianEmail;
+                child.GuardianFirstName = childVM.GuardianFirstName;
+                child.GuardianLastName = childVM.GuardianLastName;
+                child.GuardianPhone = childVM.GuardianPhone;
+                child.HomeChurch = childVM.HomeChurch;
+                child.InvitedBy = childVM.InvitedBy;
+                child.HasAllergies = false;
+                child.HasMedicalCondition = false;
+                child.HasMedications = false;
+                child.LastName = childVM.LastName;
+                child.MedicalConditionDescription = childVM.MedicalConditionDescription;
+                child.MedicationDescription = childVM.MedicationDescription;
+                child.PlaceChildWithRequest = childVM.PlaceChildWithRequest;
+                child.SessionId = childVM.SessionId;
+                child.State = childVM.State;
+                child.Zip = childVM.Zip;
+
+                if (child.ClassroomId == 0)
+                {
+                    child.ClassroomId = null;
+                }
+
                 try
                 {
                     _context.Update(child);
@@ -141,9 +352,31 @@ namespace VBSAdmin.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            ViewData["ClassroomId"] = new SelectList(_context.Classes.Where(s => s.VBSId == this.CurrentVBSId), "Id", "Name", child.ClassroomId);
-            ViewData["SessionId"] = new SelectList(_context.Sessions.Where(s => s.VBSId == this.CurrentVBSId), "Id", "Period", child.SessionId);
-            return View(child);
+
+            List<Classroom> classrooms = _context.Classes
+                .Include(c => c.Session)
+                .Where(c => c.VBSId == this.CurrentVBSId)
+                .OrderBy(c => c.Session.Period)
+                .ThenBy(c => c.Grade)
+                .ThenBy(c => c.Name)
+                .ToList();
+
+            SelectListItem noneClassSelectItem = new SelectListItem { Value = "0", Text = "None", Selected = true };
+            List<SelectListItem> assignClassrooms = new List<SelectListItem>();
+            assignClassrooms.Add(noneClassSelectItem);
+
+            foreach (Classroom dbClass in classrooms)
+            {
+                SelectListItem assignClass = new SelectListItem();
+                assignClass.Value = dbClass.Id.ToString();
+                assignClass.Text = dbClass.Session.Period + " " + dbClass.Grade + " " + dbClass.Name;
+                assignClassrooms.Add(assignClass);
+            }
+
+            childVM.ClassroomSelectItems = assignClassrooms;
+
+            ViewData["SessionId"] = new SelectList(_context.Sessions.Where(s => s.VBSId == this.CurrentVBSId), "Id", "Period", childVM.SessionId);
+            return View(childVM);
         }
 
         // GET: Children/Delete/5
@@ -420,8 +653,31 @@ namespace VBSAdmin.Controllers
                 assignChild.Id = dbChild.Id;
                 assignChild.Name = dbChild.FirstName + " " + dbChild.LastName;
                 assignChild.PlaceChildWithRequest = dbChild.PlaceChildWithRequest;
-                assignChild.Allergies = dbChild.AllergiesDescription;
-                assignChild.MedicalConditions = dbChild.MedicalConditionDescription;
+                assignChild.HealthConcernsMarkup = string.Empty;
+                if(!string.IsNullOrWhiteSpace(dbChild.AllergiesDescription))
+                {
+                    assignChild.HealthConcernsMarkup = "<div style='text-align:left'><b>Allergies:</b><br/>" + dbChild.AllergiesDescription;
+                }
+
+                if(!string.IsNullOrWhiteSpace(dbChild.MedicalConditionDescription))
+                {
+                    if(!string.IsNullOrWhiteSpace(assignChild.HealthConcernsMarkup))
+                    {
+                        assignChild.HealthConcernsMarkup += "<br/><br/>";
+                    }
+                    else
+                    {
+                        assignChild.HealthConcernsMarkup += "<div style='text-align:left'>";
+                    }
+
+                    assignChild.HealthConcernsMarkup += "<b>Medical Conditions:</b><br/>" + dbChild.MedicalConditionDescription;
+                }
+
+                if(!string.IsNullOrWhiteSpace(assignChild.HealthConcernsMarkup))
+                {
+                    assignChild.HealthConcernsMarkup += "</div>";
+                }
+
                 assignChild.Session = dbChild.Session;
                 assignChild.GuardianName = dbChild.GuardianFirstName + " " + dbChild.GuardianLastName;
                 assignChild.CurrentClassId = (int)((dbChild.ClassroomId.HasValue) ? dbChild.ClassroomId : 0);

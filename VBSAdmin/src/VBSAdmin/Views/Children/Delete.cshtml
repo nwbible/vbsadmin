@@ -1,48 +1,44 @@
 @model VBSAdmin.Data.VBSAdminModels.Child
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Delete Child";
 }
 
-<h2>Delete</h2>
-
-<h3>Are you sure you want to delete this?</h3>
+<h3>Are you sure you want to delete this child?</h3>
 <div>
-    <h4>Child</h4>
-    <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.LastName)
+            Child Last Name
         </dt>
         <dd>
             @Html.DisplayFor(model => model.LastName)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.FirstName)
+            Child First Name
         </dt>
         <dd>
             @Html.DisplayFor(model => model.FirstName)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.GradeCompleted)
+            Grade Completed
         </dt>
         <dd>
             @Html.DisplayFor(model => model.GradeCompleted)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.DateOfBirth)
+            Date of Birth
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.DateOfBirth)
+            @Model.DateOfBirth.ToString("d")
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.GuardianLastName)
+            Guardian Last Name
         </dt>
         <dd>
             @Html.DisplayFor(model => model.GuardianLastName)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.GuardianFirstName)
+            Guardian First Name
         </dt>
         <dd>
             @Html.DisplayFor(model => model.GuardianFirstName)
@@ -51,8 +47,8 @@
     
     <form asp-action="Delete">
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            <a asp-action="Index">Back to List</a>
+            <input type="submit" value="Delete" class="btn btn-primary" /> |
+            <a asp-action="Index">Back to Child List</a>
         </div>
     </form>
 </div>

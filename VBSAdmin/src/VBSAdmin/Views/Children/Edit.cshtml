@@ -1,249 +1,261 @@
-@model VBSAdmin.Data.VBSAdminModels.Child
+@model VBSAdmin.Models.ChildrenViewModels.EditChildViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Child";
 }
 
-<h2>Edit</h2>
+<h2>Edit Child</h2>
+<hr />
 
 <form asp-action="Edit">
-    <div class="form-horizontal">
-        <h4>Child</h4>
-        <hr />
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="Id" />
-        <div class="form-group">
-            <label asp-for="SessionId" class="control-label col-md-2"></label>
-            <div class="col-md-10">
+    <div class="container">
+        <div class="row">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+        </div>
+        <div class="row">
+            <h3>Session</h3>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-12">
                 <select asp-for="SessionId" class="form-control" asp-items="ViewBag.SessionId"></select>
-                <span asp-validation-for="SessionId" class="text-danger" />
             </div>
         </div>
-        <div class="form-group">
-            <label asp-for="FirstName" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-danger" />
+        <div class="row"><h3>Child Information</h3></div>
+        <div class="row">
+            <div class="form-group col-md-3">
+                <label asp-for="FirstName" class="control-label">First Name</label>
+                <div>
+                    <input asp-for="FirstName" class="form-control" />
+                    <span asp-validation-for="FirstName" class="text-danger" />
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="LastName" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger" />
+            <div class="form-group col-md-3">
+                <label asp-for="LastName" class="control-label">Last Name</label>
+                <div>
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger" />
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="DateOfBirth" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="DateOfBirth" class="form-control" />
-                <span asp-validation-for="DateOfBirth" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Gender" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <select asp-for="Gender" class="form-control" asp-items="Html.GetEnumSelectList<VBSAdmin.Data.VBSAdminModels.Enums.ChildGender>()"></select>
-                <span asp-validation-for="Gender" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Address1" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Address1" class="form-control" />
-                <span asp-validation-for="Address1" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Address2" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Address2" class="form-control" />
-                <span asp-validation-for="Address2" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="City" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="City" class="form-control" />
-                <span asp-validation-for="City" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="State" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="State" class="form-control" />
-                <span asp-validation-for="State" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Zip" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Zip" class="form-control" />
-                <span asp-validation-for="Zip" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="GradeCompleted" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <select asp-for="GradeCompleted" class="form-control" asp-items="Html.GetEnumSelectList<VBSAdmin.Data.VBSAdminModels.Enums.ClassGrade>()"></select>
-                <span asp-validation-for="GradeCompleted" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="GuardianFirstName" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="GuardianFirstName" class="form-control" />
-                <span asp-validation-for="GuardianFirstName" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="GuardianLastName" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="GuardianLastName" class="form-control" />
-                <span asp-validation-for="GuardianLastName" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="GuardianPhone" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="GuardianPhone" class="form-control" />
-                <span asp-validation-for="GuardianPhone" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="GuardianEmail" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="GuardianEmail" class="form-control" />
-                <span asp-validation-for="GuardianEmail" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="GuardianChildRelationship" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="GuardianChildRelationship" class="form-control" />
-                <span asp-validation-for="GuardianChildRelationship" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="EmergencyContactFirstName" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="EmergencyContactFirstName" class="form-control" />
-                <span asp-validation-for="EmergencyContactFirstName" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="EmergencyContactLastName" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="EmergencyContactLastName" class="form-control" />
-                <span asp-validation-for="EmergencyContactLastName" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="EmergencyContactPhone" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="EmergencyContactPhone" class="form-control" />
-                <span asp-validation-for="EmergencyContactPhone" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <div class="checkbox">
-                    <input asp-for="HasAllergies" />
-                    <label asp-for="HasAllergies"></label>
+            <div class="form-group col-md-6">
+                <label asp-for="DateOfBirth" class="control-label">Date of Birth</label>
+                <div>
+                    <input asp-for="DateOfBirth" class="form-control" value="@Model.DateOfBirth.ToString("d")" />
+                    <span asp-validation-for="DateOfBirth" class="text-danger" />
                 </div>
             </div>
         </div>
-        <div class="form-group">
-            <label asp-for="AllergiesDescription" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="AllergiesDescription" class="form-control" />
-                <span asp-validation-for="AllergiesDescription" class="text-danger" />
+        <div class="row">
+            <div class="form-group col-md-3">
+                <label asp-for="Gender" class="control-label">Gender</label>
+                <div>
+                    <select asp-for="Gender" class="form-control" asp-items="Html.GetEnumSelectList<VBSAdmin.Data.VBSAdminModels.Enums.ChildGender>()"></select>
+                    <span asp-validation-for="Gender" class="text-danger" />
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <div class="checkbox">
-                    <input asp-for="HasMedicalCondition" />
-                    <label asp-for="HasMedicalCondition"></label>
+            <div class="form-group col-md-3">
+                <label asp-for="GradeCompleted" class="control-label">Grade Completed</label>
+                <div>
+                    <select asp-for="GradeCompleted" class="form-control" asp-items="Html.GetEnumSelectList<VBSAdmin.Data.VBSAdminModels.Enums.ClassGrade>()"></select>
+                    <span asp-validation-for="GradeCompleted" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="ClassroomId" class="control-label">Assigned Class</label>
+                <div>
+                    <select asp-for="ClassroomId" class="form-control" name="ClassroomId" asp-items="@Model.ClassroomSelectItems"></select>
                 </div>
             </div>
         </div>
-        <div class="form-group">
-            <label asp-for="MedicalConditionDescription" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="MedicalConditionDescription" class="form-control" />
-                <span asp-validation-for="MedicalConditionDescription" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <div class="checkbox">
-                    <input asp-for="HasMedications" />
-                    <label asp-for="HasMedications"></label>
+        <div class="row">
+            <div class="form-group col-md-12">
+                <label asp-for="PlaceChildWithRequest" class="control-label">Place Child With Request</label>
+                <div>
+                    <input asp-for="PlaceChildWithRequest" class="form-control" />
+                    <span asp-validation-for="PlaceChildWithRequest" class="text-danger" />
                 </div>
             </div>
         </div>
-        <div class="form-group">
-            <label asp-for="MedicationDescription" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="MedicationDescription" class="form-control" />
-                <span asp-validation-for="MedicationDescription" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <div class="checkbox">
+        <div class="row">
+            <div class="form-group col-md-3">
+                <div class="checkbox col-md-offset-1">
                     <input asp-for="AttendHostChurch" />
-                    <label asp-for="AttendHostChurch"></label>
+                    <label asp-for="AttendHostChurch" class="control-label" style="font-weight:bold">Attends NWB</label>
                 </div>
             </div>
         </div>
-        <div class="form-group">
-            <label asp-for="HomeChurch" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="HomeChurch" class="form-control" />
-                <span asp-validation-for="HomeChurch" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="InvitedBy" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="InvitedBy" class="form-control" />
-                <span asp-validation-for="InvitedBy" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="PlaceChildWithRequest" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="PlaceChildWithRequest" class="form-control" />
-                <span asp-validation-for="PlaceChildWithRequest" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="ClassroomId" class="control-label col-md-2"></label>
-            <div class="col-md-10">
-                <select asp-for="ClassroomId" class="form-control" asp-items="ViewBag.ClassroomId"></select>
-                <span asp-validation-for="ClassroomId" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <div class="checkbox">
-                    <input asp-for="DecisionMade" />
-                    <label asp-for="DecisionMade"></label>
+        <div class="row">
+            <div class="form-group col-md-12">
+                <label asp-for="HomeChurch" class="control-label">Home Church</label>
+                <div>
+                    <input asp-for="HomeChurch" class="form-control" placeholder="Leave empty if none" />
+                    <span asp-validation-for="HomeChurch" class="text-danger" />
                 </div>
             </div>
         </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+        <div class="row">
+            <div class="form-group col-md-12">
+                <label asp-for="InvitedBy" class="control-label">Invited By</label>
+                <div>
+                    <input asp-for="InvitedBy" class="form-control" />
+                    <span asp-validation-for="InvitedBy" class="text-danger" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-3">
+                <div class="col-md-offset-1">
+                    <div class="checkbox">
+                        <input asp-for="DecisionMade" />
+                        <label asp-for="DecisionMade" style="font-weight:bold">Accepted Christ During VBS</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row"><h3>Address</h3></div>
+        <div class="row">
+            <div class="form-group col-md-5">
+                <label asp-for="Address1" class="control-label">Address 1</label>
+                <div>
+                    <input asp-for="Address1" class="form-control" style="max-width:457px" />
+                    <span asp-validation-for="Address1" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group col-md-7">
+                <label asp-for="Address2" class="control-label">Address 2</label>
+                <div>
+                    <input asp-for="Address2" class="form-control" style="max-width:382px" />
+                    <span asp-validation-for="Address2" class="text-danger" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-3">
+                <label asp-for="City" class="control-label">City</label>
+                <div>
+                    <input asp-for="City" class="form-control" />
+                    <span asp-validation-for="City" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="State" class="control-label">State</label>
+                <div>
+                    <input asp-for="State" class="form-control" />
+                    <span asp-validation-for="State" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group col-md-7">
+                <label asp-for="Zip" class="control-label">Zip Code</label>
+                <div>
+                    <input asp-for="Zip" class="form-control" style="max-width:200px" />
+                    <span asp-validation-for="Zip" class="text-danger" />
+                </div>
+            </div>
+        </div>
+        <div class="row"><h3>Guardian Information</h3></div>
+        <div class="row">
+            <div class="form-group col-md-3">
+                <label asp-for="GuardianFirstName" class="control-label">Guardian First Name</label>
+                <div>
+                    <input asp-for="GuardianFirstName" class="form-control" />
+                    <span asp-validation-for="GuardianFirstName" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group col-md-3">
+                <label asp-for="GuardianLastName" class="control-label">Guardian Last Name</label>
+                <div>
+                    <input asp-for="GuardianLastName" class="form-control" />
+                    <span asp-validation-for="GuardianLastName" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="GuardianChildRelationship" class="control-label">Relationship</label>
+                <div>
+                    <input asp-for="GuardianChildRelationship" class="form-control" />
+                    <span asp-validation-for="GuardianChildRelationship" class="text-danger" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-3">
+                <label asp-for="GuardianEmail" class="control-label"></label>
+                <div>
+                    <input asp-for="GuardianEmail" class="form-control" />
+                    <span asp-validation-for="GuardianEmail" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group col-md-9">
+                <label asp-for="GuardianPhone" class="control-label"></label>
+                <div>
+                    <input asp-for="GuardianPhone" class="form-control" />
+                    <span asp-validation-for="GuardianPhone" class="text-danger" />
+                </div>
+            </div>
+        </div>
+        <div class="row"><h3>Emergency Contact Information</h3></div>
+        <div class="row">
+            <div class="form-group col-md-3">
+                <label asp-for="EmergencyContactFirstName" class="control-label">Emergency First Name</label>
+                <div>
+                    <input asp-for="EmergencyContactFirstName" class="form-control" />
+                    <span asp-validation-for="EmergencyContactFirstName" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group col-md-3">
+                <label asp-for="EmergencyContactLastName" class="control-label">Emergency Last Name</label>
+                <div>
+                    <input asp-for="EmergencyContactLastName" class="form-control" />
+                    <span asp-validation-for="EmergencyContactLastName" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="EmergencyContactPhone" class="control-label">Emergency Phone</label>
+                <div>
+                    <input asp-for="EmergencyContactPhone" class="form-control" />
+                    <span asp-validation-for="EmergencyContactPhone" class="text-danger" />
+                </div>
+            </div>
+        </div>
+        <div class="row"><h3>Health Information</h3></div>
+        <div class="row">
+            <div class="form-group col-md-12">
+                <label asp-for="AllergiesDescription" class="control-label">Allergies</label>
+                <div>
+                    <textarea asp-for="AllergiesDescription" rows="3" placeholder="Leave empty if none" class="form-control" style="max-width:500px"></textarea>
+                    <span asp-validation-for="AllergiesDescription" class="text-danger" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-12">
+                <label asp-for="MedicalConditionDescription" class="control-label">Medical Conditions</label>
+                <div>
+                    <textarea asp-for="MedicalConditionDescription" rows="3" placeholder="Leave empty if none" class="form-control" style="max-width:500px"></textarea>
+                    <span asp-validation-for="MedicalConditionDescription" class="text-danger" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-12">
+                <label asp-for="MedicationDescription" class="control-label">Medications</label>
+                <div>
+                    <textarea asp-for="MedicationDescription" rows="3" placeholder="Leave empty if none" class="form-control" style="max-width:500px"></textarea>
+                    <span asp-validation-for="MedicationDescription" class="text-danger" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-12">
+                    <input type="submit" value="Save Child" class="btn btn-primary" />
+                </div>
             </div>
         </div>
     </div>
 </form>
-
+<p></p>
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Back to Child List</a>
 </div>
 
 @section Scripts {
