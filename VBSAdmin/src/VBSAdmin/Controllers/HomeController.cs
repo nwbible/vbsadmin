@@ -54,7 +54,10 @@ namespace VBSAdmin.Controllers
                 }
 
             }
-            return View();
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
         }
 
         public IActionResult About()
