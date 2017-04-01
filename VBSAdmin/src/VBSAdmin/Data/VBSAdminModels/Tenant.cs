@@ -15,14 +15,18 @@ namespace VBSAdmin.Data.VBSAdminModels
         [Required]
         public string Name { get; set; }
         [Required]
+        [Display(Name = "Church Name")]
         public string ChurchName { get; set; }
         [Required]
+        [Display(Name = "Contact Name")]
         public string ContactName { get; set; }
         [Required]
         [Phone]
+        [Display(Name = "Phone")]
         public string ContactPhone { get; set; }
         [Required]
         [EmailAddress]
+        [Display(Name = "Email")]
         public string ContactEmail { get; set; }
 
         public List<VBS> VBSList { get; set; }

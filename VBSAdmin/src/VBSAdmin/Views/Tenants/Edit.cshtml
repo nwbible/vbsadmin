@@ -1,14 +1,13 @@
 @model VBSAdmin.Data.VBSAdminModels.Tenant
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Church";
 }
 
-<h2>Edit</h2>
+<h2>Edit Church</h2>
 
 <form asp-action="Edit">
     <div class="form-horizontal">
-        <h4>Tenant</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="Id" />
@@ -49,7 +48,7 @@
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </div>
     </div>

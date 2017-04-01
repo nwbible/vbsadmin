@@ -28,6 +28,7 @@ namespace VBSAdmin.Controllers
         }
 
         // GET: VBS
+        [Authorize(Policy = "TenantAdmin")]
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.VBS.Include(v => v.Tenant).Where(t => t.Tenant.Id == this.TenantId);
@@ -83,6 +84,7 @@ namespace VBSAdmin.Controllers
         }
 
         // GET: VBS/Current/5
+        [Authorize(Policy = "TenantAdmin")]
         public async Task<IActionResult> Current(int? id)
         {
             if (id == null)
@@ -106,6 +108,7 @@ namespace VBSAdmin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "TenantAdmin")]
         public async Task<IActionResult> Current(int id, [Bind("Id,EndDate,StartDate,ThemeName")] VBS vBS)
         {
             if (id != vBS.Id)
@@ -129,6 +132,7 @@ namespace VBSAdmin.Controllers
 
 
         // GET: VBS/Create
+        [Authorize(Policy = "TenantAdmin")]
         public IActionResult Create()
         {
             return View();
@@ -139,6 +143,7 @@ namespace VBSAdmin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "TenantAdmin")]
         public async Task<IActionResult> Create([Bind("EndDate,StartDate,ThemeName,AMStartTime,AMEndTime,AMMaxChildren,PMStartTime,PMEndTime,PMMaxChildren")] CreateViewModel vBSCreateViewModel)
         {
 
@@ -184,6 +189,7 @@ namespace VBSAdmin.Controllers
         }
 
         // GET: VBS/Edit/5
+        [Authorize(Policy = "TenantAdmin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -207,6 +213,7 @@ namespace VBSAdmin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "TenantAdmin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,EndDate,StartDate,ThemeName")] VBS vBS)
         {
             if (id != vBS.Id)
@@ -248,6 +255,7 @@ namespace VBSAdmin.Controllers
         }
 
         // GET: VBS/Delete/5
+        [Authorize(Policy = "TenantAdmin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -269,6 +277,7 @@ namespace VBSAdmin.Controllers
         // POST: VBS/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "TenantAdmin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
 

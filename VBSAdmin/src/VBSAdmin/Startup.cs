@@ -61,6 +61,7 @@ namespace VBSAdmin
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("SystemAdminOnly", policy => policy.RequireClaim("SystemAdmin"));
+                options.AddPolicy("TenantAdmin", policy => policy.RequireClaim("TenantAdmin"));
                 options.AddPolicy("BelongToTenant", policy => policy.Requirements.Add(new Authorization.BelongsToTenantRequirement()));
             }); 
 

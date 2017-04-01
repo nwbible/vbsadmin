@@ -86,10 +86,10 @@ namespace VBSAdmin.Controllers
 
                     return RedirectToLocal(returnUrl);
                 }
-                if (result.RequiresTwoFactor)
-                {
-                    return RedirectToAction(nameof(SendCode), new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-                }
+                //if (result.RequiresTwoFactor)
+                //{
+                //    return RedirectToAction(nameof(SendCode), new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                //}
                 if (result.IsLockedOut)
                 {
                     _logger.LogWarning(2, "User account locked out.");
@@ -109,7 +109,7 @@ namespace VBSAdmin.Controllers
         //
         // GET: /Account/Register
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(Policy = "TenantAdmin")]
         public IActionResult Register(string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
@@ -119,20 +119,23 @@ namespace VBSAdmin.Controllers
         //
         // POST: /Account/Register
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize(Policy = "TenantAdmin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Name = model.Name };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    var claimResult = await _userManager.AddClaimAsync(user, new Claim(Constants.SystemAdminClaim, "True"));
-                    claimResult = await _userManager.AddClaimAsync(user, new Claim(Constants.TenantClaim, "*"));
-                    claimResult = await _userManager.AddClaimAsync(user, new Claim(Constants.TenantAdminClaim, "True"));
+                    var claimResult = await _userManager.AddClaimAsync(user, new Claim(Constants.TenantClaim, this.TenantId.ToString()));
+                    if (model.IsTenantAdmin)
+                    {
+                        claimResult = await _userManager.AddClaimAsync(user, new Claim(Constants.TenantAdminClaim, "True"));
+                    }
+                    //claimResult = await _userManager.AddClaimAsync(user, new Claim(Constants.SystemAdminClaim, "True"));
 
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
                     // Send an email with this link
@@ -163,8 +166,7 @@ namespace VBSAdmin.Controllers
             Response.Cookies.Delete(Constants.TenantClaim);
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
-
-        //
+/*        //
         // POST: /Account/ExternalLogin
         [HttpPost]
         [AllowAnonymous]
@@ -462,7 +464,7 @@ namespace VBSAdmin.Controllers
                 return View(model);
             }
         }
-
+*/
         #region Helpers
 
         private void AddErrors(IdentityResult result)

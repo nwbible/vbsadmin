@@ -37,12 +37,12 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    @if (await AuthorizationService.AuthorizeAsync(User, "SystemAdminOnly"))
-                    {
-                        <li><a asp-area="" asp-controller="Tenants" asp-action="Index">Tenant Management</a></li>
-                    }
                     @if (SignInManager.IsSignedIn(User))
-                    {
+                    { 
+                        @if (await AuthorizationService.AuthorizeAsync(User, "SystemAdminOnly"))
+                        {
+                            <li><a asp-area="" asp-controller="Tenants" asp-action="Index"><i class="fa fa-university fa-lg"></i>  Churches</a></li>
+                        }                  
                         <li>
                             <a asp-area="" asp-controller="Classrooms" asp-action="Index"><i class="fa fa-address-book fa-lg"></i>  Classes</a>
                         </li>

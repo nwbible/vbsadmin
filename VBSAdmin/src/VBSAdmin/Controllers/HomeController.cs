@@ -34,24 +34,11 @@ namespace VBSAdmin.Controllers
         {
             if(signInManager.IsSignedIn(User))
             {
-                var sysAdminClaim = User.Claims.FirstOrDefault(c => c.Type == "SystemAdmin");
-                var tenantAdminClaim = User.Claims.FirstOrDefault(c => c.Type == "TenantAdmin");
+                //var sysAdminClaim = User.Claims.FirstOrDefault(c => c.Type == "SystemAdmin");
+                //var tenantAdminClaim = User.Claims.FirstOrDefault(c => c.Type == "TenantAdmin");
 
-                if(sysAdminClaim != null && sysAdminClaim.Value.ToLower() == "true")
-                {
-                    return RedirectToAction("Index", "Tenants");
-                }
-                else
-                {
-//                    {
-//                        return RedirectToAction("Index", "VBS");
-//                    }
-//                    else
-//                    {
-                        var currentVbsId = Convert.ToInt32(Request.Cookies[Constants.CurrentVBSIdCookie]);
-                        return RedirectToAction("Details", "VBS", new { Id = currentVbsId });
-//                    }
-                }
+                var currentVbsId = Convert.ToInt32(Request.Cookies[Constants.CurrentVBSIdCookie]);
+                return RedirectToAction("Details", "VBS", new { Id = currentVbsId });
 
             }
             else
@@ -60,19 +47,19 @@ namespace VBSAdmin.Controllers
             }
         }
 
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
+        //public IActionResult About()
+        //{
+        //    ViewData["Message"] = "Your application description page.";
 
-            return View();
-        }
+        //    return View();
+        //}
 
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
+        //public IActionResult Contact()
+        //{
+        //    ViewData["Message"] = "Your contact page.";
 
-            return View();
-        }
+        //    return View();
+        //}
 
         public IActionResult Error()
         {

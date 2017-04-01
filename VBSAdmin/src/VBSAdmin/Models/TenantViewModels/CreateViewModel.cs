@@ -13,13 +13,16 @@ namespace VBSAdmin.Models.TenantViewModels
         public string Name { get; set; }
 
         [Required]
+        [Display(Name = "Church Name")]
         public string ChurchName { get; set; }
 
         [Required]
+        [Display(Name = "Contact Name")]
         public string ContactName { get; set; }
 
         [Required]
         [Phone]
+        [Display(Name = "Phone")]
         public string ContactPhone { get; set; }
 
         [Required]
@@ -34,7 +37,7 @@ namespace VBSAdmin.Models.TenantViewModels
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
+        [Display(Name = "Confirm Password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 

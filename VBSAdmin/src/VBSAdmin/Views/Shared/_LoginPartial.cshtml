@@ -1,6 +1,8 @@
-﻿@using Microsoft.AspNetCore.Identity
+﻿@using Microsoft.AspNetCore.Authorization;
+@using Microsoft.AspNetCore.Identity
 @using VBSAdmin.Models
 
+@inject IAuthorizationService AuthorizationService
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
@@ -8,12 +10,16 @@
 {
     <form asp-area="" asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm" class="navbar-right">
         <ul class="nav navbar-nav navbar-right">
+            @if (await AuthorizationService.AuthorizeAsync(User, "TenantAdmin"))
+            {
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-gear fa-lg"></i></a>
                 <ul class="dropdown-menu">
-                    <li><a asp-area="" asp-controller="VBS" asp-action="Index" title="Change VBS">Switch VBS</a></li>
+                    <li><a asp-area="" asp-controller="VBS" asp-action="Index" title="Change VBS">Change Active VBS</a></li>
+                    <li><a asp-area="" asp-controller="Account" asp-action="Register" title="Register New User">Register New User</a></li>
                 </ul>
             </li>
+            }
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user fa-lg"></i></a>
                 <ul class="dropdown-menu">
@@ -29,7 +35,6 @@
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li><a asp-area="" asp-controller="Account" asp-action="Register">Register System Administrator</a></li>
         <li><a asp-area="" asp-controller="Account" asp-action="Login">Log in</a></li>
     </ul>
 }
