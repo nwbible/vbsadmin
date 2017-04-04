@@ -13,19 +13,19 @@
         <table class="table table-bordered table-condensed">
             <thead>
                 <tr>
-                    <th>
+                    <th style="width:120px">
                         Name
                     </th>
-                    <th>
+                    <th style="width:200px">
                         Address
                     </th>
-                    <th>
+                    <th style="width:100px">
                         City
                     </th>
-                    <th>
+                    <th style="width:50px">
                         State
                     </th>
-                    <th>
+                    <th style="width:50px">
                         Zip
                     </th>
                 </tr>
@@ -34,19 +34,19 @@
                 @foreach (var child in item.Children)
                 {
                     <tr>
-                        <td>
+                        <td style="width:120px">
                             @child.Name
                         </td>
-                        <td>
+                        <td style="width:200px">
                             @child.Address
                         </td>
-                        <td>
+                        <td style="width:100px">
                             @child.City
                         </td>
-                        <td>
+                        <td style="width:50px">
                             @child.State
                         </td>
-                        <td>
+                        <td style="width:50px">
                             @child.Zip
                         </td>
                     </tr>

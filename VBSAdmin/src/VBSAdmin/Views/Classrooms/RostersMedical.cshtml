@@ -13,13 +13,13 @@
         <table class="table table-bordered table-condensed">
             <thead>
                 <tr>
-                    <th>
+                    <th style="width:150px">
                         Name
                     </th>
-                    <th>
+                    <th style="width:300px">
                         Medical Condition Description
                     </th>
-                    <th>
+                    <th style="width:200px">
                         Medication Description
                     </th>
                 </tr>
@@ -28,13 +28,13 @@
                 @foreach (var child in item.Children)
                 {
                     <tr>
-                        <td>
+                        <td style="width:150px">
                             @child.Name
                         </td>
-                        <td>
+                        <td style="width:300px">
                             @child.MedicalConditionDescription
                         </td>
-                        <td>
+                        <td style="width:200px">
                             @child.MedicinesDescription
                         </td>
                     </tr>

@@ -1,14 +1,13 @@
 @model VBSAdmin.Data.VBSAdminModels.VBS
 
 @{
-    ViewData["Title"] = "Current";
+    ViewData["Title"] = "Set Active";
 }
 
-<h2>Make Current</h2>
+<h2>Set Active VBS</h2>
 
 <form asp-action="Current">
     <div class="form-horizontal">
-        <h4>VBS</h4>
         <hr />
         <dl class="dl-horizontal">
             <dt>
@@ -32,14 +31,14 @@
         </dl>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Make Current " class="btn btn-default" />
+                <input type="submit" value="Set Active " class="btn btn-primary" />
             </div>
         </div>
     </div>
 </form>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Back to VBS List</a>
 </div>
 
 @section Scripts {
