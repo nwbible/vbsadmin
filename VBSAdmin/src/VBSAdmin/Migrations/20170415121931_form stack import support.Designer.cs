@@ -8,9 +8,10 @@ using VBSAdmin.Data;
 namespace VBSAdmin.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170415121931_form stack import support")]
+    partial class formstackimportsupport
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.0-rtm-21431")
@@ -303,11 +304,11 @@ namespace VBSAdmin.Migrations
 
                     b.Property<string>("FormStackAPIKey");
 
-                    b.Property<int?>("FormStackFormId");
+                    b.Property<string>("FormStackFormName");
 
-                    b.Property<string>("FormStackImportPageKey");
+                    b.Property<string>("FormStackLastImportTimestamp");
 
-                    b.Property<DateTime>("FormStackLastImportDateTime");
+                    b.Property<string>("ImportPageKey");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("Date");

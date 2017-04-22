@@ -250,3 +250,5 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
+/VBSAdmin/src/VBSAdmin/Properties/PublishProfiles/Default Settings-publish.ps1
+/VBSAdmin/src/VBSAdmin/Properties/PublishProfiles/publish-module.psm1

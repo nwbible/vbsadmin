@@ -62,6 +62,7 @@ namespace VBSAdmin.Models.ChildrenViewModels
         [Required]
         [Phone]
         public string EmergencyContactPhone { get; set; }
+        public string EmergencyContactChildRelationship { get; set; }
         public int? ClassroomId { get; set; }
 
 

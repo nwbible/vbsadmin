@@ -55,6 +55,8 @@ namespace VBSAdmin.Models.ChildrenViewModels
         public string EmergencyContactName { get; set; }
         [Display(Name = "Emergency Contact Phone")]
         public string EmergencyContactPhone { get; set; }
+        [Display(Name = "Emergency Contact Relationship")]
+        public string EmergencyContactChildRelationship { get; set; }
         [Display(Name = "Assigned Classroom")]
         public string ClassroomName { get; set; }
 

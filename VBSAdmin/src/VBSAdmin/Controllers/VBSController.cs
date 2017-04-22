@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -9,10 +11,12 @@ using Microsoft.EntityFrameworkCore;
 using VBSAdmin.Data;
 using VBSAdmin.Data.VBSAdminModels;
 using VBSAdmin.Models.VBSViewModels;
+using VBSAdmin.Models.ChildrenViewModels;
 using VBSAdmin.Authorization;
 using VBSAdmin.Helpers;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
+using Newtonsoft.Json;
 
 namespace VBSAdmin.Controllers
 {
@@ -144,7 +148,7 @@ namespace VBSAdmin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "TenantAdmin")]
-        public async Task<IActionResult> Create([Bind("EndDate,StartDate,ThemeName,AMStartTime,AMEndTime,AMMaxChildren,PMStartTime,PMEndTime,PMMaxChildren")] CreateViewModel vBSCreateViewModel)
+        public async Task<IActionResult> Create([Bind("EndDate,StartDate,ThemeName,AMStartTime,AMEndTime,AMMaxChildren,PMStartTime,PMEndTime,PMMaxChildren,FormStackAPIKey,FormStackFormId,FormStackImportPageKey")] CreateViewModel vBSCreateViewModel)
         {
 
 
@@ -152,7 +156,10 @@ namespace VBSAdmin.Controllers
                 ThemeName = vBSCreateViewModel.ThemeName,
                 EndDate = vBSCreateViewModel.EndDate,
                 StartDate = vBSCreateViewModel.StartDate,
-                TenantId = this.TenantId
+                TenantId = this.TenantId,
+                FormStackAPIKey = vBSCreateViewModel.FormStackAPIKey,
+                FormStackFormId = vBSCreateViewModel.FormStackFormId,
+                FormStackImportPageKey = vBSCreateViewModel.FormStackImportPageKey
             };
 
             var amSession = new Session
@@ -184,7 +191,6 @@ namespace VBSAdmin.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            //ViewData["TenantId"] = new SelectList(_context.Tenants, "Id", "ChurchName", vBS.TenantId);
             return View(vBSCreateViewModel);
         }
 
@@ -214,7 +220,7 @@ namespace VBSAdmin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "TenantAdmin")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,EndDate,StartDate,ThemeName")] VBS vBS)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,EndDate,StartDate,ThemeName,FormStackAPIKey,FormStackFormId,FormStackImportPageKey")] VBS vBS)
         {
             if (id != vBS.Id)
             {
@@ -230,6 +236,9 @@ namespace VBSAdmin.Controllers
             vbsContext.EndDate = vBS.EndDate;
             vbsContext.StartDate = vBS.StartDate;
             vbsContext.ThemeName = vBS.ThemeName;
+            vbsContext.FormStackAPIKey = vBS.FormStackAPIKey;
+            vbsContext.FormStackFormId = vBS.FormStackFormId;
+            vbsContext.FormStackImportPageKey = vBS.FormStackImportPageKey;
 
             if (ModelState.IsValid)
             {
@@ -342,6 +351,60 @@ namespace VBSAdmin.Controllers
 
             return Ok(models);
         }
+
+
+        // GET: VBS/Import/5/abcdefg
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> Import(int? id, string pageImportKey)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            //Need to verify the requested VBS exists
+            var vBS = await _context.VBS.Include(s => s.Sessions).Where(vb => vb.Id == id).SingleOrDefaultAsync();
+            if (vBS == null)
+            {
+                return NotFound();
+            }
+
+            //Verify the supplied page import key matches the value saved with the VBS in the database.
+            if (vBS.FormStackImportPageKey != pageImportKey)
+            {
+                return NotFound();
+            }
+
+            //Don't go further if the formstack fields aren't populated in the database
+            if(string.IsNullOrWhiteSpace(vBS.FormStackAPIKey) || vBS.FormStackFormId == null)
+            {
+                return NotFound();
+            }
+
+
+            string baseAddress = "https://www.formstack.com/api/v1/";
+            string apiKey = vBS.FormStackAPIKey;
+            string responseType = "json";
+
+            int amSessionId, pmSessionId;
+            if(vBS.Sessions[0].Period == Enums.SessionPeriod.AM)
+            {
+                amSessionId = vBS.Sessions[0].Id;
+                pmSessionId = vBS.Sessions[1].Id;
+            }
+            else
+            {
+                amSessionId = vBS.Sessions[1].Id;
+                pmSessionId = vBS.Sessions[0].Id;
+            }
+
+            FormStackHelper fsHelper = new FormStackHelper(baseAddress, apiKey, responseType, vBS, amSessionId, pmSessionId, _context);
+            await fsHelper.PopulateLatestSubmissions(vBS.FormStackFormId.ToString(), vBS.FormStackLastImportDateTime.ToString());
+
+            return Ok();
+        }
+
 
 
         private bool VBSExists(int id)

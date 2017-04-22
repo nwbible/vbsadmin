@@ -68,6 +68,8 @@ namespace VBSAdmin.Data.VBSAdminModels
         [Phone]
         public string EmergencyContactPhone { get; set; }
 
+        public string EmergencyContactChildRelationship { get; set; }
+
 
         //Classroom Assignment
         public int? ClassroomId { get; set; }

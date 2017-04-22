@@ -209,6 +209,15 @@
                 </div>
             </div>
             <div class="form-group col-md-6">
+                <label asp-for="EmergencyContactChildRelationship" class="control-label">Relationship</label>
+                <div>
+                    <input asp-for="EmergencyContactChildRelationship" class="form-control" />
+                    <span asp-validation-for="EmergencyContactChildRelationship" class="text-danger" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-3">
                 <label asp-for="EmergencyContactPhone" class="control-label">Emergency Phone</label>
                 <div>
                     <input asp-for="EmergencyContactPhone" class="form-control" />

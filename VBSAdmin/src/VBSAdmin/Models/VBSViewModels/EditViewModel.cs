@@ -22,5 +22,13 @@ namespace VBSAdmin.Models.VBSViewModels
         [Required]
         [Display(Name = "End Date")]
         public DateTime EndDate { get; set; }
+
+        [Display(Name = "Form Stack API Key")]
+        public string FormStackAPIKey { get; set; }
+        [Display(Name = "Form Stack Form Id")]
+        public int? FormStackFormId { get; set; }
+        [Display(Name = "Form Stack Import Page Key")]
+        public string FormStackImportPageKey { get; set; }
+
     }
 }

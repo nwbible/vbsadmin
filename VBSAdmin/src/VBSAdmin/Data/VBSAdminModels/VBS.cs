@@ -31,6 +31,11 @@ namespace VBSAdmin.Data.VBSAdminModels
 
         public List<Classroom> Classrooms { get; set; }
 
+        public string FormStackImportPageKey { get; set; }
+        public int? FormStackFormId { get; set; }
+        public string FormStackAPIKey { get; set; }
+        public DateTime FormStackLastImportDateTime { get; set; }
+
         //TODO:
         //Theme image
     }

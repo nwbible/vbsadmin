@@ -34,6 +34,27 @@
             </div>
         </div>
         <div class="form-group">
+            <label asp-for="FormStackAPIKey" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="FormStackAPIKey" class="form-control" />
+                <span asp-validation-for="FormStackAPIKey" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="FormStackFormId" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="FormStackFormId" class="form-control" />
+                <span asp-validation-for="FormStackFormId" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="FormStackImportPageKey" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="FormStackImportPageKey" class="form-control" />
+                <span asp-validation-for="FormStackImportPageKey" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

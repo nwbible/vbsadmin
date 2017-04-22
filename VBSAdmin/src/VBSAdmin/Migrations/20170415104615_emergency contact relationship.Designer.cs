@@ -8,9 +8,10 @@ using VBSAdmin.Data;
 namespace VBSAdmin.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170415104615_emergency contact relationship")]
+    partial class emergencycontactrelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.0-rtm-21431")
@@ -300,14 +301,6 @@ namespace VBSAdmin.Migrations
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("Date");
-
-                    b.Property<string>("FormStackAPIKey");
-
-                    b.Property<int?>("FormStackFormId");
-
-                    b.Property<string>("FormStackImportPageKey");
-
-                    b.Property<DateTime>("FormStackLastImportDateTime");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("Date");
