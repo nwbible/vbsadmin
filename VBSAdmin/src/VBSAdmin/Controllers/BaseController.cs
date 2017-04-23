@@ -12,6 +12,7 @@ using VBSAdmin.Data.VBSAdminModels;
 
 namespace VBSAdmin.Controllers
 {
+    [RequireHttps]
     public class BaseController : Controller
     {
         private readonly ApplicationDbContext _context;

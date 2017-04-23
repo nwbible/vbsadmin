@@ -10,6 +10,7 @@ using VBSAdmin.Models;
 
 namespace VBSAdmin.Controllers
 {
+    [RequireHttps]
     public class HomeController : Controller
     {
         private readonly UserManager<ApplicationUser> userManager;
