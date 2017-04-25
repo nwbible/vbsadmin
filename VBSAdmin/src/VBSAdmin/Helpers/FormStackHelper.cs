@@ -413,6 +413,7 @@ namespace VBSAdmin.Helpers
                     child.DateOfBirth = Convert.ToDateTime(form.birth_date_c1);
                     child.Gender = (form.gender_c1.ToLower() == "male") ? Enums.ChildGender.Boy : Enums.ChildGender.Girl;
                     child.SessionId = (form.morning_or_evening_session_c1.ToLower().Contains("morning")) ? AMSessionId : PMSessionId;
+                    child.PlaceChildWithRequest = form.please_place_my_child_with_c1;
                     switch (form.grade_completed_c1)
                     {
                         case "16":
@@ -460,6 +461,7 @@ namespace VBSAdmin.Helpers
                     child.DateOfBirth = Convert.ToDateTime(form.birth_date_c2);
                     child.Gender = (form.gender_c2.ToLower() == "male") ? Enums.ChildGender.Boy : Enums.ChildGender.Girl;
                     child.SessionId = (form.morning_or_evening_session_c2.ToLower().Contains("morning")) ? AMSessionId : PMSessionId;
+                    child.PlaceChildWithRequest = form.please_place_my_child_with_c2;
                     switch (form.grade_completed_c2)
                     {
                         case "16":
@@ -507,6 +509,7 @@ namespace VBSAdmin.Helpers
                     child.DateOfBirth = Convert.ToDateTime(form.birth_date_c3);
                     child.Gender = (form.gender_c3.ToLower() == "male") ? Enums.ChildGender.Boy : Enums.ChildGender.Girl;
                     child.SessionId = (form.morning_or_evening_session_c3.ToLower().Contains("morning")) ? AMSessionId : PMSessionId;
+                    child.PlaceChildWithRequest = form.please_place_my_child_with_c3;
                     switch (form.grade_completed_c3)
                     {
                         case "16":
@@ -554,6 +557,7 @@ namespace VBSAdmin.Helpers
                     child.DateOfBirth = Convert.ToDateTime(form.birth_date_c4);
                     child.Gender = (form.gender_c4.ToLower() == "male") ? Enums.ChildGender.Boy : Enums.ChildGender.Girl;
                     child.SessionId = (form.morning_or_evening_session_c4.ToLower().Contains("morning")) ? AMSessionId : PMSessionId;
+                    child.PlaceChildWithRequest = form.please_place_my_child_with_c4;
                     switch (form.grade_completed_c4)
                     {
                         case "16":
@@ -601,6 +605,7 @@ namespace VBSAdmin.Helpers
                     child.DateOfBirth = Convert.ToDateTime(form.birth_date_c5);
                     child.Gender = (form.gender_c5.ToLower() == "male") ? Enums.ChildGender.Boy : Enums.ChildGender.Girl;
                     child.SessionId = (form.morning_or_evening_session_c5.ToLower().Contains("morning")) ? AMSessionId : PMSessionId;
+                    child.PlaceChildWithRequest = form.please_place_my_child_with_c5;
                     switch (form.grade_completed_c5)
                     {
                         case "16":
