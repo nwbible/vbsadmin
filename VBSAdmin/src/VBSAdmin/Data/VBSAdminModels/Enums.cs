@@ -18,17 +18,23 @@ namespace VBSAdmin.Data.VBSAdminModels
 
         public enum ClassGrade
         {
-            [Display(Name = "PreSchool")]
+            [Display(Name = "4 Yrs")]
             PreSchool=0,
             [Display(Name = "PreK")]
             PreK=1,
-            [Display(Name = "Kindergarten")]
+            [Display(Name = "K")]
             Kindergarten=2,
+            [Display(Name = "1st")]
             First=3,
+            [Display(Name = "2nd")]
             Second=4,
+            [Display(Name = "3rd")]
             Third=5,
+            [Display(Name = "4th")]
             Fourth=6,
+            [Display(Name = "5th")]
             Fifth=7,
+            [Display(Name = "6th")]
             Sixth=8
         }
         
@@ -59,17 +65,23 @@ namespace VBSAdmin.Data.VBSAdminModels
 
         public enum ClassGradeOptions
         {
-            [Display(Name = "PreSchool")]
+            [Display(Name = "4 Yrs")]
             PreSchool = 0,
             [Display(Name = "PreK")]
             PreK = 1,
-            [Display(Name = "Kindergarten")]
+            [Display(Name = "K")]
             Kindergarten = 2,
+            [Display(Name = "1st")]
             First = 3,
+            [Display(Name = "2nd")]
             Second = 4,
+            [Display(Name = "3rd")]
             Third = 5,
+            [Display(Name = "4th")]
             Fourth = 6,
+            [Display(Name = "5th")]
             Fifth = 7,
+            [Display(Name = "6th")]
             Sixth = 8,
             All = 9
         }

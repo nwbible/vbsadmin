@@ -63,7 +63,7 @@ namespace VBSAdmin.Controllers
                 AllergiesDescription = child.AllergiesDescription,
                 AttendHostChurch = child.AttendHostChurch,
                 City = child.City,
-                ClassroomName = (child.Classroom != null) ? child.Classroom.Session.Period + " " + child.Classroom.Grade + " " + child.Classroom.Name : "",
+                ClassroomName = (child.Classroom != null) ? child.Classroom.Session.Period + " " + child.Classroom.Grade.GetDisplayName() + " " + child.Classroom.Name : "",
                 DateOfBirth = child.DateOfBirth,
                 DecisionMade = child.DecisionMade,
                 EmergencyContactName = child.EmergencyContactFirstName + " " + child.EmergencyContactLastName,
@@ -110,7 +110,7 @@ namespace VBSAdmin.Controllers
             {
                 SelectListItem assignClass = new SelectListItem();
                 assignClass.Value = dbClass.Id.ToString();
-                assignClass.Text = dbClass.Session.Period + " " + dbClass.Grade + " " + dbClass.Name;
+                assignClass.Text = dbClass.Session.Period + " " + dbClass.Grade.GetDisplayName() + " " + dbClass.Name;
                 assignClassrooms.Add(assignClass);
             }
 
@@ -194,7 +194,7 @@ namespace VBSAdmin.Controllers
             {
                 SelectListItem assignClass = new SelectListItem();
                 assignClass.Value = dbClass.Id.ToString();
-                assignClass.Text = dbClass.Session.Period + " " + dbClass.Grade + " " + dbClass.Name;
+                assignClass.Text = dbClass.Session.Period + " " + dbClass.Grade.GetDisplayName() + " " + dbClass.Name;
                 assignClassrooms.Add(assignClass);
             }
 
@@ -271,7 +271,7 @@ namespace VBSAdmin.Controllers
             {
                 SelectListItem assignClass = new SelectListItem();
                 assignClass.Value = dbClass.Id.ToString();
-                assignClass.Text = dbClass.Session.Period + " " + dbClass.Grade + " " + dbClass.Name;
+                assignClass.Text = dbClass.Session.Period + " " + dbClass.Grade.GetDisplayName() + " " + dbClass.Name;
                 assignClassrooms.Add(assignClass);
             }
 
@@ -373,7 +373,7 @@ namespace VBSAdmin.Controllers
             {
                 SelectListItem assignClass = new SelectListItem();
                 assignClass.Value = dbClass.Id.ToString();
-                assignClass.Text = dbClass.Session.Period + " " + dbClass.Grade + " " + dbClass.Name;
+                assignClass.Text = dbClass.Session.Period + " " + dbClass.Grade.GetDisplayName() + " " + dbClass.Name;
                 assignClassrooms.Add(assignClass);
             }
 
@@ -531,6 +531,44 @@ namespace VBSAdmin.Controllers
         }
 
 
+        // GET: Alphabetical listing of chidren and class assignments by session
+        public async Task<IActionResult> AlphabeticalClassAssignments(string session)
+        {
+            Enums.SessionPeriod sessionPeriod = Enums.SessionPeriod.AM;
+
+            if (!string.IsNullOrEmpty(session) && session.ToUpper() == "PM")
+            {
+                sessionPeriod = Enums.SessionPeriod.PM;
+            }
+
+            var applicationDbContext = _context.Children.Include(c => c.Session)
+                .Include(c => c.Classroom)
+                .Where(c => c.VBSId == this.CurrentVBSId && c.VBS.TenantId == this.TenantId && c.Session.Period == sessionPeriod)
+                .OrderBy(c => c.LastName)
+                .ThenBy(c => c.FirstName);
+
+            //TODO: Use AutoMapper
+            List<Child> dbChildren = await applicationDbContext.ToListAsync();
+            List<AlphabeticalClassAssignmentsViewModel> alphaAssignmentVMs = new List<AlphabeticalClassAssignmentsViewModel>();
+
+            foreach (Child dbChild in dbChildren)
+            {
+                AlphabeticalClassAssignmentsViewModel vm = new AlphabeticalClassAssignmentsViewModel();
+                vm.Name = dbChild.LastName + ", " + dbChild.FirstName;
+                if (dbChild.Classroom != null)
+                {
+                    vm.ClassAssignment = dbChild.Session.Period + " " + dbChild.Classroom.Grade.GetDisplayName() + " " + dbChild.Classroom.Name;
+                }
+                else
+                {
+                    vm.ClassAssignment = "Not assigned to classroom";
+                }
+
+                alphaAssignmentVMs.Add(vm);
+            }
+
+            return View(alphaAssignmentVMs);
+        }
 
         private bool ChildExists(int id)
         {
@@ -571,7 +609,7 @@ namespace VBSAdmin.Controllers
             {
                 SelectListItem assignClass = new SelectListItem();
                 assignClass.Value = dbAMClass.Id.ToString();
-                assignClass.Text = dbAMClass.Session.Period + " " + dbAMClass.Grade + " " + dbAMClass.Name;
+                assignClass.Text = dbAMClass.Session.Period + " " + dbAMClass.Grade.GetDisplayName() + " " + dbAMClass.Name;
 
                 assignAMClassrooms.Add(assignClass);
             }
@@ -585,7 +623,7 @@ namespace VBSAdmin.Controllers
             {
                 SelectListItem assignClass = new SelectListItem();
                 assignClass.Value = dbPMClass.Id.ToString();
-                assignClass.Text = dbPMClass.Session.Period + " " + dbPMClass.Grade + " " + dbPMClass.Name;
+                assignClass.Text = dbPMClass.Session.Period + " " + dbPMClass.Grade.GetDisplayName() + " " + dbPMClass.Name;
 
                 assignPMClassrooms.Add(assignClass);
             }
@@ -646,7 +684,7 @@ namespace VBSAdmin.Controllers
                 AssignChild assignChild = new AssignChild();
                 if (dbChild.Classroom != null)
                 {
-                    assignChild.CurrentClassName = dbChild.Session.Period + " " + dbChild.Classroom.Grade + " " + dbChild.Classroom.Name;
+                    assignChild.CurrentClassName = dbChild.Session.Period + " " + dbChild.Classroom.Grade.GetDisplayName() + " " + dbChild.Classroom.Name;
                 }
                 else
                 {

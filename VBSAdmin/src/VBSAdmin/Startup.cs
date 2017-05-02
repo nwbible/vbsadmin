@@ -30,7 +30,7 @@ namespace VBSAdmin
             if (env.IsDevelopment())
             {
                 // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-                builder.AddUserSecrets();
+                //builder.AddUserSecrets();
             }
 
             builder.AddEnvironmentVariables();
@@ -55,7 +55,7 @@ namespace VBSAdmin
                 .AddDefaultTokenProviders();
 
             services.AddMvc();
-            services.AddMvc().AddCsvSerializerFormatters();
+            services.AddMvc().AddCsvSerializerFormatters(new CsvFormatterOptions { CsvDelimiter = "," });
 
 
             services.AddAuthorization(options =>
@@ -81,7 +81,7 @@ namespace VBSAdmin
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
-                app.UseBrowserLink();
+                //app.UseBrowserLink();
             }
             else
             {

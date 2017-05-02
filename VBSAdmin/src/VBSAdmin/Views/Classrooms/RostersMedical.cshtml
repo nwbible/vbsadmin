@@ -4,12 +4,12 @@
     ViewData["Title"] = "Class Rosters - Medical Conditions and Medications";
 }
 
-<h2>Class Rosters - Medical Conditions and Medications</h2>
+<h2 class="pagebreak">Class Rosters - Medical Conditions and Medications</h2>
 
 @foreach (var item in Model)
 {
-    <div class="panel panel-primary">
-        <div class="panel-heading">@(item.SessionPeriod + " " + item.Grade + " " + item.Name)</div>
+    <div class="panel panel-primary pagebreak">
+        <div class="panel-heading">@(item.SessionPeriod + " " + item.Grade.GetDisplayName() + " " + item.Name)</div>
         <table class="table table-bordered table-condensed">
             <thead>
                 <tr>

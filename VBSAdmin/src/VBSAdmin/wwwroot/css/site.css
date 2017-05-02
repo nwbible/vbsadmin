@@ -67,3 +67,7 @@ background-color: #269abc;
 .badge-inverse {
 background-color: #333333;
 }
+
+.pagebreak { 
+    page-break-after: always; 
+} 

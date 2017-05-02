@@ -343,7 +343,7 @@ namespace VBSAdmin.Controllers
                 ClassAssignmentEmailModel model = new ClassAssignmentEmailModel();
                 model.Email = child.GuardianEmail;
                 model.ChildName = child.FirstName + " " + child.LastName;
-                model.AssignedClassName = child.Classroom.Session.Period + " " + child.Classroom.Grade + " " + child.Classroom.Name;
+                model.AssignedClassName = child.Classroom.Session.Period + " " + child.Classroom.Grade.GetDisplayName() + " " + child.Classroom.Name;
                 model.GuardianName = child.GuardianFirstName + " " + child.GuardianLastName;
 
                 models.Add(model);

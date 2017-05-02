@@ -23,7 +23,7 @@ namespace VBSAdmin.Helpers
             {
                 foreach (Classroom classroom in classrooms)
                 {
-                    string className = classroom.Session.Period + " " + classroom.Grade + " " + classroom.Name;
+                    string className = classroom.Session.Period + " " + classroom.Grade.GetDisplayName() + " " + classroom.Name;
                     ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(className);
                     worksheet.Cells["A1"].Value = "Child Name";
                     worksheet.Cells["B1"].Value = "Monday";
