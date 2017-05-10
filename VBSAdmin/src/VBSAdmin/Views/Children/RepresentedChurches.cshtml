@@ -1,0 +1,27 @@
+@model VBSAdmin.Models.ChildrenViewModels.RepresentedChurchesViewModel
+
+@{
+    ViewData["Title"] = "Represented Church List";
+}
+
+<h2>Represented Church List</h2>
+
+<div class="panel panel-primary">
+    <table class="table table-bordered table-condensed">
+        <tbody>
+            @foreach (var item in Model.Churches.Keys)
+            {
+                    <tr>
+                        <td>
+                            @item
+                        </td>
+                        <td>
+                            @Model.Churches[item]
+                        </td>
+                    </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<p />
+

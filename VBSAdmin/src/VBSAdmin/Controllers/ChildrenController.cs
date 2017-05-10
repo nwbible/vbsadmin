@@ -570,6 +570,58 @@ namespace VBSAdmin.Controllers
             return View(alphaAssignmentVMs);
         }
 
+
+        // GET: Listing of represented churches
+        public async Task<IActionResult> RepresentedChurches()
+        {
+            var applicationDbContext = _context.Children
+                .Where(c => c.VBSId == this.CurrentVBSId && c.VBS.TenantId == this.TenantId)
+                .OrderBy(c => c.HomeChurch);
+
+            List<Child> dbChildren = await applicationDbContext.ToListAsync();
+            RepresentedChurchesViewModel vm = new RepresentedChurchesViewModel();
+            vm.Churches = new Dictionary<string, int>();
+
+            foreach (Child dbChild in dbChildren)
+            {
+                string church = dbChild.HomeChurch;
+
+                if (string.IsNullOrWhiteSpace(church)
+                    || church.ToLower().Trim().StartsWith("none")
+                    || church.ToLower().Trim().StartsWith("n/a")
+                    || church.ToLower().Trim().StartsWith("na")
+                    || church.ToLower().Trim().StartsWith("none at this time")
+                    || church.ToLower().Trim().StartsWith("none currently")
+                    || church.ToLower().Trim().StartsWith("not sure")
+                    || church.ToLower().Trim().StartsWith("still looking")
+                    || church.ToLower().Trim().StartsWith("still seeking")
+                    || church.ToLower().Trim().StartsWith("we are looking")
+                    || church.ToLower().Trim().StartsWith("we don't have one"))
+                {
+                    church = "None";
+                }
+
+
+                if (dbChild.AttendHostChurch)
+                {
+                    church = "Northwest Bible Church";
+                }
+
+
+                if(vm.Churches.ContainsKey(church.Trim()))
+                {
+                    vm.Churches[church.Trim()] = vm.Churches[church] + 1;
+                }
+                else
+                {
+                    vm.Churches.Add(church.Trim(), 1);
+                }
+
+            }
+
+            return View(vm);
+        }
+
         private bool ChildExists(int id)
         {
             return _context.Children.Any(e => e.Id == id);
