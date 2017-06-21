@@ -325,6 +325,43 @@ namespace VBSAdmin.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> ExportVBSToExcel()
+        {
+            var applicationDbContext = _context.Classes.Include(c => c.Session)
+                .Include(c => c.Children)
+                .Where(c => c.VBSId == this.CurrentVBSId && c.VBS.TenantId == this.TenantId)
+                .OrderBy(c => c.SessionId)
+                .ThenBy(c => c.Grade)
+                .ThenBy(c => c.Name);
+
+            List<Classroom> dbClassrooms = await applicationDbContext.ToListAsync();
+
+            var applicationDbContext2 = _context.Children.Include(c => c.Classroom)
+                .Include(c => c.Classroom.Session)
+                .Include(c => c.Session)
+                .Where(c => c.VBSId == this.CurrentVBSId && c.VBS.TenantId == this.TenantId)
+                .OrderBy(c => c.SessionId)
+                .ThenBy(c => c.LastName)
+                .ThenBy(c => c.FirstName);
+
+            List<Child> dbChildren = await applicationDbContext2.ToListAsync();
+
+
+
+            string tenantName = _context.Tenants
+                .Where(t => t.Id == this.TenantId).First().Name;
+
+            string theme = _context.VBS
+                .Where(v => v.Id == this.CurrentVBSId).First().ThemeName;
+
+            string fileName = tenantName + " - " + theme + " - " + "Full Data Export.xlsx";
+
+            byte[] filecontent = ExcelExportHelper.ExportVBSExcel(dbClassrooms, dbChildren);
+            return File(filecontent, ExcelExportHelper.ExcelContentType, fileName);
+        }
+
+
+        [HttpGet]
         [Route("ClassAssignmentEmailExport.csv")]
         [Produces("text/csv")]
         public async Task<IActionResult> ExportClassAssignmentEmailDataAsCsv()
