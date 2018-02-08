@@ -1,0 +1,54 @@
+@model VBSAdmin.Models.ChildrenViewModels.ChildrenMapViewModel
+
+@{
+    ViewData["Title"] = "Registered Children Map";
+}
+
+<h2>Registered Children Map</h2>
+
+<div id="dvMap" style="width: 1200px; height: 800px">
+</div>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbfVH8TAC_3Itet0g5PIu1iJ7OY7ebr8Y"></script>
+<script type="text/javascript">
+        var markers = @Html.Raw(ViewBag.Markers);
+        window.onload = function () {
+            var mapOptions = {
+                center: new google.maps.LatLng(markers[0].lat, markers[0].lng),
+                zoom: 11,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            var infoWindow = new google.maps.InfoWindow();
+            var map = new google.maps.Map(document.getElementById("dvMap"), mapOptions);
+            for (i = 0; i < markers.length; i++) {
+                var data = markers[i]
+                var myLatlng = new google.maps.LatLng(data.lat, data.lng);
+                var marker = new google.maps.Marker({
+                    position: myLatlng,
+                    map: map,
+                    title: data.title
+                });
+                if(data.homeChurch == "home")
+                {
+                    marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png') 
+                }
+                else
+                {
+                    if(data.homeChurch == "none")
+                    {
+                        marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
+                    }
+                    else
+                    {
+                        marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png');
+                    }
+                }
+                (function (marker, data) {
+                    google.maps.event.addListener(marker, "click", function (e) {
+                        infoWindow.setContent(data.description);
+                        infoWindow.open(map, marker);
+                    });
+                })(marker, data);
+            }
+        }
+</script>
+

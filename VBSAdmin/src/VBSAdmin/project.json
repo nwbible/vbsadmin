@@ -31,7 +31,8 @@
     "Microsoft.VisualStudio.Web.CodeGenerators.Mvc": "1.1.0",
     "BundlerMinifier.Core": "2.4.337",
     "EPPlus.Core": "1.3.2",
-    "WebApiContrib.Core.Formatter.Csv": "1.0.3"
+    "WebApiContrib.Core.Formatter.Csv": "1.0.3",
+    "GeocodeSharp": "1.5.0"
   },
 
   "tools": {

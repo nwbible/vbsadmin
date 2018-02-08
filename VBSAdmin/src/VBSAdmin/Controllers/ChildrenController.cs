@@ -10,6 +10,7 @@ using VBSAdmin.Data;
 using VBSAdmin.Data.VBSAdminModels;
 using VBSAdmin.Models.ChildrenViewModels;
 using VBSAdmin.Filters;
+using GeocodeSharp.Google;
 
 namespace VBSAdmin.Controllers
 {
@@ -568,6 +569,93 @@ namespace VBSAdmin.Controllers
             }
 
             return View(alphaAssignmentVMs);
+        }
+
+        // GET: Map of registered children
+        public async Task<IActionResult> ChildrenMap()
+        {
+            var applicationDbContext = _context.Children
+                .Where(c => c.VBSId == this.CurrentVBSId && c.VBS.TenantId == this.TenantId);
+
+            List<Child> dbChildren = await applicationDbContext.ToListAsync();
+
+            Dictionary<string, string> addressList = new Dictionary<string, string>();
+            string markers = "[";
+            var client = new GeocodeClient("AIzaSyDbfVH8TAC_3Itet0g5PIu1iJ7OY7ebr8Y");
+
+            foreach (Child child in dbChildren)
+            {
+                var childAddress = child.Address1 + ", ";
+                if(!string.IsNullOrWhiteSpace(child.Address2))
+                {
+                    childAddress += child.Address2 + ", ";
+                }
+                childAddress += child.City + ", ";
+                childAddress += child.State + ", ";
+                childAddress += child.Zip;
+
+                if(!addressList.ContainsKey(childAddress))
+                {
+                    addressList.Add(childAddress, child.LastName);
+
+                    var response = await client.GeocodeAddress(childAddress);
+                    if (response.Status == GeocodeStatus.Ok)
+                    {
+                        var firstResult = response.Results.First();
+                        var location = firstResult.Geometry.Location;
+                        var lat = location.Latitude;
+                        var lng = location.Longitude;
+                        string homeChurch;
+
+                        if(child.AttendHostChurch)
+                        {
+                            homeChurch = "home";
+                        }
+                        else
+                        {
+                            if (string.IsNullOrWhiteSpace(child.HomeChurch)
+                                || child.HomeChurch.ToLower().Trim().StartsWith("none")
+                                || child.HomeChurch.ToLower().Trim().StartsWith("n/a")
+                                || child.HomeChurch.ToLower().Trim().StartsWith("na")
+                                || child.HomeChurch.ToLower().Trim().StartsWith("none at this time")
+                                || child.HomeChurch.ToLower().Trim().StartsWith("none currently")
+                                || child.HomeChurch.ToLower().Trim().StartsWith("not sure")
+                                || child.HomeChurch.ToLower().Trim().StartsWith("still looking")
+                                || child.HomeChurch.ToLower().Trim().StartsWith("still seeking")
+                                || child.HomeChurch.ToLower().Trim().StartsWith("we are looking")
+                                || child.HomeChurch.ToLower().Trim().StartsWith("we don't have one"))
+                            {
+                                homeChurch = "none";
+                            }
+                            else
+                            {
+                                homeChurch = "other";
+                            }
+                        }
+
+                        markers += "{";
+                        markers += string.Format("'title': '{0}',", child.LastName);
+                        markers += string.Format("'lat': '{0}',", lat);
+                        markers += string.Format("'lng': '{0}',", lng);
+                        markers += string.Format("'description': '{0}',", childAddress);
+                        markers += string.Format("'homeChurch': '{0}'", homeChurch);
+                        markers += "},";
+                    }
+                }
+
+                if(addressList.Count > 50)
+                {
+                    break;
+                }
+            }
+
+            markers += "];";
+
+            ViewBag.Markers = markers;
+
+            ChildrenMapViewModel vm = new ChildrenMapViewModel();
+
+            return View(vm);
         }
 
 
