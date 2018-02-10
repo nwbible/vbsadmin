@@ -33,24 +33,24 @@ namespace VBSAdmin.Data
                 .HasOne(c => c.VBS)
                 .WithMany(v => v.Children)
                 .IsRequired()
-                .OnDelete(Microsoft.EntityFrameworkCore.Metadata.DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Child>()
                 .HasOne(c => c.Session)
                 .WithMany(s => s.Children)
                 .IsRequired()
-                .OnDelete(Microsoft.EntityFrameworkCore.Metadata.DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Classroom>()
                 .HasOne(c => c.VBS)
                 .WithMany(r => r.Classrooms)
                 .IsRequired()
-                .OnDelete(Microsoft.EntityFrameworkCore.Metadata.DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Child>()
                 .HasOne(c => c.Classroom)
                 .WithMany(r => r.Children)
-                .OnDelete(Microsoft.EntityFrameworkCore.Metadata.DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Restrict);
 
         }
     }

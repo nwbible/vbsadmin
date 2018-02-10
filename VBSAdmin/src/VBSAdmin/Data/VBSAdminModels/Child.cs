@@ -24,6 +24,8 @@ namespace VBSAdmin.Data.VBSAdminModels
         public string State { get; set; }
         [Required]
         public string Zip { get; set; }
+        //public string Latitude { get; set; }
+        //public string Longitude { get; set; }
         [Required]
         public Enums.ClassGrade GradeCompleted { get; set; }
         [Column(TypeName = "Date")]

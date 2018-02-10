@@ -38,8 +38,8 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     @if (SignInManager.IsSignedIn(User))
-                    { 
-                        @if (await AuthorizationService.AuthorizeAsync(User, "SystemAdminOnly"))
+                    {
+                        @if ((await AuthorizationService.AuthorizeAsync(User, "SystemAdminOnly")).Succeeded)
                         {
                             <li><a asp-area="" asp-controller="Tenants" asp-action="Index"><i class="fa fa-university fa-lg"></i>  Churches</a></li>
                         }                  
