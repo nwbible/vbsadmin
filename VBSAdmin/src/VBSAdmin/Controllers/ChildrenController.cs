@@ -10,7 +10,7 @@ using VBSAdmin.Data;
 using VBSAdmin.Data.VBSAdminModels;
 using VBSAdmin.Models.ChildrenViewModels;
 using VBSAdmin.Filters;
-using GeocodeSharp.Google;
+using VBSAdmin.Helpers;
 
 namespace VBSAdmin.Controllers
 {
@@ -167,6 +167,13 @@ namespace VBSAdmin.Controllers
                     State = childVM.State,
                     Zip = childVM.Zip
                 };
+
+                GetGeoCodeResponse geoResponse = await GeocodeHelper.GetGeoCode(child);
+                if(geoResponse != null)
+                {
+                    child.Latitude = geoResponse.Lat;
+                    child.Longitude = geoResponse.Long;
+                }
 
                 if(child.ClassroomId == 0)
                 {
@@ -333,6 +340,14 @@ namespace VBSAdmin.Controllers
                 child.SessionId = childVM.SessionId;
                 child.State = childVM.State;
                 child.Zip = childVM.Zip;
+
+                GetGeoCodeResponse geoResponse = await GeocodeHelper.GetGeoCode(child);
+                if (geoResponse != null)
+                {
+                    child.Latitude = geoResponse.Lat;
+                    child.Longitude = geoResponse.Long;
+                }
+
 
                 if (child.ClassroomId == 0)
                 {
@@ -581,71 +596,53 @@ namespace VBSAdmin.Controllers
 
             Dictionary<string, string> addressList = new Dictionary<string, string>();
             string markers = "[";
-            var client = new GeocodeClient("AIzaSyDbfVH8TAC_3Itet0g5PIu1iJ7OY7ebr8Y");
 
             foreach (Child child in dbChildren)
             {
-                var childAddress = child.Address1 + ", ";
-                if(!string.IsNullOrWhiteSpace(child.Address2))
-                {
-                    childAddress += child.Address2 + ", ";
-                }
-                childAddress += child.City + ", ";
-                childAddress += child.State + ", ";
-                childAddress += child.Zip;
+                string childAddress = GeocodeHelper.GetFullAddress(child);
 
-                if(!addressList.ContainsKey(childAddress))
+                if (string.IsNullOrWhiteSpace(child.Latitude) || string.IsNullOrWhiteSpace(child.Longitude))
+                {
+                    var response = await GeocodeHelper.GetGeoCode(childAddress);
+                    if(response != null)
+                    {
+                        child.Latitude = response.Lat;
+                        child.Longitude = response.Long;
+                        _context.Update(child);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+                
+
+                if (!addressList.ContainsKey(childAddress))
                 {
                     addressList.Add(childAddress, child.LastName);
 
-                    var response = await client.GeocodeAddress(childAddress);
-                    if (response.Status == GeocodeStatus.Ok)
-                    {
-                        var firstResult = response.Results.First();
-                        var location = firstResult.Geometry.Location;
-                        var lat = location.Latitude;
-                        var lng = location.Longitude;
-                        string homeChurch;
+                    string homeChurch;
 
-                        if(child.AttendHostChurch)
+                    if(child.AttendHostChurch)
+                    {
+                        homeChurch = "home";
+                    }
+                    else
+                    {
+                        if (ChurchHelper.IsNoneChurch(child.HomeChurch))
                         {
-                            homeChurch = "home";
+                            homeChurch = "none";
                         }
                         else
                         {
-                            if (string.IsNullOrWhiteSpace(child.HomeChurch)
-                                || child.HomeChurch.ToLower().Trim().StartsWith("none")
-                                || child.HomeChurch.ToLower().Trim().StartsWith("n/a")
-                                || child.HomeChurch.ToLower().Trim().StartsWith("na")
-                                || child.HomeChurch.ToLower().Trim().StartsWith("none at this time")
-                                || child.HomeChurch.ToLower().Trim().StartsWith("none currently")
-                                || child.HomeChurch.ToLower().Trim().StartsWith("not sure")
-                                || child.HomeChurch.ToLower().Trim().StartsWith("still looking")
-                                || child.HomeChurch.ToLower().Trim().StartsWith("still seeking")
-                                || child.HomeChurch.ToLower().Trim().StartsWith("we are looking")
-                                || child.HomeChurch.ToLower().Trim().StartsWith("we don't have one"))
-                            {
-                                homeChurch = "none";
-                            }
-                            else
-                            {
-                                homeChurch = "other";
-                            }
+                            homeChurch = "other";
                         }
-
-                        markers += "{";
-                        markers += string.Format("'title': '{0}',", child.LastName);
-                        markers += string.Format("'lat': '{0}',", lat);
-                        markers += string.Format("'lng': '{0}',", lng);
-                        markers += string.Format("'description': '{0}',", childAddress);
-                        markers += string.Format("'homeChurch': '{0}'", homeChurch);
-                        markers += "},";
                     }
-                }
 
-                if(addressList.Count > 50)
-                {
-                    break;
+                    markers += "{";
+                    markers += string.Format("'title': '{0}',", System.Net.WebUtility.HtmlEncode(child.LastName));
+                    markers += string.Format("'lat': '{0}',", child.Latitude);
+                    markers += string.Format("'lng': '{0}',", child.Longitude);
+                    markers += string.Format("'description': '{0}',", System.Net.WebUtility.HtmlEncode(childAddress));
+                    markers += string.Format("'homeChurch': '{0}'", homeChurch);
+                    markers += "},";
                 }
             }
 
@@ -654,6 +651,8 @@ namespace VBSAdmin.Controllers
             ViewBag.Markers = markers;
 
             ChildrenMapViewModel vm = new ChildrenMapViewModel();
+
+            vm.ChurchName = "Northwest Bible Church";
 
             return View(vm);
         }
@@ -674,17 +673,7 @@ namespace VBSAdmin.Controllers
             {
                 string church = dbChild.HomeChurch;
 
-                if (string.IsNullOrWhiteSpace(church)
-                    || church.ToLower().Trim().StartsWith("none")
-                    || church.ToLower().Trim().StartsWith("n/a")
-                    || church.ToLower().Trim().StartsWith("na")
-                    || church.ToLower().Trim().StartsWith("none at this time")
-                    || church.ToLower().Trim().StartsWith("none currently")
-                    || church.ToLower().Trim().StartsWith("not sure")
-                    || church.ToLower().Trim().StartsWith("still looking")
-                    || church.ToLower().Trim().StartsWith("still seeking")
-                    || church.ToLower().Trim().StartsWith("we are looking")
-                    || church.ToLower().Trim().StartsWith("we don't have one"))
+                if (ChurchHelper.IsNoneChurch(church))
                 {
                     church = "None";
                 }
@@ -709,6 +698,52 @@ namespace VBSAdmin.Controllers
 
             return View(vm);
         }
+
+
+        // GET: Listing of registered unchurched children.
+        public async Task<IActionResult> UnchurchedReport()
+        {
+            var applicationDbContext = _context.Children
+                .Where(c => c.VBSId == this.CurrentVBSId && c.VBS.TenantId == this.TenantId)
+                .OrderBy(c => c.LastName)
+                .ThenBy(c => c.Address1)
+                .ThenBy(c => c.GradeCompleted);
+
+            List<Child> dbChildren = await applicationDbContext.ToListAsync();
+            List<UnchurchedReportViewModel> vms = new List<UnchurchedReportViewModel>();
+
+            foreach (Child dbChild in dbChildren)
+            {
+                string church = dbChild.HomeChurch;
+
+                if (!dbChild.AttendHostChurch && ChurchHelper.IsNoneChurch(church))
+                {
+                    UnchurchedReportViewModel vm = new UnchurchedReportViewModel();
+
+                    vm.ChildName = dbChild.LastName + ", " + dbChild.FirstName;
+                    vm.GradeCompleted = dbChild.GradeCompleted;
+                    vm.Address = dbChild.Address1 + ", ";
+                    if(!string.IsNullOrEmpty(dbChild.Address2))
+                    {
+                        vm.Address += dbChild.Address2 + ", ";
+                    }
+                    vm.Address += dbChild.City + ", ";
+                    vm.Address += dbChild.State + ", ";
+                    vm.Address += dbChild.Zip;
+                    vm.GuardianName = dbChild.GuardianFirstName + " " + dbChild.GuardianLastName;
+                    vm.GuardianRelationship = dbChild.GuardianChildRelationship;
+                    vm.GuardianEmail = dbChild.GuardianEmail;
+                    vm.GuardianPhone = dbChild.GuardianPhone;
+                    vm.ChurchSpecified = dbChild.HomeChurch;
+                    vm.InvitedBy = dbChild.InvitedBy;
+
+                    vms.Add(vm);
+                }
+            }
+
+            return View(vms);
+        }
+
 
         private bool ChildExists(int id)
         {

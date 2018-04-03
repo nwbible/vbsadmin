@@ -22,14 +22,14 @@
         <div class="form-group">
             <label asp-for="StartDate" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="StartDate" value="@Model.StartDate.ToString("d")" class="form-control" />
+                <input asp-for="StartDate" class="form-control" />
                 <span asp-validation-for="StartDate" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
             <label asp-for="EndDate" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="EndDate" value="@Model.EndDate.ToString("d")" class="form-control" />
+                <input asp-for="EndDate" class="form-control" />
                 <span asp-validation-for="EndDate" class="text-danger" />
             </div>
         </div>

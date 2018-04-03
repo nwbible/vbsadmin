@@ -14,24 +14,30 @@ namespace VBSAdmin.Models.VBSViewModels
         public string ThemeName { get; set; }
 
         [Required]
+        [DataType(DataType.Date)]
         public DateTime StartDate { get; set; }
 
         [Required]
+        [DataType(DataType.Date)]
         public DateTime EndDate { get; set; }
 
         [Required]
+        [DataType(DataType.Time)]
         public DateTime AMStartTime { get; set; }
 
         [Required]
+        [DataType(DataType.Time)]
         public DateTime AMEndTime { get; set; }
 
         [Required]
         public int AMMaxChildren { get; set; }
 
         [Required]
+        [DataType(DataType.Time)]
         public DateTime PMStartTime { get; set; }
 
         [Required]
+        [DataType(DataType.Time)]
         public DateTime PMEndTime { get; set; }
 
         [Required]

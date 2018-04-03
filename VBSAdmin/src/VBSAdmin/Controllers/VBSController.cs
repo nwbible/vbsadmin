@@ -362,6 +362,30 @@ namespace VBSAdmin.Controllers
 
 
         [HttpGet]
+        public async Task<IActionResult> ExportUnchurchedToExcel()
+        {
+            var applicationDbContext = _context.Children
+                .Where(c => c.VBSId == this.CurrentVBSId && c.VBS.TenantId == this.TenantId)
+                .OrderBy(c => c.LastName)
+                .ThenBy(c => c.Address1)
+                .ThenBy(c => c.GradeCompleted);
+
+            List<Child> dbChildren = await applicationDbContext.ToListAsync();
+
+            string tenantName = _context.Tenants
+                .Where(t => t.Id == this.TenantId).First().Name;
+
+            string theme = _context.VBS
+                .Where(v => v.Id == this.CurrentVBSId).First().ThemeName;
+
+            string fileName = tenantName + " - " + theme + " - " + "Unchurched Children Export.xlsx";
+
+            byte[] filecontent = ExcelExportHelper.ExportUnchurchedExcel(dbChildren);
+            return File(filecontent, ExcelExportHelper.ExcelContentType, fileName);
+        }
+
+
+        [HttpGet]
         [Route("ClassAssignmentEmailExport.csv")]
         [Produces("text/csv")]
         public async Task<IActionResult> ExportClassAssignmentEmailDataAsCsv()

@@ -19,10 +19,12 @@ namespace VBSAdmin.Data.VBSAdminModels
         [Column(TypeName = "Date")]
         [Required]
         [Display(Name = "Start Date")]
+        [DataType(DataType.Date)]
         public DateTime StartDate { get; set; }
         [Column(TypeName = "Date")]
         [Required]
         [Display(Name = "End Date")]
+        [DataType(DataType.Date)]
         public DateTime EndDate { get; set; }
 
         public List<Session> Sessions { get; set; }

@@ -1,0 +1,14 @@
+{
+  "name": "gmap-clusterer",
+  "homepage": "https://github.com/googlemaps/v3-utility-library",
+  "_release": "0f8034cd89",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "0f8034cd897d43bb06ffbaf7fbae1853723692d1"
+  },
+  "_source": "https://github.com/googlemaps/v3-utility-library.git",
+  "_target": "*",
+  "_originalSource": "gmap-clusterer",
+  "_direct": true
+}

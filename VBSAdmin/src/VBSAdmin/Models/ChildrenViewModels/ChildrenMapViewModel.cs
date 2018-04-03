@@ -7,5 +7,6 @@ namespace VBSAdmin.Models.ChildrenViewModels
 {
     public class ChildrenMapViewModel
     {
+        public string ChurchName { get; set; }
     }
 }

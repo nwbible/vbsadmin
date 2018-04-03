@@ -1,0 +1,79 @@
+@model IEnumerable<VBSAdmin.Models.ChildrenViewModels.UnchurchedReportViewModel>
+
+@{
+    ViewData["Title"] = "Unchurched Report";
+}
+
+<h2 class="pagebreak">Unchurched Report</h2>
+
+<div class="panel panel-primary pagebreak">
+    <div class="panel-heading">Unchurched Report</div>
+    <table class="table table-bordered table-condensed">
+        <thead>
+            <tr>
+                <th style="width:100px">
+                    Name
+                </th>
+                <th style="width:180px">
+                    Grade
+                </th>
+                <th style="width:130px">
+                    Address
+                </th>
+                <th style="width:100px">
+                    Guardian
+                </th>
+                <th style="width:50px">
+                    Guardian Relationship
+                </th>
+                <th style="width:50px">
+                    Phone
+                </th>
+                <th style="width:50px">
+                    Email
+                </th>
+                <th style="width:80px">
+                    Church Selection
+                </th>
+                <th style="width:80px">
+                    Invited By
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var child in Model)
+        {
+            <tr>
+                <td style="width:100px">
+                    @child.ChildName
+                </td>
+                <td style="width:180px">
+                    @child.GradeCompleted
+                </td>
+                <td style="width:130px">
+                    @child.Address
+                </td>
+                <td style="width:100px">
+                    @child.GuardianName
+                </td>
+                <td style="width:50px">
+                    @child.GuardianRelationship
+                </td>
+                <td style="width:50px">
+                    @child.GuardianPhone
+                </td>
+                <td style="width:50px">
+                    @child.GuardianEmail
+                </td>
+                <td style="width:80px">
+                    @child.ChurchSpecified
+                </td>
+                <td style="width:80px">
+                    @child.InvitedBy
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+<p />

@@ -640,6 +640,15 @@ namespace VBSAdmin.Helpers
                     }
                 }
 
+                //Get the geocode for the registered child
+                GetGeoCodeResponse geoResponse = await GeocodeHelper.GetGeoCode(child);
+                if (geoResponse != null)
+                {
+                    child.Latitude = geoResponse.Lat;
+                    child.Longitude = geoResponse.Long;
+                }
+
+
                 //Add the child to the db context
                 _context.Add(child);
             }

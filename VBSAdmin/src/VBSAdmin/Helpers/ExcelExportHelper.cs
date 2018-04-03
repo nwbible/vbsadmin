@@ -55,6 +55,70 @@ namespace VBSAdmin.Helpers
             return result;
         }
 
+        public static byte[] ExportUnchurchedExcel(List<Child> children)
+        {
+            byte[] result = null;
+
+            using (ExcelPackage package = new ExcelPackage())
+            {
+                //Export children to worksheet
+                ExcelWorksheet childrenWorksheet = package.Workbook.Worksheets.Add("Unchurched Children");
+                childrenWorksheet.Cells["A1"].Value = "Child Name";
+                childrenWorksheet.Cells["B1"].Value = "Grade";
+                childrenWorksheet.Cells["C1"].Value = "Address";
+                childrenWorksheet.Cells["D1"].Value = "Guardian Name";
+                childrenWorksheet.Cells["E1"].Value = "Guardian Relationship";
+                childrenWorksheet.Cells["F1"].Value = "Guardian Phone";
+                childrenWorksheet.Cells["G1"].Value = "Guardian Email";
+                childrenWorksheet.Cells["H1"].Value = "Church Specified";
+                childrenWorksheet.Cells["I1"].Value = "Invited By";
+                childrenWorksheet.Cells["A1:I1"].Style.Font.Bold = true;
+
+                int rowCount = 2;
+                foreach (Child child in children)
+                {
+                    if (!child.AttendHostChurch && ChurchHelper.IsNoneChurch(child.HomeChurch))
+                    {
+                        var address = child.Address1 + ", ";
+                        if (!string.IsNullOrEmpty(child.Address2))
+                        {
+                            address += child.Address2 + ", ";
+                        }
+                        address += child.City + ", ";
+                        address += child.State + ", ";
+                        address += child.Zip;
+
+                        childrenWorksheet.Cells["A" + rowCount].Value = child.LastName + ", " + child.FirstName;
+                        childrenWorksheet.Cells["B" + rowCount].Value = child.GradeCompleted;
+                        childrenWorksheet.Cells["C" + rowCount].Value = address;
+                        childrenWorksheet.Cells["D" + rowCount].Value = child.GuardianFirstName + " " + child.GuardianLastName;
+                        childrenWorksheet.Cells["E" + rowCount].Value = child.GuardianChildRelationship;
+                        childrenWorksheet.Cells["F" + rowCount].Value = child.GuardianPhone;
+                        childrenWorksheet.Cells["G" + rowCount].Value = child.GuardianEmail;
+                        childrenWorksheet.Cells["H" + rowCount].Value = child.HomeChurch;
+                        childrenWorksheet.Cells["I" + rowCount].Value = child.InvitedBy;
+                        rowCount++;
+                    }
+                }
+
+                childrenWorksheet.Column(1).AutoFit();
+                childrenWorksheet.Column(2).AutoFit();
+                childrenWorksheet.Column(3).AutoFit();
+                childrenWorksheet.Column(4).AutoFit();
+                childrenWorksheet.Column(5).AutoFit();
+                childrenWorksheet.Column(6).AutoFit();
+                childrenWorksheet.Column(7).AutoFit();
+                childrenWorksheet.Column(8).AutoFit();
+                childrenWorksheet.Column(9).AutoFit();
+
+                result = package.GetAsByteArray();
+            }
+
+            return result;
+        }
+
+
+
         public static byte[] ExportVBSExcel(List<Classroom> classrooms, List<Child> children)
         {
             byte[] result = null;

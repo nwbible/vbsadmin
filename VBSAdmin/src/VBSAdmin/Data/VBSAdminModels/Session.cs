@@ -14,9 +14,11 @@ namespace VBSAdmin.Data.VBSAdminModels
         public Enums.SessionPeriod Period { get; set; }
 
         [Required]
+        [DataType(DataType.Time)]
         public DateTime StartTime { get; set; }
 
         [Required]
+        [DataType(DataType.Time)]
         public DateTime EndTime { get; set; }
 
         [Required]

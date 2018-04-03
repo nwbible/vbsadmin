@@ -30,6 +30,7 @@ namespace VBSAdmin.Models.ChildrenViewModels
         public Enums.ClassGrade GradeCompleted { get; set; }
         [Column(TypeName = "Date")]
         [Required]
+        [DataType(DataType.Date)]
         public DateTime DateOfBirth { get; set; }
         [Required]
         public Enums.ChildGender Gender { get; set; }
