@@ -113,18 +113,18 @@ namespace VBSAdmin.Helpers
                 {
                     switch (Convert.ToInt32(data.field))
                     {
-                        case (int)FormStackForm2017Enum.number_of_your_children_being_registered_now:
+                        case (int)FormStackForm2018Enum.number_of_your_children_being_registered_now:
                             form.number_of_your_children_being_registered_now = Convert.ToInt32(data.value);
                             break;
-                        case (int)FormStackForm2017Enum.parentguardian_name:
+                        case (int)FormStackForm2018Enum.parentguardian_name:
                             var firstSpaceIndex = data.value.IndexOf(" ");
                             form.parentguardian_first_name = data.value.Substring(0, firstSpaceIndex);
                             form.parentguardian_last_name = data.value.Substring(firstSpaceIndex + 1);
                             break;
-                        case (int)FormStackForm2017Enum.email:
+                        case (int)FormStackForm2018Enum.email:
                             form.email = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.address:
+                        case (int)FormStackForm2018Enum.address:
                             string addr, city, state, zip;
                             int len = data.value.Length;
                             zip = data.value.Substring(len - 5, 5).Trim();
@@ -139,7 +139,7 @@ namespace VBSAdmin.Helpers
                             form.state = state;
                             form.zip = zip;
                             break;
-                        case (int)FormStackForm2017Enum.parentguardian_phone:
+                        case (int)FormStackForm2018Enum.parentguardian_phone:
                             var phone = data.value.Trim();
                             phone = phone.Replace(" ", "");
                             phone = phone.Replace("(", "");
@@ -147,24 +147,24 @@ namespace VBSAdmin.Helpers
                             phone = phone.Replace("-", "");
                             form.parentguardian_phone = phone;
                             break;
-                        case (int)FormStackForm2017Enum.relationship_to_children_being_registered:
+                        case (int)FormStackForm2018Enum.relationship_to_children_being_registered:
                             form.relationship_to_children_being_registered = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.does_your_family_attend_northwest_bible_church:
+                        case (int)FormStackForm2018Enum.does_your_family_attend_northwest_bible_church:
                             form.does_your_family_attend_northwest_bible_church = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.what_church_does_your_family_call_home:
+                        case (int)FormStackForm2018Enum.what_church_does_your_family_call_home:
                             form.what_church_does_your_family_call_home = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.who_invited_you_to_vbs_at_northwest:
+                        case (int)FormStackForm2018Enum.who_invited_you_to_vbs_at_northwest:
                             form.who_invited_you_to_vbs_at_northwest = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.emergency_contact_name:
+                        case (int)FormStackForm2018Enum.emergency_contact_name:
                             var emfirstSpaceIndex = data.value.IndexOf(" ");
                             form.emergency_contact_first_name = data.value.Substring(0, emfirstSpaceIndex).Trim();
                             form.emergency_contact_last_name = data.value.Substring(emfirstSpaceIndex + 1).Trim();
                             break;
-                        case (int)FormStackForm2017Enum.emergency_contact_phone:
+                        case (int)FormStackForm2018Enum.emergency_contact_phone:
                             var emphone = data.value.Trim();
                             emphone = emphone.Replace(" ", "");
                             emphone = emphone.Replace("(", "");
@@ -172,197 +172,197 @@ namespace VBSAdmin.Helpers
                             emphone = emphone.Replace("-", "");
                             form.emergency_contact_phone = emphone;
                             break;
-                        case (int)FormStackForm2017Enum.emergency_contact_relationship:
+                        case (int)FormStackForm2018Enum.emergency_contact_relationship:
                             form.emergency_contact_relationship = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.morning_or_evening_session_c1:
+                        case (int)FormStackForm2018Enum.morning_or_evening_session_c1:
                             form.morning_or_evening_session_c1 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.name_c1:
+                        case (int)FormStackForm2018Enum.name_c1:
                             var firstSpaceIndex_c1 = data.value.IndexOf(" ");
                             form.first_name_c1 = data.value.Substring(0, firstSpaceIndex_c1).Trim();
                             form.last_name_c1 = data.value.Substring(firstSpaceIndex_c1 + 1).Trim();
                             break;
-                        case (int)FormStackForm2017Enum.gender_c1:
+                        case (int)FormStackForm2018Enum.gender_c1:
                             form.gender_c1 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.birth_date_c1:
+                        case (int)FormStackForm2018Enum.birth_date_c1:
                             form.birth_date_c1 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.grade_completed_c1:
+                        case (int)FormStackForm2018Enum.grade_completed_c1:
                             form.grade_completed_c1 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.does_this_child_have_any_allergies_c1:
+                        case (int)FormStackForm2018Enum.does_this_child_have_any_allergies_c1:
                             form.does_this_child_have_any_allergies_c1 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.allergies_please_explain_c1:
+                        case (int)FormStackForm2018Enum.allergies_please_explain_c1:
                             form.allergies_please_explain_c1 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.does_this_child_have_any_medical_conditions_c1:
+                        case (int)FormStackForm2018Enum.does_this_child_have_any_medical_conditions_c1:
                             form.does_this_child_have_any_medical_conditions_c1 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.medical_conditions_please_explain_c1:
+                        case (int)FormStackForm2018Enum.medical_conditions_please_explain_c1:
                             form.medical_conditions_please_explain_c1 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.is_this_child_taking_any_medications_c1:
+                        case (int)FormStackForm2018Enum.is_this_child_taking_any_medications_c1:
                             form.is_this_child_taking_any_medications_c1 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.medications_please_explain_c1:
+                        case (int)FormStackForm2018Enum.medications_please_explain_c1:
                             form.medications_please_explain_c1 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.please_place_my_child_with_c1:
+                        case (int)FormStackForm2018Enum.please_place_my_child_with_c1:
                             form.please_place_my_child_with_c1 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.morning_or_evening_session_c2:
+                        case (int)FormStackForm2018Enum.morning_or_evening_session_c2:
                             form.morning_or_evening_session_c2 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.name_c2:
+                        case (int)FormStackForm2018Enum.name_c2:
                             var firstSpaceIndex_c2 = data.value.IndexOf(" ");
                             form.first_name_c2 = data.value.Substring(0, firstSpaceIndex_c2).Trim();
                             form.last_name_c2 = data.value.Substring(firstSpaceIndex_c2 + 1).Trim();
                             break;
-                        case (int)FormStackForm2017Enum.gender_c2:
+                        case (int)FormStackForm2018Enum.gender_c2:
                             form.gender_c2 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.birth_date_c2:
+                        case (int)FormStackForm2018Enum.birth_date_c2:
                             form.birth_date_c2 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.grade_completed_c2:
+                        case (int)FormStackForm2018Enum.grade_completed_c2:
                             form.grade_completed_c2 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.does_this_child_have_any_allergies_c2:
+                        case (int)FormStackForm2018Enum.does_this_child_have_any_allergies_c2:
                             form.does_this_child_have_any_allergies_c2 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.allergies_please_explain_c2:
+                        case (int)FormStackForm2018Enum.allergies_please_explain_c2:
                             form.allergies_please_explain_c2 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.does_this_child_have_any_medical_conditions_c2:
+                        case (int)FormStackForm2018Enum.does_this_child_have_any_medical_conditions_c2:
                             form.does_this_child_have_any_medical_conditions_c2 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.medical_conditions_please_explain_c2:
+                        case (int)FormStackForm2018Enum.medical_conditions_please_explain_c2:
                             form.medical_conditions_please_explain_c2 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.is_this_child_taking_any_medications_c2:
+                        case (int)FormStackForm2018Enum.is_this_child_taking_any_medications_c2:
                             form.is_this_child_taking_any_medications_c2 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.medications_please_explain_c2:
+                        case (int)FormStackForm2018Enum.medications_please_explain_c2:
                             form.medications_please_explain_c2 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.please_place_my_child_with_c2:
+                        case (int)FormStackForm2018Enum.please_place_my_child_with_c2:
                             form.please_place_my_child_with_c2 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.morning_or_evening_session_c3:
+                        case (int)FormStackForm2018Enum.morning_or_evening_session_c3:
                             form.morning_or_evening_session_c3 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.name_c3:
+                        case (int)FormStackForm2018Enum.name_c3:
                             var firstSpaceIndex_c3 = data.value.IndexOf(" ");
                             form.first_name_c3 = data.value.Substring(0, firstSpaceIndex_c3).Trim();
                             form.last_name_c3 = data.value.Substring(firstSpaceIndex_c3 + 1).Trim();
                             break;
-                        case (int)FormStackForm2017Enum.gender_c3:
+                        case (int)FormStackForm2018Enum.gender_c3:
                             form.gender_c3 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.birth_date_c3:
+                        case (int)FormStackForm2018Enum.birth_date_c3:
                             form.birth_date_c3 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.grade_completed_c3:
+                        case (int)FormStackForm2018Enum.grade_completed_c3:
                             form.grade_completed_c3 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.does_this_child_have_any_allergies_c3:
+                        case (int)FormStackForm2018Enum.does_this_child_have_any_allergies_c3:
                             form.does_this_child_have_any_allergies_c3 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.allergies_please_explain_c3:
+                        case (int)FormStackForm2018Enum.allergies_please_explain_c3:
                             form.allergies_please_explain_c3 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.does_this_child_have_any_medical_conditions_c3:
+                        case (int)FormStackForm2018Enum.does_this_child_have_any_medical_conditions_c3:
                             form.does_this_child_have_any_medical_conditions_c3 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.medical_conditions_please_explain_c3:
+                        case (int)FormStackForm2018Enum.medical_conditions_please_explain_c3:
                             form.medical_conditions_please_explain_c3 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.is_this_child_taking_any_medications_c3:
+                        case (int)FormStackForm2018Enum.is_this_child_taking_any_medications_c3:
                             form.is_this_child_taking_any_medications_c3 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.medications_please_explain_c3:
+                        case (int)FormStackForm2018Enum.medications_please_explain_c3:
                             form.medications_please_explain_c3 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.please_place_my_child_with_c3:
+                        case (int)FormStackForm2018Enum.please_place_my_child_with_c3:
                             form.please_place_my_child_with_c3 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.morning_or_evening_session_c4:
+                        case (int)FormStackForm2018Enum.morning_or_evening_session_c4:
                             form.morning_or_evening_session_c4 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.name_c4:
+                        case (int)FormStackForm2018Enum.name_c4:
                             var firstSpaceIndex_c4 = data.value.IndexOf(" ");
                             form.first_name_c4 = data.value.Substring(0, firstSpaceIndex_c4).Trim();
                             form.last_name_c4 = data.value.Substring(firstSpaceIndex_c4 + 1).Trim();
                             break;
-                        case (int)FormStackForm2017Enum.gender_c4:
+                        case (int)FormStackForm2018Enum.gender_c4:
                             form.gender_c4 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.birth_date_c4:
+                        case (int)FormStackForm2018Enum.birth_date_c4:
                             form.birth_date_c4 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.grade_completed_c4:
+                        case (int)FormStackForm2018Enum.grade_completed_c4:
                             form.grade_completed_c4 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.does_this_child_have_any_allergies_c4:
+                        case (int)FormStackForm2018Enum.does_this_child_have_any_allergies_c4:
                             form.does_this_child_have_any_allergies_c4 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.allergies_please_explain_c4:
+                        case (int)FormStackForm2018Enum.allergies_please_explain_c4:
                             form.allergies_please_explain_c4 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.does_this_child_have_any_medical_conditions_c4:
+                        case (int)FormStackForm2018Enum.does_this_child_have_any_medical_conditions_c4:
                             form.does_this_child_have_any_medical_conditions_c4 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.medical_conditions_please_explain_c4:
+                        case (int)FormStackForm2018Enum.medical_conditions_please_explain_c4:
                             form.medical_conditions_please_explain_c4 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.is_this_child_taking_any_medications_c4:
+                        case (int)FormStackForm2018Enum.is_this_child_taking_any_medications_c4:
                             form.is_this_child_taking_any_medications_c4 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.medications_please_explain_c4:
+                        case (int)FormStackForm2018Enum.medications_please_explain_c4:
                             form.medications_please_explain_c4 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.please_place_my_child_with_c4:
+                        case (int)FormStackForm2018Enum.please_place_my_child_with_c4:
                             form.please_place_my_child_with_c4 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.morning_or_evening_session_c5:
+                        case (int)FormStackForm2018Enum.morning_or_evening_session_c5:
                             form.morning_or_evening_session_c5 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.name_c5:
+                        case (int)FormStackForm2018Enum.name_c5:
                             var firstSpaceIndex_c5 = data.value.IndexOf(" ");
                             form.first_name_c5 = data.value.Substring(0, firstSpaceIndex_c5).Trim();
                             form.last_name_c5 = data.value.Substring(firstSpaceIndex_c5 + 1).Trim();
                             break;
-                        case (int)FormStackForm2017Enum.gender_c5:
+                        case (int)FormStackForm2018Enum.gender_c5:
                             form.gender_c5 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.birth_date_c5:
+                        case (int)FormStackForm2018Enum.birth_date_c5:
                             form.birth_date_c5 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.grade_completed_c5:
+                        case (int)FormStackForm2018Enum.grade_completed_c5:
                             form.grade_completed_c5 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.does_this_child_have_any_allergies_c5:
+                        case (int)FormStackForm2018Enum.does_this_child_have_any_allergies_c5:
                             form.does_this_child_have_any_allergies_c5 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.allergies_please_explain_c5:
+                        case (int)FormStackForm2018Enum.allergies_please_explain_c5:
                             form.allergies_please_explain_c5 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.does_this_child_have_any_medical_conditions_c5:
+                        case (int)FormStackForm2018Enum.does_this_child_have_any_medical_conditions_c5:
                             form.does_this_child_have_any_medical_conditions_c5 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.medical_conditions_please_explain_c5:
+                        case (int)FormStackForm2018Enum.medical_conditions_please_explain_c5:
                             form.medical_conditions_please_explain_c5 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.is_this_child_taking_any_medications_c5:
+                        case (int)FormStackForm2018Enum.is_this_child_taking_any_medications_c5:
                             form.is_this_child_taking_any_medications_c5 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.medications_please_explain_c5:
+                        case (int)FormStackForm2018Enum.medications_please_explain_c5:
                             form.medications_please_explain_c5 = data.value.Trim();
                             break;
-                        case (int)FormStackForm2017Enum.please_place_my_child_with_c5:
+                        case (int)FormStackForm2018Enum.please_place_my_child_with_c5:
                             form.please_place_my_child_with_c5 = data.value.Trim();
                             break;
                         default:
