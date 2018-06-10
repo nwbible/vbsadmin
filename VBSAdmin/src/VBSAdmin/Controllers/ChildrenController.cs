@@ -687,7 +687,7 @@ namespace VBSAdmin.Controllers
 
                 if(vm.Churches.ContainsKey(church.Trim()))
                 {
-                    vm.Churches[church.Trim()] = vm.Churches[church] + 1;
+                    vm.Churches[church.Trim()] = vm.Churches[church.Trim()] + 1;
                 }
                 else
                 {
@@ -701,11 +701,11 @@ namespace VBSAdmin.Controllers
 
 
         // GET: Listing of registered unchurched children.
-        public async Task<IActionResult> UnchurchedReport()
+        public async Task<IActionResult> UnchurchedReportOld()
         {
             var applicationDbContext = _context.Children
                 .Where(c => c.VBSId == this.CurrentVBSId && c.VBS.TenantId == this.TenantId)
-                .OrderBy(c => c.LastName)
+                .OrderBy(c => c.GuardianLastName)
                 .ThenBy(c => c.Address1)
                 .ThenBy(c => c.GradeCompleted);
 
@@ -744,6 +744,65 @@ namespace VBSAdmin.Controllers
             return View(vms);
         }
 
+        // GET: Listing of registered unchurched children.
+        public async Task<IActionResult> UnchurchedReport()
+        {
+            var applicationDbContext = _context.Children
+                .Where(c => c.VBSId == this.CurrentVBSId && c.VBS.TenantId == this.TenantId)
+                .OrderBy(c => c.GuardianLastName)
+                .ThenBy(c => c.Address1)
+                .ThenBy(c => c.GradeCompleted);
+
+            List<Child> dbChildren = await applicationDbContext.ToListAsync();
+            List<UnchurchedReportViewModel2> vms = new List<UnchurchedReportViewModel2>();
+
+
+            Dictionary<string, UnchurchedReportViewModel2> vmDictionary = new Dictionary<string, UnchurchedReportViewModel2>();
+
+            foreach (Child dbChild in dbChildren)
+            {
+                string church = dbChild.HomeChurch;
+
+                if (!dbChild.AttendHostChurch && ChurchHelper.IsNoneChurch(church))
+                {
+                    if (!vmDictionary.ContainsKey(dbChild.GuardianFirstName + " " + dbChild.GuardianLastName))
+                    {
+                        UnchurchedReportViewModel2 vm = new UnchurchedReportViewModel2();
+
+                        vm.ChildrenNamesAndGrades = dbChild.FirstName + " " + dbChild.LastName + "(" + dbChild.GradeCompleted + ")"; 
+                        vm.Address = dbChild.Address1 + ", ";
+                        if (!string.IsNullOrEmpty(dbChild.Address2))
+                        {
+                            vm.Address += dbChild.Address2 + ", ";
+                        }
+                        vm.Address += dbChild.City + ", ";
+                        vm.Address += dbChild.State + ", ";
+                        vm.Address += dbChild.Zip;
+                        vm.GuardianName = dbChild.GuardianFirstName + " " + dbChild.GuardianLastName;
+                        vm.GuardianRelationship = dbChild.GuardianChildRelationship;
+                        vm.GuardianEmail = dbChild.GuardianEmail;
+                        vm.GuardianPhone = dbChild.GuardianPhone;
+                        vm.ChurchSpecified = dbChild.HomeChurch;
+                        vm.InvitedBy = dbChild.InvitedBy;
+
+                        vmDictionary.Add(vm.GuardianName, vm);
+                    }
+                    else
+                    {
+                        UnchurchedReportViewModel2 vm = vmDictionary[dbChild.GuardianFirstName + " " + dbChild.GuardianLastName];
+
+                        vm.ChildrenNamesAndGrades+= ", " + dbChild.FirstName + " " + dbChild.LastName + "(" + dbChild.GradeCompleted + ")";
+                    }
+                }
+            }
+
+            foreach (UnchurchedReportViewModel2 vm2 in vmDictionary.Values)
+            {
+                vms.Add(vm2);
+            }
+
+            return View(vms);
+        }
 
         private bool ChildExists(int id)
         {

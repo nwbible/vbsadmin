@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using VBSAdmin.Data.VBSAdminModels;
+using VBSAdmin.Models.ChildrenViewModels;
 
 namespace VBSAdmin.Helpers
 {
@@ -55,7 +56,7 @@ namespace VBSAdmin.Helpers
             return result;
         }
 
-        public static byte[] ExportUnchurchedExcel(List<Child> children)
+        public static byte[] ExportUnchurchedExcel(List<UnchurchedReportViewModel2> children)
         {
             byte[] result = null;
 
@@ -63,42 +64,28 @@ namespace VBSAdmin.Helpers
             {
                 //Export children to worksheet
                 ExcelWorksheet childrenWorksheet = package.Workbook.Worksheets.Add("Unchurched Children");
-                childrenWorksheet.Cells["A1"].Value = "Child Name";
-                childrenWorksheet.Cells["B1"].Value = "Grade";
-                childrenWorksheet.Cells["C1"].Value = "Address";
-                childrenWorksheet.Cells["D1"].Value = "Guardian Name";
-                childrenWorksheet.Cells["E1"].Value = "Guardian Relationship";
-                childrenWorksheet.Cells["F1"].Value = "Guardian Phone";
-                childrenWorksheet.Cells["G1"].Value = "Guardian Email";
-                childrenWorksheet.Cells["H1"].Value = "Church Specified";
-                childrenWorksheet.Cells["I1"].Value = "Invited By";
-                childrenWorksheet.Cells["A1:I1"].Style.Font.Bold = true;
+                childrenWorksheet.Cells["A1"].Value = "Guardian Name";
+                childrenWorksheet.Cells["B1"].Value = "Guardian Phone";
+                childrenWorksheet.Cells["C1"].Value = "Guardian Email";
+                childrenWorksheet.Cells["D1"].Value = "Guardian Relationship";
+                childrenWorksheet.Cells["E1"].Value = "Address";
+                childrenWorksheet.Cells["F1"].Value = "Invited By";
+                childrenWorksheet.Cells["G1"].Value = "Church Specified";
+                childrenWorksheet.Cells["H1"].Value = "Children Name and Grades";
+                childrenWorksheet.Cells["A1:H1"].Style.Font.Bold = true;
 
                 int rowCount = 2;
-                foreach (Child child in children)
+                foreach (UnchurchedReportViewModel2 child in children)
                 {
-                    if (!child.AttendHostChurch && ChurchHelper.IsNoneChurch(child.HomeChurch))
-                    {
-                        var address = child.Address1 + ", ";
-                        if (!string.IsNullOrEmpty(child.Address2))
-                        {
-                            address += child.Address2 + ", ";
-                        }
-                        address += child.City + ", ";
-                        address += child.State + ", ";
-                        address += child.Zip;
-
-                        childrenWorksheet.Cells["A" + rowCount].Value = child.LastName + ", " + child.FirstName;
-                        childrenWorksheet.Cells["B" + rowCount].Value = child.GradeCompleted;
-                        childrenWorksheet.Cells["C" + rowCount].Value = address;
-                        childrenWorksheet.Cells["D" + rowCount].Value = child.GuardianFirstName + " " + child.GuardianLastName;
-                        childrenWorksheet.Cells["E" + rowCount].Value = child.GuardianChildRelationship;
-                        childrenWorksheet.Cells["F" + rowCount].Value = child.GuardianPhone;
-                        childrenWorksheet.Cells["G" + rowCount].Value = child.GuardianEmail;
-                        childrenWorksheet.Cells["H" + rowCount].Value = child.HomeChurch;
-                        childrenWorksheet.Cells["I" + rowCount].Value = child.InvitedBy;
-                        rowCount++;
-                    }
+                    childrenWorksheet.Cells["A" + rowCount].Value = child.GuardianName;
+                    childrenWorksheet.Cells["B" + rowCount].Value = child.GuardianPhone;
+                    childrenWorksheet.Cells["C" + rowCount].Value = child.GuardianEmail;
+                    childrenWorksheet.Cells["D" + rowCount].Value = child.GuardianRelationship;
+                    childrenWorksheet.Cells["E" + rowCount].Value = child.Address;
+                    childrenWorksheet.Cells["F" + rowCount].Value = child.InvitedBy;
+                    childrenWorksheet.Cells["G" + rowCount].Value = child.ChurchSpecified;
+                    childrenWorksheet.Cells["H" + rowCount].Value = child.ChildrenNamesAndGrades;
+                    rowCount++;
                 }
 
                 childrenWorksheet.Column(1).AutoFit();

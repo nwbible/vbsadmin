@@ -1,4 +1,4 @@
-@model IEnumerable<VBSAdmin.Models.ChildrenViewModels.UnchurchedReportViewModel>
+@model IEnumerable<VBSAdmin.Models.ChildrenViewModels.UnchurchedReportViewModel2>
 
 @{
     ViewData["Title"] = "Unchurched Report";
@@ -12,31 +12,28 @@
         <thead>
             <tr>
                 <th style="width:100px">
-                    Name
+                    Guardian Name
                 </th>
-                <th style="width:180px">
-                    Grade
+                <th style="width:50px">
+                    Guardian Phone
                 </th>
-                <th style="width:130px">
+                <th style="width:50px">
+                    Guiardian Email
+                </th>
+                <th style="width:100px">
+                    Guardian Relationship
+                </th>
+                <th style="width:150px">
                     Address
                 </th>
                 <th style="width:100px">
-                    Guardian
-                </th>
-                <th style="width:50px">
-                    Guardian Relationship
-                </th>
-                <th style="width:50px">
-                    Phone
-                </th>
-                <th style="width:50px">
-                    Email
-                </th>
-                <th style="width:80px">
-                    Church Selection
-                </th>
-                <th style="width:80px">
                     Invited By
+                </th>
+                <th style="width:100px">
+                    Church Specified
+                </th>
+                <th style="width:180px">
+                    Registered Children
                 </th>
             </tr>
         </thead>
@@ -45,31 +42,28 @@
         {
             <tr>
                 <td style="width:100px">
-                    @child.ChildName
-                </td>
-                <td style="width:180px">
-                    @child.GradeCompleted
-                </td>
-                <td style="width:130px">
-                    @child.Address
-                </td>
-                <td style="width:100px">
                     @child.GuardianName
-                </td>
-                <td style="width:50px">
-                    @child.GuardianRelationship
                 </td>
                 <td style="width:50px">
                     @child.GuardianPhone
                 </td>
-                <td style="width:50px">
+                <td style="width:100px">
                     @child.GuardianEmail
                 </td>
-                <td style="width:80px">
+                <td style="width:100px">
+                    @child.GuardianRelationship 
+                </td>
+                <td style="width:150px">
+                    @child.Address
+                </td>
+                <td style="width:100px">
+                    @child.InvitedBy
+                </td>
+                <td style="width:100px">
                     @child.ChurchSpecified
                 </td>
-                <td style="width:80px">
-                    @child.InvitedBy
+                <td style="width:180px">
+                    @child.ChildrenNamesAndGrades
                 </td>
             </tr>
         }

@@ -29,4 +29,16 @@ namespace VBSAdmin.Models.ChildrenViewModels
         public string GuardianEmail { get; set; }
     }
 
+    public class UnchurchedReportViewModel2
+    {
+        public string GuardianName { get; set; }
+        public string GuardianPhone { get; set; }
+        public string GuardianEmail { get; set; }
+        public string GuardianRelationship { get; set; }
+        public string Address { get; set; }
+        public string InvitedBy { get; set; }
+        public string ChurchSpecified { get; set; }
+        public string ChildrenNamesAndGrades { get; set; }
+    }
+
 }

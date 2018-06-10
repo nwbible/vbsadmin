@@ -25,7 +25,7 @@ namespace VBSAdmin.Models.VBSViewModels
         [DataType(DataType.Date)]
         public DateTime EndDate { get; set; }
 
-        [Display(Name = "Form Stack API Key")]
+        [Display(Name = "Form Stack API Key or Access Token")]
         public string FormStackAPIKey { get; set; }
         [Display(Name = "Form Stack Form Id")]
         public int? FormStackFormId { get; set; }

@@ -366,11 +366,56 @@ namespace VBSAdmin.Controllers
         {
             var applicationDbContext = _context.Children
                 .Where(c => c.VBSId == this.CurrentVBSId && c.VBS.TenantId == this.TenantId)
-                .OrderBy(c => c.LastName)
+                .OrderBy(c => c.GuardianLastName)
                 .ThenBy(c => c.Address1)
                 .ThenBy(c => c.GradeCompleted);
 
             List<Child> dbChildren = await applicationDbContext.ToListAsync();
+            List<UnchurchedReportViewModel2> vms = new List<UnchurchedReportViewModel2>();
+
+            Dictionary<string, UnchurchedReportViewModel2> vmDictionary = new Dictionary<string, UnchurchedReportViewModel2>();
+
+            foreach (Child dbChild in dbChildren)
+            {
+                string church = dbChild.HomeChurch;
+
+                if (!dbChild.AttendHostChurch && ChurchHelper.IsNoneChurch(church))
+                {
+                    if (!vmDictionary.ContainsKey(dbChild.GuardianFirstName + " " + dbChild.GuardianLastName))
+                    {
+                        UnchurchedReportViewModel2 vm = new UnchurchedReportViewModel2();
+
+                        vm.ChildrenNamesAndGrades = dbChild.FirstName + " " + dbChild.LastName + "(" + dbChild.GradeCompleted + ")";
+                        vm.Address = dbChild.Address1 + ", ";
+                        if (!string.IsNullOrEmpty(dbChild.Address2))
+                        {
+                            vm.Address += dbChild.Address2 + ", ";
+                        }
+                        vm.Address += dbChild.City + ", ";
+                        vm.Address += dbChild.State + ", ";
+                        vm.Address += dbChild.Zip;
+                        vm.GuardianName = dbChild.GuardianFirstName + " " + dbChild.GuardianLastName;
+                        vm.GuardianRelationship = dbChild.GuardianChildRelationship;
+                        vm.GuardianEmail = dbChild.GuardianEmail;
+                        vm.GuardianPhone = dbChild.GuardianPhone;
+                        vm.ChurchSpecified = dbChild.HomeChurch;
+                        vm.InvitedBy = dbChild.InvitedBy;
+
+                        vmDictionary.Add(vm.GuardianName, vm);
+                    }
+                    else
+                    {
+                        UnchurchedReportViewModel2 vm = vmDictionary[dbChild.GuardianFirstName + " " + dbChild.GuardianLastName];
+
+                        vm.ChildrenNamesAndGrades += ", " + dbChild.FirstName + " " + dbChild.LastName + "(" + dbChild.GradeCompleted + ")";
+                    }
+                }
+            }
+
+            foreach (UnchurchedReportViewModel2 vm2 in vmDictionary.Values)
+            {
+                vms.Add(vm2);
+            }
 
             string tenantName = _context.Tenants
                 .Where(t => t.Id == this.TenantId).First().Name;
@@ -380,7 +425,7 @@ namespace VBSAdmin.Controllers
 
             string fileName = tenantName + " - " + theme + " - " + "Unchurched Children Export.xlsx";
 
-            byte[] filecontent = ExcelExportHelper.ExportUnchurchedExcel(dbChildren);
+            byte[] filecontent = ExcelExportHelper.ExportUnchurchedExcel(vms);
             return File(filecontent, ExcelExportHelper.ExcelContentType, fileName);
         }
 
@@ -713,6 +758,54 @@ namespace VBSAdmin.Controllers
             return Ok();
         }
 
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> ImportV2(int? id, string pageImportKey)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            //Need to verify the requested VBS exists
+            var vBS = await _context.VBS.Include(s => s.Sessions).Where(vb => vb.Id == id).SingleOrDefaultAsync();
+            if (vBS == null)
+            {
+                return NotFound();
+            }
+
+            //Verify the supplied page import key matches the value saved with the VBS in the database.
+            if (vBS.FormStackImportPageKey != pageImportKey)
+            {
+                return NotFound();
+            }
+
+            //Don't go further if the formstack fields aren't populated in the database
+            if (string.IsNullOrWhiteSpace(vBS.FormStackAPIKey) || vBS.FormStackFormId == null)
+            {
+                return NotFound();
+            }
+
+
+            string baseAddress = "https://www.formstack.com/api/v2/";
+
+            int amSessionId, pmSessionId;
+            if (vBS.Sessions[0].Period == Enums.SessionPeriod.AM)
+            {
+                amSessionId = vBS.Sessions[0].Id;
+                pmSessionId = vBS.Sessions[1].Id;
+            }
+            else
+            {
+                amSessionId = vBS.Sessions[1].Id;
+                pmSessionId = vBS.Sessions[0].Id;
+            }
+
+            FormStackHelper fsHelper = new FormStackHelper(baseAddress, vBS.FormStackAPIKey, vBS, amSessionId, pmSessionId, _context);
+            await fsHelper.PopulateLatestSubmissionsV2(vBS.FormStackFormId.ToString(), vBS.FormStackLastImportDateTime.ToString());
+
+            return Ok();
+        }
 
 
         private bool VBSExists(int id)

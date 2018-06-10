@@ -42,6 +42,7 @@ namespace VBSAdmin.Models.VBSViewModels
 
         [Required]
         public int PMMaxChildren { get; set; }
+        [Display(Name = "FormStack API Key or Access Token")]
         public string FormStackAPIKey { get; set; }
         public int? FormStackFormId { get; set; }
         public string FormStackImportPageKey { get; set; }

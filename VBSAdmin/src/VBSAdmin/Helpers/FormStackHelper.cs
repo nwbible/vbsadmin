@@ -16,6 +16,7 @@ namespace VBSAdmin.Helpers
     {
         public string BaseAddress { get; set; }
         public string ApiKey { get; set; }
+        public string AccessToken { get; set; }
         public string ResponseType { get; set; }
         public int VbsId { get; set; }
         public int AMSessionId { get; set; }
@@ -31,6 +32,17 @@ namespace VBSAdmin.Helpers
             BaseAddress = baseAddress;
             ApiKey = apiKey;
             ResponseType = responseType;
+            vBS = vbs;
+            VbsId = vbs.Id;
+            AMSessionId = amSessionId;
+            PMSessionId = pmSessionId;
+            _context = dbContext;
+        }
+
+        public FormStackHelper(string baseAddress, string accessToken, VBS vbs, int amSessionId, int pmSessionId, ApplicationDbContext dbContext)
+        {
+            BaseAddress = baseAddress;
+            AccessToken = accessToken;
             vBS = vbs;
             VbsId = vbs.Id;
             AMSessionId = amSessionId;
@@ -77,6 +89,46 @@ namespace VBSAdmin.Helpers
             return;
         }
 
+        public async Task PopulateLatestSubmissionsV2(string formId, string minTime)
+        {
+            FormStackSubmissionV2 submissions = await GetSubmissionPageV2(1, formId, minTime);
+            if (submissions != null && submissions.submissions.Count > 0)
+            {
+                int numPages = submissions.pages;
+
+                string latestTimestamp = "";
+                foreach (SubmissionV2 submission in submissions.submissions)
+                {
+                    await ImportSubmissionV2(submission);
+                    latestTimestamp = submission.timestamp;
+                }
+
+
+                if (numPages > 1)
+                {
+                    for (int i = 2; i <= numPages; i++)
+                    {
+                        submissions = await GetSubmissionPageV2(i, formId, minTime);
+                        if (submissions != null && submissions.submissions.Count > 0)
+                        {
+                            foreach (SubmissionV2 submission in submissions.submissions)
+                            {
+                                await ImportSubmissionV2(submission);
+                                latestTimestamp = submission.timestamp;
+                            }
+                        }
+                    }
+                }
+
+                //Save the latest timestamp to the database
+                vBS.FormStackLastImportDateTime = Convert.ToDateTime(latestTimestamp).AddSeconds(1);
+                await _context.SaveChangesAsync();
+                return;
+            }
+            return;
+
+        }
+
         private async Task<FormStackSubmission> GetSubmissionPage(int page, string formId, string minTime)
         {
             HttpClient client = new HttpClient();
@@ -96,6 +148,35 @@ namespace VBSAdmin.Helpers
                 FormStackSubmission submissionResponse;
                 string jsonString = response.Content.ReadAsStringAsync().Result;
                 submissionResponse = JsonConvert.DeserializeObject<FormStackSubmission>(jsonString);
+
+                return submissionResponse;
+            }
+
+            return null;
+        }
+
+        private async Task<FormStackSubmissionV2> GetSubmissionPageV2(int page, string formId, string minTime)
+        {
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri(this.BaseAddress);
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.AccessToken);
+
+
+            //string path = "data?api_key=" + ApiKey + "&type=" + ResponseType + "&id=" + formId + "&per_page=100&page=" + page;
+            string path = "form/" + formId + "/submission?per_page=100&data=1&expand_data=1&page=" + page;
+            if (!string.IsNullOrEmpty(minTime))
+            {
+                path = path + "&min_time=" + minTime;
+            }
+
+            HttpResponseMessage response = await client.GetAsync(path);
+            if (response.IsSuccessStatusCode)
+            {
+                FormStackSubmissionV2 submissionResponse;
+                string jsonString = response.Content.ReadAsStringAsync().Result;
+                submissionResponse = JsonConvert.DeserializeObject<FormStackSubmissionV2>(jsonString);
 
                 return submissionResponse;
             }
@@ -658,5 +739,409 @@ namespace VBSAdmin.Helpers
 
             return;
         }
+
+        private async Task ImportSubmissionV2(SubmissionV2 submission)
+        {
+            FormStackForm form = new FormStackForm();
+            try
+            {
+                form.number_of_your_children_being_registered_now = Convert.ToInt32(submission.data.numChildrenRegistered.value);
+                form.parentguardian_first_name = submission.data.parentGuardianName.value.first;
+                form.parentguardian_last_name = submission.data.parentGuardianName.value.last;
+                form.email = submission.data.parentGuardianEmail.value;
+                form.address = submission.data.address.value.address;
+                form.city = submission.data.address.value.city;
+                form.state = submission.data.address.value.state;
+                form.zip = submission.data.address.value.zip;
+                var phone = submission.data.parentGuardianPhone.value.Trim();
+                phone = phone.Replace(" ", "");
+                phone = phone.Replace("(", "");
+                phone = phone.Replace(")", "");
+                phone = phone.Replace("-", "");
+                form.parentguardian_phone = phone;
+                form.relationship_to_children_being_registered = submission.data.parentGuardianRelationship.value;
+                form.does_your_family_attend_northwest_bible_church = submission.data.attendNWB.value;
+                form.what_church_does_your_family_call_home = (submission.data.homeChurch == null)? null : submission.data.homeChurch.value;
+                form.who_invited_you_to_vbs_at_northwest = (submission.data.invitedBy == null)? null : submission.data.invitedBy.value;
+                form.emergency_contact_first_name = submission.data.emergencyContactName.value.first;
+                form.emergency_contact_last_name = submission.data.emergencyContactName.value.last;
+                var emphone = submission.data.emergencyContactPhone.value.Trim();
+                emphone = emphone.Replace(" ", "");
+                emphone = emphone.Replace("(", "");
+                emphone = emphone.Replace(")", "");
+                emphone = emphone.Replace("-", "");
+                form.emergency_contact_phone = emphone;
+                form.emergency_contact_relationship = submission.data.emergencyContactRelationship.value;
+                form.morning_or_evening_session_c1 = submission.data.session_c1.value;
+                form.first_name_c1 = submission.data.name_c1.value.first;
+                form.last_name_c1 = submission.data.name_c1.value.last;
+                form.gender_c1 = submission.data.gender_c1.value;
+                form.birth_date_c1 = submission.data.birthDate_c1.value;
+                form.grade_completed_c1 = submission.data.gradeCompleted_c1.value;
+                form.does_this_child_have_any_allergies_c1 = submission.data.hasAllergies_c1.value;
+                form.allergies_please_explain_c1 = (submission.data.allergiesDescription_c1 == null)? null : submission.data.allergiesDescription_c1.value;
+                form.does_this_child_have_any_medical_conditions_c1 = submission.data.hasMedicalConditions_c1.value;
+                form.medical_conditions_please_explain_c1 = (submission.data.medicalConditionsDescription_c1 == null) ? null : submission.data.medicalConditionsDescription_c1.value;
+                form.is_this_child_taking_any_medications_c1 = submission.data.hasMedications_c1.value;
+                form.medications_please_explain_c1 = (submission.data.medicationsDescription_c1 ==  null) ? null : submission.data.medicationsDescription_c1.value;
+                form.please_place_my_child_with_c1 = (submission.data.placeChildWith_c1 == null) ? null : submission.data.placeChildWith_c1.value;
+
+                if (submission.data.session_c2 != null)
+                {
+                    form.morning_or_evening_session_c2 = submission.data.session_c2.value;
+                    form.first_name_c2 = submission.data.name_c2.value.first;
+                    form.last_name_c2 = submission.data.name_c2.value.last;
+                    form.gender_c2 = submission.data.gender_c2.value;
+                    form.birth_date_c2 = submission.data.birthDate_c2.value;
+                    form.grade_completed_c2 = submission.data.gradeCompleted_c2.value;
+                    form.does_this_child_have_any_allergies_c2 = submission.data.hasAllergies_c2.value;
+                    form.allergies_please_explain_c2 = (submission.data.allergiesDescription_c2 ==  null) ? null : submission.data.allergiesDescription_c2.value;
+                    form.does_this_child_have_any_medical_conditions_c2 = submission.data.hasMedicalConditions_c2.value;
+                    form.medical_conditions_please_explain_c2 = (submission.data.medicalConditionsDescription_c2 == null) ? null : submission.data.medicalConditionsDescription_c2.value;
+                    form.is_this_child_taking_any_medications_c2 = submission.data.hasMedications_c2.value;
+                    form.medications_please_explain_c2 = (submission.data.medicationsDescription_c2 == null) ? null : submission.data.medicationsDescription_c2.value;
+                    form.please_place_my_child_with_c2 = (submission.data.placeChildWith_c2 == null) ? null : submission.data.placeChildWith_c2.value;
+                }
+
+                if (submission.data.session_c3 != null)
+                {
+                    form.morning_or_evening_session_c3 = submission.data.session_c3.value;
+                    form.first_name_c3 = submission.data.name_c3.value.first;
+                    form.last_name_c3 = submission.data.name_c3.value.last;
+                    form.gender_c3 = submission.data.gender_c3.value;
+                    form.birth_date_c3 = submission.data.birthDate_c3.value;
+                    form.grade_completed_c3 = submission.data.gradeCompleted_c3.value;
+                    form.does_this_child_have_any_allergies_c3 = submission.data.hasAllergies_c3.value;
+                    form.allergies_please_explain_c3 = (submission.data.allergiesDescription_c3 == null) ? null : submission.data.allergiesDescription_c3.value;
+                    form.does_this_child_have_any_medical_conditions_c3 = submission.data.hasMedicalConditions_c3.value;
+                    form.medical_conditions_please_explain_c3 = (submission.data.medicalConditionsDescription_c3 == null) ? null : submission.data.medicalConditionsDescription_c3.value;
+                    form.is_this_child_taking_any_medications_c3 = submission.data.hasMedications_c3.value;
+                    form.medications_please_explain_c3 = (submission.data.medicationsDescription_c3 == null) ? null : submission.data.medicationsDescription_c3.value;
+                    form.please_place_my_child_with_c3 = (submission.data.placeChildWith_c3 == null) ? null : submission.data.placeChildWith_c3.value;
+                }
+
+                if (submission.data.session_c4 != null)
+                {
+                    form.morning_or_evening_session_c4 = submission.data.session_c4.value;
+                    form.first_name_c4 = submission.data.name_c4.value.first;
+                    form.last_name_c4 = submission.data.name_c4.value.last;
+                    form.gender_c4 = submission.data.gender_c4.value;
+                    form.birth_date_c4 = submission.data.birthDate_c4.value;
+                    form.grade_completed_c4 = submission.data.gradeCompleted_c4.value;
+                    form.does_this_child_have_any_allergies_c4 = submission.data.hasAllergies_c4.value;
+                    form.allergies_please_explain_c4 = (submission.data.allergiesDescription_c4 == null) ? null : submission.data.allergiesDescription_c4.value;
+                    form.does_this_child_have_any_medical_conditions_c4 = submission.data.hasMedicalConditions_c4.value;
+                    form.medical_conditions_please_explain_c4 = (submission.data.medicalConditionsDescription_c4 == null) ? null : submission.data.medicalConditionsDescription_c4.value;
+                    form.is_this_child_taking_any_medications_c4 = submission.data.hasMedications_c4.value;
+                    form.medications_please_explain_c4 = (submission.data.medicationsDescription_c4 == null) ? null : submission.data.medicationsDescription_c4.value;
+                    form.please_place_my_child_with_c4 = (submission.data.placeChildWith_c4 == null) ? null : submission.data.placeChildWith_c4.value;
+                }
+
+                if (submission.data.session_c5 != null)
+                {
+                    form.morning_or_evening_session_c5 = submission.data.session_c5.value;
+                    form.first_name_c5 = submission.data.name_c5.value.first;
+                    form.last_name_c5 = submission.data.name_c5.value.last;
+                    form.gender_c5 = submission.data.gender_c5.value;
+                    form.birth_date_c5 = submission.data.birthDate_c5.value;
+                    form.grade_completed_c5 = submission.data.gradeCompleted_c5.value;
+                    form.does_this_child_have_any_allergies_c5 = submission.data.hasAllergies_c5.value;
+                    form.allergies_please_explain_c5 = (submission.data.allergiesDescription_c5 == null) ? null : submission.data.allergiesDescription_c5.value;
+                    form.does_this_child_have_any_medical_conditions_c5 = submission.data.hasMedicalConditions_c5.value;
+                    form.medical_conditions_please_explain_c5 = (submission.data.medicalConditionsDescription_c5 == null) ? null : submission.data.medicalConditionsDescription_c5.value;
+                    form.is_this_child_taking_any_medications_c5 = submission.data.hasMedications_c5.value;
+                    form.medications_please_explain_c5 = (submission.data.medicationsDescription_c5 == null) ? null : submission.data.medicationsDescription_c5.value;
+                    form.please_place_my_child_with_c5 = (submission.data.placeChildWith_c5 == null) ? null : submission.data.placeChildWith_c5.value;
+                }
+            }
+            catch (Exception e)
+            {
+                var message = e.Message;
+            }
+
+            for (int i = 1; i <= form.number_of_your_children_being_registered_now; i++)
+            {
+                Child child = new Child
+                {
+                    VBSId = VbsId,
+                    DateOfRegistration = Convert.ToDateTime(submission.timestamp),
+                    Address1 = form.address,
+                    City = form.city,
+                    State = form.state,
+                    Zip = form.zip,
+                    AttendHostChurch = (form.does_your_family_attend_northwest_bible_church.ToLower() == "no") ? false : true,
+                    GuardianFirstName = form.parentguardian_first_name,
+                    GuardianLastName = form.parentguardian_last_name,
+                    GuardianPhone = form.parentguardian_phone,
+                    GuardianEmail = form.email,
+                    GuardianChildRelationship = form.relationship_to_children_being_registered,
+                    EmergencyContactFirstName = form.emergency_contact_first_name,
+                    EmergencyContactLastName = form.emergency_contact_last_name,
+                    EmergencyContactChildRelationship = form.emergency_contact_relationship,
+                    EmergencyContactPhone = form.emergency_contact_phone,
+                    HomeChurch = form.what_church_does_your_family_call_home,
+                    InvitedBy = form.who_invited_you_to_vbs_at_northwest,
+                    ClassroomId = null
+                };
+
+                if (i == 1)
+                {
+                    child.FirstName = form.first_name_c1;
+                    child.LastName = form.last_name_c1;
+                    child.AllergiesDescription = form.allergies_please_explain_c1;
+                    child.HasAllergies = (form.does_this_child_have_any_allergies_c1.ToLower() == "yes") ? true : false;
+                    child.HasMedicalCondition = (form.does_this_child_have_any_medical_conditions_c1.ToLower() == "yes") ? true : false;
+                    child.MedicalConditionDescription = form.medical_conditions_please_explain_c1;
+                    child.HasMedications = (form.is_this_child_taking_any_medications_c1.ToLower() == "yes") ? true : false;
+                    child.MedicationDescription = form.medications_please_explain_c1;
+                    child.DateOfBirth = Convert.ToDateTime(form.birth_date_c1);
+                    child.Gender = (form.gender_c1.ToLower() == "male") ? Enums.ChildGender.Boy : Enums.ChildGender.Girl;
+                    child.SessionId = (form.morning_or_evening_session_c1.ToLower().Contains("morning")) ? AMSessionId : PMSessionId;
+                    child.PlaceChildWithRequest = form.please_place_my_child_with_c1;
+                    switch (form.grade_completed_c1)
+                    {
+                        case "16":
+                            child.GradeCompleted = Enums.ClassGrade.PreSchool;
+                            break;
+                        case "17":
+                            child.GradeCompleted = Enums.ClassGrade.PreK;
+                            break;
+                        case "13":
+                            child.GradeCompleted = Enums.ClassGrade.Kindergarten;
+                            break;
+                        case "1":
+                            child.GradeCompleted = Enums.ClassGrade.First;
+                            break;
+                        case "2":
+                            child.GradeCompleted = Enums.ClassGrade.Second;
+                            break;
+                        case "3":
+                            child.GradeCompleted = Enums.ClassGrade.Third;
+                            break;
+                        case "4":
+                            child.GradeCompleted = Enums.ClassGrade.Fourth;
+                            break;
+                        case "5":
+                            child.GradeCompleted = Enums.ClassGrade.Fifth;
+                            break;
+                        case "6":
+                            child.GradeCompleted = Enums.ClassGrade.Sixth;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                if (i == 2)
+                {
+                    child.FirstName = form.first_name_c2;
+                    child.LastName = form.last_name_c2;
+                    child.AllergiesDescription = form.allergies_please_explain_c2;
+                    child.HasAllergies = (form.does_this_child_have_any_allergies_c2.ToLower() == "yes") ? true : false;
+                    child.HasMedicalCondition = (form.does_this_child_have_any_medical_conditions_c2.ToLower() == "yes") ? true : false;
+                    child.MedicalConditionDescription = form.medical_conditions_please_explain_c2;
+                    child.HasMedications = (form.is_this_child_taking_any_medications_c2.ToLower() == "yes") ? true : false;
+                    child.MedicationDescription = form.medications_please_explain_c2;
+                    child.DateOfBirth = Convert.ToDateTime(form.birth_date_c2);
+                    child.Gender = (form.gender_c2.ToLower() == "male") ? Enums.ChildGender.Boy : Enums.ChildGender.Girl;
+                    child.SessionId = (form.morning_or_evening_session_c2.ToLower().Contains("morning")) ? AMSessionId : PMSessionId;
+                    child.PlaceChildWithRequest = form.please_place_my_child_with_c2;
+                    switch (form.grade_completed_c2)
+                    {
+                        case "16":
+                            child.GradeCompleted = Enums.ClassGrade.PreSchool;
+                            break;
+                        case "17":
+                            child.GradeCompleted = Enums.ClassGrade.PreK;
+                            break;
+                        case "13":
+                            child.GradeCompleted = Enums.ClassGrade.Kindergarten;
+                            break;
+                        case "1":
+                            child.GradeCompleted = Enums.ClassGrade.First;
+                            break;
+                        case "2":
+                            child.GradeCompleted = Enums.ClassGrade.Second;
+                            break;
+                        case "3":
+                            child.GradeCompleted = Enums.ClassGrade.Third;
+                            break;
+                        case "4":
+                            child.GradeCompleted = Enums.ClassGrade.Fourth;
+                            break;
+                        case "5":
+                            child.GradeCompleted = Enums.ClassGrade.Fifth;
+                            break;
+                        case "6":
+                            child.GradeCompleted = Enums.ClassGrade.Sixth;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                if (i == 3)
+                {
+                    child.FirstName = form.first_name_c3;
+                    child.LastName = form.last_name_c3;
+                    child.AllergiesDescription = form.allergies_please_explain_c3;
+                    child.HasAllergies = (form.does_this_child_have_any_allergies_c3.ToLower() == "yes") ? true : false;
+                    child.HasMedicalCondition = (form.does_this_child_have_any_medical_conditions_c3.ToLower() == "yes") ? true : false;
+                    child.MedicalConditionDescription = form.medical_conditions_please_explain_c3;
+                    child.HasMedications = (form.is_this_child_taking_any_medications_c3.ToLower() == "yes") ? true : false;
+                    child.MedicationDescription = form.medications_please_explain_c3;
+                    child.DateOfBirth = Convert.ToDateTime(form.birth_date_c3);
+                    child.Gender = (form.gender_c3.ToLower() == "male") ? Enums.ChildGender.Boy : Enums.ChildGender.Girl;
+                    child.SessionId = (form.morning_or_evening_session_c3.ToLower().Contains("morning")) ? AMSessionId : PMSessionId;
+                    child.PlaceChildWithRequest = form.please_place_my_child_with_c3;
+                    switch (form.grade_completed_c3)
+                    {
+                        case "16":
+                            child.GradeCompleted = Enums.ClassGrade.PreSchool;
+                            break;
+                        case "17":
+                            child.GradeCompleted = Enums.ClassGrade.PreK;
+                            break;
+                        case "13":
+                            child.GradeCompleted = Enums.ClassGrade.Kindergarten;
+                            break;
+                        case "1":
+                            child.GradeCompleted = Enums.ClassGrade.First;
+                            break;
+                        case "2":
+                            child.GradeCompleted = Enums.ClassGrade.Second;
+                            break;
+                        case "3":
+                            child.GradeCompleted = Enums.ClassGrade.Third;
+                            break;
+                        case "4":
+                            child.GradeCompleted = Enums.ClassGrade.Fourth;
+                            break;
+                        case "5":
+                            child.GradeCompleted = Enums.ClassGrade.Fifth;
+                            break;
+                        case "6":
+                            child.GradeCompleted = Enums.ClassGrade.Sixth;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                if (i == 4)
+                {
+                    child.FirstName = form.first_name_c4;
+                    child.LastName = form.last_name_c4;
+                    child.AllergiesDescription = form.allergies_please_explain_c4;
+                    child.HasAllergies = (form.does_this_child_have_any_allergies_c4.ToLower() == "yes") ? true : false;
+                    child.HasMedicalCondition = (form.does_this_child_have_any_medical_conditions_c4.ToLower() == "yes") ? true : false;
+                    child.MedicalConditionDescription = form.medical_conditions_please_explain_c4;
+                    child.HasMedications = (form.is_this_child_taking_any_medications_c4.ToLower() == "yes") ? true : false;
+                    child.MedicationDescription = form.medications_please_explain_c4;
+                    child.DateOfBirth = Convert.ToDateTime(form.birth_date_c4);
+                    child.Gender = (form.gender_c4.ToLower() == "male") ? Enums.ChildGender.Boy : Enums.ChildGender.Girl;
+                    child.SessionId = (form.morning_or_evening_session_c4.ToLower().Contains("morning")) ? AMSessionId : PMSessionId;
+                    child.PlaceChildWithRequest = form.please_place_my_child_with_c4;
+                    switch (form.grade_completed_c4)
+                    {
+                        case "16":
+                            child.GradeCompleted = Enums.ClassGrade.PreSchool;
+                            break;
+                        case "17":
+                            child.GradeCompleted = Enums.ClassGrade.PreK;
+                            break;
+                        case "13":
+                            child.GradeCompleted = Enums.ClassGrade.Kindergarten;
+                            break;
+                        case "1":
+                            child.GradeCompleted = Enums.ClassGrade.First;
+                            break;
+                        case "2":
+                            child.GradeCompleted = Enums.ClassGrade.Second;
+                            break;
+                        case "3":
+                            child.GradeCompleted = Enums.ClassGrade.Third;
+                            break;
+                        case "4":
+                            child.GradeCompleted = Enums.ClassGrade.Fourth;
+                            break;
+                        case "5":
+                            child.GradeCompleted = Enums.ClassGrade.Fifth;
+                            break;
+                        case "6":
+                            child.GradeCompleted = Enums.ClassGrade.Sixth;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                if (i == 5)
+                {
+                    child.FirstName = form.first_name_c5;
+                    child.LastName = form.last_name_c5;
+                    child.AllergiesDescription = form.allergies_please_explain_c5;
+                    child.HasAllergies = (form.does_this_child_have_any_allergies_c5.ToLower() == "yes") ? true : false;
+                    child.HasMedicalCondition = (form.does_this_child_have_any_medical_conditions_c5.ToLower() == "yes") ? true : false;
+                    child.MedicalConditionDescription = form.medical_conditions_please_explain_c5;
+                    child.HasMedications = (form.is_this_child_taking_any_medications_c5.ToLower() == "yes") ? true : false;
+                    child.MedicationDescription = form.medications_please_explain_c5;
+                    child.DateOfBirth = Convert.ToDateTime(form.birth_date_c5);
+                    child.Gender = (form.gender_c5.ToLower() == "male") ? Enums.ChildGender.Boy : Enums.ChildGender.Girl;
+                    child.SessionId = (form.morning_or_evening_session_c5.ToLower().Contains("morning")) ? AMSessionId : PMSessionId;
+                    child.PlaceChildWithRequest = form.please_place_my_child_with_c5;
+                    switch (form.grade_completed_c5)
+                    {
+                        case "16":
+                            child.GradeCompleted = Enums.ClassGrade.PreSchool;
+                            break;
+                        case "17":
+                            child.GradeCompleted = Enums.ClassGrade.PreK;
+                            break;
+                        case "13":
+                            child.GradeCompleted = Enums.ClassGrade.Kindergarten;
+                            break;
+                        case "1":
+                            child.GradeCompleted = Enums.ClassGrade.First;
+                            break;
+                        case "2":
+                            child.GradeCompleted = Enums.ClassGrade.Second;
+                            break;
+                        case "3":
+                            child.GradeCompleted = Enums.ClassGrade.Third;
+                            break;
+                        case "4":
+                            child.GradeCompleted = Enums.ClassGrade.Fourth;
+                            break;
+                        case "5":
+                            child.GradeCompleted = Enums.ClassGrade.Fifth;
+                            break;
+                        case "6":
+                            child.GradeCompleted = Enums.ClassGrade.Sixth;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                //Get the geocode for the registered child
+                GetGeoCodeResponse geoResponse = await GeocodeHelper.GetGeoCode(child);
+                if (geoResponse != null)
+                {
+                    child.Latitude = geoResponse.Lat;
+                    child.Longitude = geoResponse.Long;
+                }
+
+
+                //Add the child to the db context
+                _context.Add(child);
+            }
+
+            //Save the new children to the db
+            await _context.SaveChangesAsync();
+
+            return;
+        }
+
     }
 }
