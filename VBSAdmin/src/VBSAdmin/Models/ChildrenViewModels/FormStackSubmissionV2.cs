@@ -235,7 +235,7 @@ namespace VBSAdmin.Models.ChildrenViewModels
         [JsonProperty("64656661")]
         public StringField hasMedicalConditions_c5 { get; set; }
 
-        [JsonProperty("64656661")]
+        [JsonProperty("64656662")]
         public StringField medicalConditionsDescription_c5 { get; set; }
 
         [JsonProperty("64656663")]
