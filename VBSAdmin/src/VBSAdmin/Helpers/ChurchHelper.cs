@@ -12,7 +12,7 @@ namespace VBSAdmin.Helpers
             if (string.IsNullOrWhiteSpace(churchName)
                 || churchName.ToLower().Trim().StartsWith("none")
                 || churchName.ToLower().Trim().StartsWith("n/a")
-                || churchName.ToLower().Trim().StartsWith("na")
+                || churchName.ToLower().Trim().Equals("na")
                 || churchName.ToLower().Trim().StartsWith("none at this time")
                 || churchName.ToLower().Trim().StartsWith("none currently")
                 || churchName.ToLower().Trim().StartsWith("not sure")
@@ -40,7 +40,9 @@ namespace VBSAdmin.Helpers
                 || churchName.ToLower().Trim().StartsWith("currently looking")
                 || churchName.ToLower().Trim().StartsWith("looking for a church")
                 || churchName.ToLower().Trim().StartsWith("new to area")
-                || churchName.ToLower().Trim().StartsWith("st. thomas (ma) new to oh"))
+                || churchName.ToLower().Trim().StartsWith("st. thomas (ma) new to oh")
+                || churchName.ToLower().Trim().StartsWith("no home church")
+                || churchName.ToLower().Trim().StartsWith("good question"))
             {
                 return true;
             }
