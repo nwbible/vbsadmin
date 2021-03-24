@@ -20,21 +20,21 @@ namespace VBSAdmin.Data.VBSAdminModels
         {
             [Display(Name = "4 Yrs")]
             PreSchool=0,
-            [Display(Name = "PreK")]
+            [Display(Name = "Entering Kindergarten")]
             PreK=1,
-            [Display(Name = "K")]
+            [Display(Name = "Kindergarten")]
             Kindergarten=2,
-            [Display(Name = "1st")]
+            [Display(Name = "First Grade")]
             First=3,
-            [Display(Name = "2nd")]
+            [Display(Name = "Second Grade")]
             Second=4,
-            [Display(Name = "3rd")]
+            [Display(Name = "Third Grade")]
             Third=5,
-            [Display(Name = "4th")]
+            [Display(Name = "Fourth Grade")]
             Fourth=6,
-            [Display(Name = "5th")]
+            [Display(Name = "Fifth Grade")]
             Fifth=7,
-            [Display(Name = "6th")]
+            [Display(Name = "Sixth Grade")]
             Sixth=8
         }
         
