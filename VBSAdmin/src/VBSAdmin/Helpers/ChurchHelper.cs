@@ -42,7 +42,8 @@ namespace VBSAdmin.Helpers
                 || churchName.ToLower().Trim().StartsWith("new to area")
                 || churchName.ToLower().Trim().StartsWith("st. thomas (ma) new to oh")
                 || churchName.ToLower().Trim().StartsWith("no home church")
-                || churchName.ToLower().Trim().StartsWith("good question"))
+                || churchName.ToLower().Trim().StartsWith("good question")
+                || churchName.ToLower().Trim().StartsWith("we don't have a church"))
             {
                 return true;
             }
