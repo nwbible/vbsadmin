@@ -48,10 +48,10 @@ namespace VBSAdmin.Models.ChildrenViewModels
         [JsonProperty("77839603")]
         public StringField attendNWB { get; set; }
 
-        [JsonProperty("77839604")]
+        [JsonProperty("108572919")]
         public StringField homeChurch { get; set; }
 
-        [JsonProperty("77839605")]
+        [JsonProperty("108572960")]
         public StringField invitedBy { get; set; }
 
         [JsonProperty("77839607")]
