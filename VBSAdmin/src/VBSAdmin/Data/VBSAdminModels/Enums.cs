@@ -20,7 +20,7 @@ namespace VBSAdmin.Data.VBSAdminModels
         {
             [Display(Name = "4 Yrs")]
             PreSchool=0,
-            [Display(Name = "Entering Kindergarten")]
+            [Display(Name = "5 Yrs")]
             PreK=1,
             [Display(Name = "Kindergarten")]
             Kindergarten=2,
