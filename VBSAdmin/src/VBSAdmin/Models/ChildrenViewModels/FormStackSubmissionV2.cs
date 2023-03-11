@@ -247,10 +247,10 @@ namespace VBSAdmin.Models.ChildrenViewModels
         [JsonProperty("123583735")]
         public StringField placeChildWith_c5 { get; set; }
 
-        [JsonProperty("123583736")]
+        [JsonProperty("123583737")]
         public CheckboxField consent { get; set; }
 
-        [JsonProperty("123583737")]
+        [JsonProperty("123583738")]
         public StringField signatureImageUrl { get; set; }
 
     }
