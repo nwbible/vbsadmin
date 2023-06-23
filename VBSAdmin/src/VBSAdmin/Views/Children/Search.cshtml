@@ -22,6 +22,9 @@
                 @Html.DisplayNameFor(model => model.GradeCompleted)
             </th>
             <th>
+                Classroom
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.DateOfBirth)
             </th>
             <th>
@@ -41,6 +44,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.GradeCompleted)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Classroom.Session.Period) - @Html.DisplayFor(modelItem => item.Classroom.Name)
             </td>
             <td>
                 @item.DateOfBirth.Date.ToString("d")
