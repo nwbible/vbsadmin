@@ -13,7 +13,7 @@ namespace VBSAdmin.Helpers
         public static async Task<GetGeoCodeResponse> GetGeoCode(string address)
         {
             GetGeoCodeResponse response = new GetGeoCodeResponse();
-            var client = new GeocodeClient("AIzaSyDbfVH8TAC_3Itet0g5PIu1iJ7OY7ebr8Y");
+            var client = new GeocodeClient("INSERT GOOGLE API KEY HERE");
 
             var resp = await client.GeocodeAddress(address);
             if (resp.Status == GeocodeStatus.Ok)
