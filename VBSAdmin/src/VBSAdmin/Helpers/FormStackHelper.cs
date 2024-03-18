@@ -165,7 +165,7 @@ namespace VBSAdmin.Helpers
 
 
             //string path = "data?api_key=" + ApiKey + "&type=" + ResponseType + "&id=" + formId + "&per_page=100&page=" + page;
-            string path = "form/" + formId + "/submission?per_page=100&data=1&expand_data=1&page=" + page;
+            string path = "form/" + formId + "/submission?sort=ASC&per_page=100&data=1&expand_data=1&page=" + page;
             if (!string.IsNullOrEmpty(minTime))
             {
                 path = path + "&min_time=" + minTime;
