@@ -891,7 +891,10 @@ namespace VBSAdmin.Controllers
 
             if(model.FilterGrade != Enums.ClassGradeOptions.All)
             {
-                applicationDbContext = applicationDbContext.Where(c => (int)c.GradeCompleted == (int)model.FilterGrade);
+                //applicationDbContext = applicationDbContext.Where(c => (int)c.GradeCompleted == (int)model.FilterGrade);
+                int temp = (int)model.FilterGrade;
+                
+                applicationDbContext = applicationDbContext.Where(c => (int)c.GradeCompleted == temp);
             }
 
             if(!string.IsNullOrWhiteSpace(model.FilterName))
