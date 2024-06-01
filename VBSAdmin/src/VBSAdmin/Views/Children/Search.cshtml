@@ -19,6 +19,9 @@
                 @Html.DisplayNameFor(model => model.FirstName)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Session)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.GradeCompleted)
             </th>
             <th>
@@ -41,6 +44,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Session.Period)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.GradeCompleted)
