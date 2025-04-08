@@ -759,7 +759,7 @@ namespace VBSAdmin.Helpers
                 phone = phone.Replace(")", "");
                 phone = phone.Replace("-", "");
                 form.parentguardian_phone = phone;
-                form.relationship_to_children_being_registered = submission.data.parentGuardianRelationship.value;
+                form.relationship_to_children_being_registered = submission.data.parentGuardianRelationship?.value ?? "Other";
                 form.does_your_family_attend_northwest_bible_church = submission.data.attendNWB.value;
                 form.what_church_does_your_family_call_home = (submission.data.homeChurch == null)? null : submission.data.homeChurch.value;
                 form.who_invited_you_to_vbs_at_northwest = (submission.data.invitedBy == null)? null : submission.data.invitedBy.value;
@@ -771,7 +771,7 @@ namespace VBSAdmin.Helpers
                 emphone = emphone.Replace(")", "");
                 emphone = emphone.Replace("-", "");
                 form.emergency_contact_phone = emphone;
-                form.emergency_contact_relationship = submission.data.emergencyContactRelationship.value;
+                form.emergency_contact_relationship = submission.data.emergencyContactRelationship?.value ?? "Other";
                 form.morning_or_evening_session_c1 = submission.data.session_c1.value;
                 form.first_name_c1 = submission.data.name_c1.value.first;
                 form.last_name_c1 = submission.data.name_c1.value.last;
