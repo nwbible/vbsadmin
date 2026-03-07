@@ -24,6 +24,7 @@ namespace VBSAdmin.Helpers
         public string emergency_contact_last_name { get; set; }
         public string emergency_contact_phone { get; set; }
         public string emergency_contact_relationship { get; set; }
+        public string password { get; set; }
 
 
         public string morning_or_evening_session_c1 { get; set; }

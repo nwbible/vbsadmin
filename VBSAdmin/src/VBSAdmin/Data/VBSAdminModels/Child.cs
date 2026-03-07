@@ -73,6 +73,10 @@ namespace VBSAdmin.Data.VBSAdminModels
 
         public string EmergencyContactChildRelationship { get; set; }
 
+        // New Password field for each child. Not required, max length 64, default empty string.
+        [StringLength(64)]
+        public string Password { get; set; } = string.Empty;
+
 
         //Classroom Assignment
         public int? ClassroomId { get; set; }

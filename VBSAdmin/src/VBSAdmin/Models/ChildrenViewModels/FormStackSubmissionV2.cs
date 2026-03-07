@@ -63,6 +63,9 @@ namespace VBSAdmin.Models.ChildrenViewModels
         [JsonProperty("162000399")]
         public StringField emergencyContactRelationship { get; set; }
 
+        [JsonProperty("")]
+        public StringField password { get; set; }
+        
         [JsonProperty("162000401")]
         public StringField session_c1 { get; set; }
 

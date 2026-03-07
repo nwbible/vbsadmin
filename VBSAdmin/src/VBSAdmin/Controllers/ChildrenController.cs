@@ -70,6 +70,7 @@ namespace VBSAdmin.Controllers
                 EmergencyContactName = child.EmergencyContactFirstName + " " + child.EmergencyContactLastName,
                 EmergencyContactPhone = child.EmergencyContactPhone,
                 EmergencyContactChildRelationship = child.EmergencyContactChildRelationship,
+                Password = child.Password,
                 Gender = child.Gender,
                 GradeCompleted = child.GradeCompleted,
                 GuardianChildRelationship = child.GuardianChildRelationship,
@@ -126,7 +127,7 @@ namespace VBSAdmin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Address1,Address2,AllergiesDescription,AttendHostChurch,City,ClassroomId,DateOfBirth,DecisionMade,EmergencyContactFirstName,EmergencyContactLastName,EmergencyContactPhone,EmergencyContactChildRelationship,FirstName,Gender,GradeCompleted,GuardianChildRelationship,GuardianEmail,GuardianFirstName,GuardianLastName,GuardianPhone,HomeChurch,InvitedBy,LastName,MedicalConditionDescription,MedicationDescription,PlaceChildWithRequest,SessionId,State,Zip")] CreateChildViewModel childVM)
+        public async Task<IActionResult> Create([Bind("Id,Address1,Address2,AllergiesDescription,AttendHostChurch,City,ClassroomId,DateOfBirth,DecisionMade,EmergencyContactFirstName,EmergencyContactLastName,EmergencyContactPhone,EmergencyContactChildRelationship,Password,FirstName,Gender,GradeCompleted,GuardianChildRelationship,GuardianEmail,GuardianFirstName,GuardianLastName,GuardianPhone,HomeChurch,InvitedBy,LastName,MedicalConditionDescription,MedicationDescription,PlaceChildWithRequest,SessionId,State,Zip")] CreateChildViewModel childVM)
         {
             if (ModelState.IsValid)
             {
@@ -146,6 +147,7 @@ namespace VBSAdmin.Controllers
                     EmergencyContactLastName = childVM.EmergencyContactLastName,
                     EmergencyContactPhone = childVM.EmergencyContactPhone,
                     EmergencyContactChildRelationship = childVM.EmergencyContactChildRelationship,
+                    Password = childVM.Password,
                     FirstName = childVM.FirstName,
                     Gender = childVM.Gender,
                     GradeCompleted = childVM.GradeCompleted,
@@ -244,6 +246,7 @@ namespace VBSAdmin.Controllers
                 EmergencyContactLastName = child.EmergencyContactLastName,
                 EmergencyContactPhone = child.EmergencyContactPhone,
                 EmergencyContactChildRelationship = child.EmergencyContactChildRelationship,
+                Password = child.Password,
                 FirstName = child.FirstName,
                 Gender = child.Gender,
                 GradeCompleted = child.GradeCompleted,
@@ -294,7 +297,7 @@ namespace VBSAdmin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Address1,Address2,AllergiesDescription,AttendHostChurch,City,ClassroomId,DateOfBirth,DecisionMade,EmergencyContactFirstName,EmergencyContactLastName,EmergencyContactPhone,EmergencyContactChildRelationship,FirstName,Gender,GradeCompleted,GuardianChildRelationship,GuardianEmail,GuardianFirstName,GuardianLastName,GuardianPhone,HasAllergies,HasMedicalCondition,HasMedications,HomeChurch,InvitedBy,LastName,MedicalConditionDescription,MedicationDescription,PlaceChildWithRequest,SessionId,State,Zip")] EditChildViewModel childVM)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Address1,Address2,AllergiesDescription,AttendHostChurch,City,ClassroomId,DateOfBirth,DecisionMade,EmergencyContactFirstName,EmergencyContactLastName,EmergencyContactPhone,EmergencyContactChildRelationship,Password,FirstName,Gender,GradeCompleted,GuardianChildRelationship,GuardianEmail,GuardianFirstName,GuardianLastName,GuardianPhone,HasAllergies,HasMedicalCondition,HasMedications,HomeChurch,InvitedBy,LastName,MedicalConditionDescription,MedicationDescription,PlaceChildWithRequest,SessionId,State,Zip")] EditChildViewModel childVM)
         {
             if (id != childVM.Id)
             {
@@ -320,6 +323,7 @@ namespace VBSAdmin.Controllers
                 child.EmergencyContactLastName = childVM.EmergencyContactLastName;
                 child.EmergencyContactPhone = childVM.EmergencyContactPhone;
                 child.EmergencyContactChildRelationship = childVM.EmergencyContactChildRelationship;
+                child.Password = childVM.Password;
                 child.FirstName = childVM.FirstName;
                 child.Gender = childVM.Gender;
                 child.GradeCompleted = childVM.GradeCompleted;
@@ -806,7 +810,7 @@ namespace VBSAdmin.Controllers
 
         private bool ChildExists(int id)
         {
-            return _context.Children.Any(e => e.Id == id);
+            return _context.Children.Any(e => e.Id == id && e.VBSId == this.CurrentVBSId && e.VBS.TenantId == this.TenantId);
         }
 
 

@@ -64,6 +64,11 @@ namespace VBSAdmin.Models.ChildrenViewModels
         [Phone]
         public string EmergencyContactPhone { get; set; }
         public string EmergencyContactChildRelationship { get; set; }
+
+        // New Password in edit view model
+        [StringLength(64)]
+        public string Password { get; set; } = string.Empty;
+
         public int? ClassroomId { get; set; }
 
 

@@ -140,7 +140,8 @@ namespace VBSAdmin.Helpers
                 childrenWorksheet.Cells["X1"].Value = "Allergies";
                 childrenWorksheet.Cells["Y1"].Value = "Medical Conditions";
                 childrenWorksheet.Cells["Z1"].Value = "Medications";
-                childrenWorksheet.Cells["A1:Z1"].Style.Font.Bold = true;
+                childrenWorksheet.Cells["AA1"].Value = "Password";
+                childrenWorksheet.Cells["A1:AA1"].Style.Font.Bold = true;
 
                 int rowCount = 2;
                 foreach (Child child in children)
@@ -171,6 +172,7 @@ namespace VBSAdmin.Helpers
                     childrenWorksheet.Cells["X" + rowCount].Value = child.AllergiesDescription;
                     childrenWorksheet.Cells["Y" + rowCount].Value = child.MedicalConditionDescription;
                     childrenWorksheet.Cells["Z" + rowCount].Value = child.MedicationDescription;
+                    childrenWorksheet.Cells["AA" + rowCount].Value = child.Password;
                     rowCount++;
                 }
 

@@ -772,6 +772,7 @@ namespace VBSAdmin.Helpers
                 emphone = emphone.Replace("-", "");
                 form.emergency_contact_phone = emphone;
                 form.emergency_contact_relationship = submission.data.emergencyContactRelationship?.value ?? "Other";
+                form.password = (submission.data.password == null) ? null : submission.data.password.value;
                 form.morning_or_evening_session_c1 = submission.data.session_c1.value;
                 form.first_name_c1 = submission.data.name_c1.value.first;
                 form.last_name_c1 = submission.data.name_c1.value.last;
