@@ -27,233 +27,236 @@ namespace VBSAdmin.Models.ChildrenViewModels
 
     public class DataV2
     {
-        [JsonProperty("162000391")]
+        // Mapped to field ids in FormStackForms\2026.html
+
+        [JsonProperty("182014309")]
         public StringField numChildrenRegistered { get; set; }
 
-        [JsonProperty("162000387")]
+        [JsonProperty("182014305")]
         public NameField parentGuardianName { get; set; }
 
-        [JsonProperty("162000388")]
+        [JsonProperty("182014306")]
         public StringField parentGuardianEmail { get; set; }
 
-        [JsonProperty("162000389")]
+        [JsonProperty("182014307")]
         public AddressField address { get; set; }
 
-        [JsonProperty("162000390")]
+        [JsonProperty("182014308")]
         public StringField parentGuardianPhone { get; set; }
 
-        [JsonProperty("162000392")]
+        [JsonProperty("182014310")]
         public StringField parentGuardianRelationship { get; set; }
 
-        [JsonProperty("162000393")]
+        [JsonProperty("182014311")]
         public StringField attendNWB { get; set; }
 
-        [JsonProperty("162000394")]
+        [JsonProperty("182014312")]
         public StringField homeChurch { get; set; }
 
-        [JsonProperty("162000395")]
+        [JsonProperty("182014313")]
         public StringField invitedBy { get; set; }
 
-        [JsonProperty("162000397")]
+        [JsonProperty("182014315")]
         public NameField emergencyContactName { get; set; }
 
-        [JsonProperty("162000398")]
+        [JsonProperty("182014316")]
         public StringField emergencyContactPhone { get; set; }
 
-        [JsonProperty("162000399")]
+        [JsonProperty("182014317")]
         public StringField emergencyContactRelationship { get; set; }
 
-        [JsonProperty("")]
+        // Child pick-up code on the 2026 form
+        [JsonProperty("192904692")]
         public StringField password { get; set; }
         
-        [JsonProperty("162000401")]
+        [JsonProperty("182014319")]
         public StringField session_c1 { get; set; }
 
-        [JsonProperty("162000402")]
+        [JsonProperty("182014320")]
         public NameField name_c1 { get; set; }
 
-        [JsonProperty("162000403")]
+        [JsonProperty("182014321")]
         public StringField gender_c1 { get; set; }
 
-        [JsonProperty("162000405")]
+        [JsonProperty("182014323")]
         public StringField birthDate_c1 { get; set; }
 
-        [JsonProperty("162000408")]
+        [JsonProperty("182014326")]
         public StringField gradeCompleted_c1 { get; set; }
 
-        [JsonProperty("162000409")]
+        [JsonProperty("182014327")]
         public StringField hasAllergies_c1 { get; set; }
 
-        [JsonProperty("162000410")]
+        [JsonProperty("182014328")]
         public StringField allergiesDescription_c1 { get; set; }
 
-        [JsonProperty("162000411")]
+        [JsonProperty("182014329")]
         public StringField hasMedicalConditions_c1 { get; set; }
 
-        [JsonProperty("162000412")]
+        [JsonProperty("182014330")]
         public StringField medicalConditionsDescription_c1 { get; set; }
 
-        [JsonProperty("162000413")]
+        [JsonProperty("182014331")]
         public StringField hasMedications_c1 { get; set; }
 
-        [JsonProperty("162000414")]
+        [JsonProperty("182014332")]
         public StringField medicationsDescription_c1 { get; set; }
 
-        [JsonProperty("162000415")]
+        [JsonProperty("182014333")]
         public StringField placeChildWith_c1 { get; set; }
 
 
-        [JsonProperty("162000417")]
+        [JsonProperty("182014335")]
         public StringField session_c2 { get; set; }
 
-        [JsonProperty("162000418")]
+        [JsonProperty("182014336")]
         public NameField name_c2 { get; set; }
 
-        [JsonProperty("162000419")]
+        [JsonProperty("182014337")]
         public StringField gender_c2 { get; set; }
 
-        [JsonProperty("162000420")]
+        [JsonProperty("182014338")]
         public StringField birthDate_c2 { get; set; }
 
-        [JsonProperty("162000423")]
+        [JsonProperty("182014341")]
         public StringField gradeCompleted_c2 { get; set; }
 
-        [JsonProperty("162000424")]
+        [JsonProperty("182014342")]
         public StringField hasAllergies_c2 { get; set; }
 
-        [JsonProperty("162000425")]
+        [JsonProperty("182014343")]
         public StringField allergiesDescription_c2 { get; set; }
 
-        [JsonProperty("162000426")]
+        [JsonProperty("182014344")]
         public StringField hasMedicalConditions_c2 { get; set; }
 
-        [JsonProperty("162000427")]
+        [JsonProperty("182014345")]
         public StringField medicalConditionsDescription_c2 { get; set; }
 
-        [JsonProperty("162000428")]
+        [JsonProperty("182014346")]
         public StringField hasMedications_c2 { get; set; }
 
-        [JsonProperty("162000429")]
+        [JsonProperty("182014347")]
         public StringField medicationsDescription_c2 { get; set; }
 
-        [JsonProperty("162000430")]
+        [JsonProperty("182014348")]
         public StringField placeChildWith_c2 { get; set; }
 
 
-        [JsonProperty("162000432")]
+        [JsonProperty("182014350")]
         public StringField session_c3 { get; set; }
 
-        [JsonProperty("162000433")]
+        [JsonProperty("182014351")]
         public NameField name_c3 { get; set; }
 
-        [JsonProperty("162000434")]
+        [JsonProperty("182014352")]
         public StringField gender_c3 { get; set; }
 
-        [JsonProperty("162000435")]
+        [JsonProperty("182014353")]
         public StringField birthDate_c3 { get; set; }
 
-        [JsonProperty("162000438")]
+        [JsonProperty("182014356")]
         public StringField gradeCompleted_c3 { get; set; }
 
-        [JsonProperty("162000439")]
+        [JsonProperty("182014357")]
         public StringField hasAllergies_c3 { get; set; }
 
-        [JsonProperty("162000440")]
+        [JsonProperty("182014358")]
         public StringField allergiesDescription_c3 { get; set; }
 
-        [JsonProperty("162000441")]
+        [JsonProperty("182014359")]
         public StringField hasMedicalConditions_c3 { get; set; }
 
-        [JsonProperty("162000442")]
+        [JsonProperty("182014360")]
         public StringField medicalConditionsDescription_c3 { get; set; }
 
-        [JsonProperty("162000443")]
+        [JsonProperty("182014361")]
         public StringField hasMedications_c3 { get; set; }
 
-        [JsonProperty("162000444")]
+        [JsonProperty("182014362")]
         public StringField medicationsDescription_c3 { get; set; }
 
-        [JsonProperty("162000445")]
+        [JsonProperty("182014363")]
         public StringField placeChildWith_c3 { get; set; }
 
 
-        [JsonProperty("162000447")]
+        [JsonProperty("182014365")]
         public StringField session_c4 { get; set; }
 
-        [JsonProperty("162000448")]
+        [JsonProperty("182014366")]
         public NameField name_c4 { get; set; }
 
-        [JsonProperty("162000449")]
+        [JsonProperty("182014367")]
         public StringField gender_c4 { get; set; }
 
-        [JsonProperty("162000450")]
+        [JsonProperty("182014368")]
         public StringField birthDate_c4 { get; set; }
 
-        [JsonProperty("162000453")]
+        [JsonProperty("182014371")]
         public StringField gradeCompleted_c4 { get; set; }
 
-        [JsonProperty("162000454")]
+        [JsonProperty("182014372")]
         public StringField hasAllergies_c4 { get; set; }
 
-        [JsonProperty("162000455")]
+        [JsonProperty("182014373")]
         public StringField allergiesDescription_c4 { get; set; }
 
-        [JsonProperty("162000456")]
+        [JsonProperty("182014374")]
         public StringField hasMedicalConditions_c4 { get; set; }
 
-        [JsonProperty("162000457")]
+        [JsonProperty("182014375")]
         public StringField medicalConditionsDescription_c4 { get; set; }
 
-        [JsonProperty("162000458")]
+        [JsonProperty("182014376")]
         public StringField hasMedications_c4 { get; set; }
 
-        [JsonProperty("162000459")]
+        [JsonProperty("182014377")]
         public StringField medicationsDescription_c4 { get; set; }
 
-        [JsonProperty("162000460")]
+        [JsonProperty("182014378")]
         public StringField placeChildWith_c4 { get; set; }
 
 
-        [JsonProperty("162000462")]
+        [JsonProperty("182014380")]
         public StringField session_c5 { get; set; }
 
-        [JsonProperty("162000463")]
+        [JsonProperty("182014381")]
         public NameField name_c5 { get; set; }
 
-        [JsonProperty("162000464")]
+        [JsonProperty("182014382")]
         public StringField gender_c5 { get; set; }
 
-        [JsonProperty("162000465")]
+        [JsonProperty("182014383")]
         public StringField birthDate_c5 { get; set; }
 
-        [JsonProperty("162000468")]
+        [JsonProperty("182014386")]
         public StringField gradeCompleted_c5 { get; set; }
 
-        [JsonProperty("162000469")]
+        [JsonProperty("182014387")]
         public StringField hasAllergies_c5 { get; set; }
 
-        [JsonProperty("162000470")]
+        [JsonProperty("182014388")]
         public StringField allergiesDescription_c5 { get; set; }
 
-        [JsonProperty("162000471")]
+        [JsonProperty("182014389")]
         public StringField hasMedicalConditions_c5 { get; set; }
 
-        [JsonProperty("162000472")]
+        [JsonProperty("182014390")]
         public StringField medicalConditionsDescription_c5 { get; set; }
 
-        [JsonProperty("162000473")]
+        [JsonProperty("182014391")]
         public StringField hasMedications_c5 { get; set; }
 
-        [JsonProperty("162000474")]
+        [JsonProperty("182014392")]
         public StringField medicationsDescription_c5 { get; set; }
 
-        [JsonProperty("162000475")]
+        [JsonProperty("182014393")]
         public StringField placeChildWith_c5 { get; set; }
 
-        [JsonProperty("162000477")]
+        [JsonProperty("182014395")]
         public CheckboxField consent { get; set; }
 
-        [JsonProperty("162000478")]
+        [JsonProperty("182014396")]
         public StringField signatureImageUrl { get; set; }
 
     }
