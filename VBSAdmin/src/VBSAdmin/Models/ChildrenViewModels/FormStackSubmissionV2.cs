@@ -299,5 +299,10 @@ namespace VBSAdmin.Models.ChildrenViewModels
         public string last { get; set; }
     }
 
+    public class TextField
+    {
+        public string field { get; set; }
+        public string flat_value { get; set; }
+    }
 
 }

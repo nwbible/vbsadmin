@@ -880,6 +880,7 @@ namespace VBSAdmin.Helpers
                     EmergencyContactLastName = form.emergency_contact_last_name,
                     EmergencyContactChildRelationship = form.emergency_contact_relationship,
                     EmergencyContactPhone = form.emergency_contact_phone,
+                    Password = form.password,
                     HomeChurch = form.what_church_does_your_family_call_home,
                     InvitedBy = form.who_invited_you_to_vbs_at_northwest,
                     ClassroomId = null
