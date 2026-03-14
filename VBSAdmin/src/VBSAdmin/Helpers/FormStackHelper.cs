@@ -750,6 +750,7 @@ namespace VBSAdmin.Helpers
                 form.parentguardian_last_name = submission.data.parentGuardianName.value.last;
                 form.email = submission.data.parentGuardianEmail.value;
                 form.address = submission.data.address.value.address;
+                form.address2 = submission.data.address.value.address2;
                 form.city = submission.data.address.value.city;
                 form.state = submission.data.address.value.state;
                 form.zip = submission.data.address.value.zip;
@@ -867,6 +868,7 @@ namespace VBSAdmin.Helpers
                     VBSId = VbsId,
                     DateOfRegistration = Convert.ToDateTime(submission.timestamp),
                     Address1 = form.address,
+                    Address2 = form.address2,
                     City = form.city,
                     State = form.state,
                     Zip = form.zip,
