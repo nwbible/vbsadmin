@@ -15,60 +15,67 @@
 <div id="map" style="width:1200px;height:800px"></div>
 
 
-@section Scripts {
+@section scripts {
 
     <script>
         function initMap() {
-            var markers = @Html.Raw(ViewBag.Markers);
-            var infoWindow = new google.maps.InfoWindow();
-
-            var map = new google.maps.Map(document.getElementById('map'), {
+            const markers = @Html.Raw(ViewBag.Markers ?? "[]");
+            const map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 47.608013, lng: -122.335167 },
                 zoom: 11,
-                center: new google.maps.LatLng(markers[0].lat, markers[0].lng),
-                mapTypeId: google.maps.MapTypeId.ROADMAP
+                mapTypeId: 'roadmap'
             });
 
+            const infoWindow = new google.maps.InfoWindow();
+            const bounds = new google.maps.LatLngBounds();
+            const markerList = [];
 
-            var markerList = [];
+            if (Array.isArray(markers) && markers.length > 0) {
+                markers.forEach(data => {
+                    const position = { lat: parseFloat(data.lat), lng: parseFloat(data.lng) };
+                    const marker = new google.maps.Marker({
+                        position,
+                        title: data.title,
+                        icon: getMarkerIcon(data.homeChurch)
+                    });
 
-            for (i = 0; i < markers.length; i++) {
-                var data = markers[i]
-                var myLatlng = new google.maps.LatLng(data.lat, data.lng);
-                var marker = new google.maps.Marker({
-                    position: myLatlng,
-                    title: data.title
-                });
-                if (data.homeChurch == "home") {
-                    marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png')
-                }
-                else {
-                    if (data.homeChurch == "none") {
-                        marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
-                    }
-                    else {
-                        marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png');
-                    }
-                }
-                (function (marker, data) {
-                    google.maps.event.addListener(marker, "click", function (e) {
+                    marker.addListener('click', () => {
                         infoWindow.setContent(data.description);
                         infoWindow.open(map, marker);
                     });
-                })(marker, data);
 
-                markerList[i] = marker;
+                    marker.setMap(map);
+                    markerList.push(marker);
+                    bounds.extend(position);
+                });
+
+                map.fitBounds(bounds);
             }
 
+            // Use the official MarkerClustererPlus library for clustering.
+            if (markerList.length > 0 && typeof MarkerClusterer === 'function') {
+                new MarkerClusterer(map, markerList, {
+                    imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
+                    minimumClusterSize: 5
+                });
+            }
+        }
 
-            // Add a marker clusterer to manage the markers.
-            var markerCluster = new MarkerClusterer(map, markerList,
-                { imagePath: '/lib/gmap-clusterer/markerclusterer/images/g', minimumClusterSize: '10' });
+        function getMarkerIcon(homeChurch) {
+            switch (homeChurch) {
+                case 'home':
+                    return 'https://maps.google.com/mapfiles/ms/icons/green-dot.png';
+                case 'none':
+                    return 'https://maps.google.com/mapfiles/ms/icons/red-dot.png';
+                default:
+                    return 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png';
+            }
         }
     </script>
-    <script src="~/lib/gmap-clusterer/markerclusterer/src/markerclusterer.js">
-    </script>
+
+    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
     <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbfVH8TAC_3Itet0g5PIu1iJ7OY7ebr8Y&callback=initMap">
+            src="https://maps.googleapis.com/maps/api/js?key=<INSERT GOOGLE API KEY HERE>&callback=initMap&v=weekly">
     </script>
 }
 

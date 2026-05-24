@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -599,7 +600,7 @@ namespace VBSAdmin.Controllers
             List<Child> dbChildren = await applicationDbContext.ToListAsync();
 
             Dictionary<string, string> addressList = new Dictionary<string, string>();
-            string markers = "[";
+            var markers = new List<object>();
 
             foreach (Child child in dbChildren)
             {
@@ -608,7 +609,7 @@ namespace VBSAdmin.Controllers
                 if (string.IsNullOrWhiteSpace(child.Latitude) || string.IsNullOrWhiteSpace(child.Longitude))
                 {
                     var response = await GeocodeHelper.GetGeoCode(childAddress);
-                    if(response != null)
+                    if (response != null)
                     {
                         child.Latitude = response.Lat;
                         child.Longitude = response.Long;
@@ -616,46 +617,41 @@ namespace VBSAdmin.Controllers
                         await _context.SaveChangesAsync();
                     }
                 }
-                
 
-                if (!addressList.ContainsKey(childAddress))
+                if (!addressList.ContainsKey(childAddress) &&
+                    double.TryParse(child.Latitude, out double lat) &&
+                    double.TryParse(child.Longitude, out double lng))
                 {
                     addressList.Add(childAddress, child.LastName);
 
                     string homeChurch;
-
-                    if(child.AttendHostChurch)
+                    if (child.AttendHostChurch)
                     {
                         homeChurch = "home";
                     }
+                    else if (ChurchHelper.IsNoneChurch(child.HomeChurch))
+                    {
+                        homeChurch = "none";
+                    }
                     else
                     {
-                        if (ChurchHelper.IsNoneChurch(child.HomeChurch))
-                        {
-                            homeChurch = "none";
-                        }
-                        else
-                        {
-                            homeChurch = "other";
-                        }
+                        homeChurch = "other";
                     }
 
-                    markers += "{";
-                    markers += string.Format("'title': '{0}',", System.Net.WebUtility.HtmlEncode(child.LastName));
-                    markers += string.Format("'lat': '{0}',", child.Latitude);
-                    markers += string.Format("'lng': '{0}',", child.Longitude);
-                    markers += string.Format("'description': '{0}',", System.Net.WebUtility.HtmlEncode(childAddress));
-                    markers += string.Format("'homeChurch': '{0}'", homeChurch);
-                    markers += "},";
+                    markers.Add(new
+                    {
+                        title = child.LastName,
+                        lat,
+                        lng,
+                        description = childAddress,
+                        homeChurch
+                    });
                 }
             }
 
-            markers += "];";
-
-            ViewBag.Markers = markers;
+            ViewBag.Markers = JsonSerializer.Serialize(markers);
 
             ChildrenMapViewModel vm = new ChildrenMapViewModel();
-
             vm.ChurchName = "Northwest Bible Church";
 
             return View(vm);
