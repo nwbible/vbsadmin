@@ -458,246 +458,58 @@ namespace VBSAdmin.Controllers
                 ClassAssignmentEmailModel model = new ClassAssignmentEmailModel();
                 model.GuardianName = guardian.GuardianFirstName + " " + guardian.GuardianLastName;
                 model.Email = guardian.GuardianEmail;
+     
+                var childNames = new string[10];
+                var childAssignments = new string[10];
+                var childPasswords = new string[10];
 
-                if (childcount == 1)
+                for (int i = 0; i < 10; i++)
                 {
-                    model.ChildName1 = children[0].FirstName + " " + children[0].LastName;
-                    model.AssignedClassName1 = children[0].Classroom.Session.Period + " " + children[0].Classroom.Grade.GetDisplayName() + " " + children[0].Classroom.Name;
-                    model.ChildName2 = "";
-                    model.AssignedClassName2 = "";
-                    model.ChildName3 = "";
-                    model.AssignedClassName3 = "";
-                    model.ChildName4 = "";
-                    model.AssignedClassName4 = "";
-                    model.ChildName5 = "";
-                    model.AssignedClassName5 = "";
-                    model.ChildName6 = "";
-                    model.AssignedClassName6 = "";
-                    model.ChildName7 = "";
-                    model.AssignedClassName7 = "";
-                    model.ChildName8 = "";
-                    model.AssignedClassName8 = "";
-                    model.ChildName9 = "";
-                    model.AssignedClassName9 = "";
-                    model.ChildName10 = "";
-                    model.AssignedClassName10 = "";
+                    if (i < childcount)
+                    {
+                        var child = children[i];
+                        childNames[i] = child.FirstName + " " + child.LastName;
+                        childAssignments[i] = child.Classroom.Session.Period + " " + child.Classroom.Grade.GetDisplayName() + " " + child.Classroom.Name;
+                        childPasswords[i] = child.Password ?? String.Empty;
+                    }
+                    else
+                    {
+                        childNames[i] = String.Empty;
+                        childAssignments[i] = String.Empty;
+                        childPasswords[i] = String.Empty;
+                    }
                 }
 
-                if (childcount == 2)
-                {
-                    model.ChildName1 = children[0].FirstName + " " + children[0].LastName;
-                    model.AssignedClassName1 = children[0].Classroom.Session.Period + " " + children[0].Classroom.Grade.GetDisplayName() + " " + children[0].Classroom.Name;
-                    model.ChildName2 = children[1].FirstName + " " + children[1].LastName;
-                    model.AssignedClassName2 = children[1].Classroom.Session.Period + " " + children[1].Classroom.Grade.GetDisplayName() + " " + children[1].Classroom.Name;
-                    model.ChildName3 = "";
-                    model.AssignedClassName3 = "";
-                    model.ChildName4 = "";
-                    model.AssignedClassName4 = "";
-                    model.ChildName5 = "";
-                    model.AssignedClassName5 = "";
-                    model.ChildName6 = "";
-                    model.AssignedClassName6 = "";
-                    model.ChildName7 = "";
-                    model.AssignedClassName7 = "";
-                    model.ChildName8 = "";
-                    model.AssignedClassName8 = "";
-                    model.ChildName9 = "";
-                    model.AssignedClassName9 = "";
-                    model.ChildName10 = "";
-                    model.AssignedClassName10 = "";
-                }
-
-                if (childcount == 3)
-                {
-                    model.ChildName1 = children[0].FirstName + " " + children[0].LastName;
-                    model.AssignedClassName1 = children[0].Classroom.Session.Period + " " + children[0].Classroom.Grade.GetDisplayName() + " " + children[0].Classroom.Name;
-                    model.ChildName2 = children[1].FirstName + " " + children[1].LastName;
-                    model.AssignedClassName2 = children[1].Classroom.Session.Period + " " + children[1].Classroom.Grade.GetDisplayName() + " " + children[1].Classroom.Name;
-                    model.ChildName3 = children[2].FirstName + " " + children[2].LastName;
-                    model.AssignedClassName3 = children[2].Classroom.Session.Period + " " + children[2].Classroom.Grade.GetDisplayName() + " " + children[2].Classroom.Name;
-                    model.ChildName4 = "";
-                    model.AssignedClassName4 = "";
-                    model.ChildName5 = "";
-                    model.AssignedClassName5 = "";
-                    model.ChildName6 = "";
-                    model.AssignedClassName6 = "";
-                    model.ChildName7 = "";
-                    model.AssignedClassName7 = "";
-                    model.ChildName8 = "";
-                    model.AssignedClassName8 = "";
-                    model.ChildName9 = "";
-                    model.AssignedClassName9 = "";
-                    model.ChildName10 = "";
-                    model.AssignedClassName10 = "";
-                }
-
-                if (childcount == 4)
-                {
-                    model.ChildName1 = children[0].FirstName + " " + children[0].LastName;
-                    model.AssignedClassName1 = children[0].Classroom.Session.Period + " " + children[0].Classroom.Grade.GetDisplayName() + " " + children[0].Classroom.Name;
-                    model.ChildName2 = children[1].FirstName + " " + children[1].LastName;
-                    model.AssignedClassName2 = children[1].Classroom.Session.Period + " " + children[1].Classroom.Grade.GetDisplayName() + " " + children[1].Classroom.Name;
-                    model.ChildName3 = children[2].FirstName + " " + children[2].LastName;
-                    model.AssignedClassName3 = children[2].Classroom.Session.Period + " " + children[2].Classroom.Grade.GetDisplayName() + " " + children[2].Classroom.Name;
-                    model.ChildName4 = children[3].FirstName + " " + children[3].LastName;
-                    model.AssignedClassName4 = children[3].Classroom.Session.Period + " " + children[3].Classroom.Grade.GetDisplayName() + " " + children[3].Classroom.Name;
-                    model.ChildName5 = "";
-                    model.AssignedClassName5 = "";
-                    model.ChildName6 = "";
-                    model.AssignedClassName6 = "";
-                    model.ChildName7 = "";
-                    model.AssignedClassName7 = "";
-                    model.ChildName8 = "";
-                    model.AssignedClassName8 = "";
-                    model.ChildName9 = "";
-                    model.AssignedClassName9 = "";
-                    model.ChildName10 = "";
-                    model.AssignedClassName10 = "";
-                }
-
-                if (childcount == 5)
-                {
-                    model.ChildName1 = children[0].FirstName + " " + children[0].LastName;
-                    model.AssignedClassName1 = children[0].Classroom.Session.Period + " " + children[0].Classroom.Grade.GetDisplayName() + " " + children[0].Classroom.Name;
-                    model.ChildName2 = children[1].FirstName + " " + children[1].LastName;
-                    model.AssignedClassName2 = children[1].Classroom.Session.Period + " " + children[1].Classroom.Grade.GetDisplayName() + " " + children[1].Classroom.Name;
-                    model.ChildName3 = children[2].FirstName + " " + children[2].LastName;
-                    model.AssignedClassName3 = children[2].Classroom.Session.Period + " " + children[2].Classroom.Grade.GetDisplayName() + " " + children[2].Classroom.Name;
-                    model.ChildName4 = children[3].FirstName + " " + children[3].LastName;
-                    model.AssignedClassName4 = children[3].Classroom.Session.Period + " " + children[3].Classroom.Grade.GetDisplayName() + " " + children[3].Classroom.Name;
-                    model.ChildName5 = children[4].FirstName + " " + children[4].LastName;
-                    model.AssignedClassName5 = children[4].Classroom.Session.Period + " " + children[4].Classroom.Grade.GetDisplayName() + " " + children[4].Classroom.Name;
-                    model.ChildName6 = "";
-                    model.AssignedClassName6 = "";
-                    model.ChildName7 = "";
-                    model.AssignedClassName7 = "";
-                    model.ChildName8 = "";
-                    model.AssignedClassName8 = "";
-                    model.ChildName9 = "";
-                    model.AssignedClassName9 = "";
-                    model.ChildName10 = "";
-                    model.AssignedClassName10 = "";
-                }
-
-                if (childcount == 6)
-                {
-                    model.ChildName1 = children[0].FirstName + " " + children[0].LastName;
-                    model.AssignedClassName1 = children[0].Classroom.Session.Period + " " + children[0].Classroom.Grade.GetDisplayName() + " " + children[0].Classroom.Name;
-                    model.ChildName2 = children[1].FirstName + " " + children[1].LastName;
-                    model.AssignedClassName2 = children[1].Classroom.Session.Period + " " + children[1].Classroom.Grade.GetDisplayName() + " " + children[1].Classroom.Name;
-                    model.ChildName3 = children[2].FirstName + " " + children[2].LastName;
-                    model.AssignedClassName3 = children[2].Classroom.Session.Period + " " + children[2].Classroom.Grade.GetDisplayName() + " " + children[2].Classroom.Name;
-                    model.ChildName4 = children[3].FirstName + " " + children[3].LastName;
-                    model.AssignedClassName4 = children[3].Classroom.Session.Period + " " + children[3].Classroom.Grade.GetDisplayName() + " " + children[3].Classroom.Name;
-                    model.ChildName5 = children[4].FirstName + " " + children[4].LastName;
-                    model.AssignedClassName5 = children[4].Classroom.Session.Period + " " + children[4].Classroom.Grade.GetDisplayName() + " " + children[4].Classroom.Name;
-                    model.ChildName6 = children[5].FirstName + " " + children[5].LastName;
-                    model.AssignedClassName6 = children[5].Classroom.Session.Period + " " + children[5].Classroom.Grade.GetDisplayName() + " " + children[5].Classroom.Name;
-                    model.ChildName7 = "";
-                    model.AssignedClassName7 = "";
-                    model.ChildName8 = "";
-                    model.AssignedClassName8 = "";
-                    model.ChildName9 = "";
-                    model.AssignedClassName9 = "";
-                    model.ChildName10 = "";
-                    model.AssignedClassName10 = "";
-                }
-
-                if (childcount == 7)
-                {
-                    model.ChildName1 = children[0].FirstName + " " + children[0].LastName;
-                    model.AssignedClassName1 = children[0].Classroom.Session.Period + " " + children[0].Classroom.Grade.GetDisplayName() + " " + children[0].Classroom.Name;
-                    model.ChildName2 = children[1].FirstName + " " + children[1].LastName;
-                    model.AssignedClassName2 = children[1].Classroom.Session.Period + " " + children[1].Classroom.Grade.GetDisplayName() + " " + children[1].Classroom.Name;
-                    model.ChildName3 = children[2].FirstName + " " + children[2].LastName;
-                    model.AssignedClassName3 = children[2].Classroom.Session.Period + " " + children[2].Classroom.Grade.GetDisplayName() + " " + children[2].Classroom.Name;
-                    model.ChildName4 = children[3].FirstName + " " + children[3].LastName;
-                    model.AssignedClassName4 = children[3].Classroom.Session.Period + " " + children[3].Classroom.Grade.GetDisplayName() + " " + children[3].Classroom.Name;
-                    model.ChildName5 = children[4].FirstName + " " + children[4].LastName;
-                    model.AssignedClassName5 = children[4].Classroom.Session.Period + " " + children[4].Classroom.Grade.GetDisplayName() + " " + children[4].Classroom.Name;
-                    model.ChildName6 = children[5].FirstName + " " + children[5].LastName;
-                    model.AssignedClassName6 = children[5].Classroom.Session.Period + " " + children[5].Classroom.Grade.GetDisplayName() + " " + children[5].Classroom.Name;
-                    model.ChildName7 = children[6].FirstName + " " + children[6].LastName;
-                    model.AssignedClassName7 = children[6].Classroom.Session.Period + " " + children[6].Classroom.Grade.GetDisplayName() + " " + children[6].Classroom.Name;
-                    model.ChildName8 = "";
-                    model.AssignedClassName8 = "";
-                    model.ChildName9 = "";
-                    model.AssignedClassName9 = "";
-                    model.ChildName10 = "";
-                    model.AssignedClassName10 = "";
-                }
-
-                if (childcount == 8)
-                {
-                    model.ChildName1 = children[0].FirstName + " " + children[0].LastName;
-                    model.AssignedClassName1 = children[0].Classroom.Session.Period + " " + children[0].Classroom.Grade.GetDisplayName() + " " + children[0].Classroom.Name;
-                    model.ChildName2 = children[1].FirstName + " " + children[1].LastName;
-                    model.AssignedClassName2 = children[1].Classroom.Session.Period + " " + children[1].Classroom.Grade.GetDisplayName() + " " + children[1].Classroom.Name;
-                    model.ChildName3 = children[2].FirstName + " " + children[2].LastName;
-                    model.AssignedClassName3 = children[2].Classroom.Session.Period + " " + children[2].Classroom.Grade.GetDisplayName() + " " + children[2].Classroom.Name;
-                    model.ChildName4 = children[3].FirstName + " " + children[3].LastName;
-                    model.AssignedClassName4 = children[3].Classroom.Session.Period + " " + children[3].Classroom.Grade.GetDisplayName() + " " + children[3].Classroom.Name;
-                    model.ChildName5 = children[4].FirstName + " " + children[4].LastName;
-                    model.AssignedClassName5 = children[4].Classroom.Session.Period + " " + children[4].Classroom.Grade.GetDisplayName() + " " + children[4].Classroom.Name;
-                    model.ChildName6 = children[5].FirstName + " " + children[5].LastName;
-                    model.AssignedClassName6 = children[5].Classroom.Session.Period + " " + children[5].Classroom.Grade.GetDisplayName() + " " + children[5].Classroom.Name;
-                    model.ChildName7 = children[6].FirstName + " " + children[6].LastName;
-                    model.AssignedClassName7 = children[6].Classroom.Session.Period + " " + children[6].Classroom.Grade.GetDisplayName() + " " + children[6].Classroom.Name;
-                    model.ChildName8 = children[7].FirstName + " " + children[7].LastName;
-                    model.AssignedClassName8 = children[7].Classroom.Session.Period + " " + children[7].Classroom.Grade.GetDisplayName() + " " + children[7].Classroom.Name;
-                    model.ChildName9 = "";
-                    model.AssignedClassName9 = "";
-                    model.ChildName10 = "";
-                    model.AssignedClassName10 = "";
-                }
-
-                if (childcount == 9)
-                {
-                    model.ChildName1 = children[0].FirstName + " " + children[0].LastName;
-                    model.AssignedClassName1 = children[0].Classroom.Session.Period + " " + children[0].Classroom.Grade.GetDisplayName() + " " + children[0].Classroom.Name;
-                    model.ChildName2 = children[1].FirstName + " " + children[1].LastName;
-                    model.AssignedClassName2 = children[1].Classroom.Session.Period + " " + children[1].Classroom.Grade.GetDisplayName() + " " + children[1].Classroom.Name;
-                    model.ChildName3 = children[2].FirstName + " " + children[2].LastName;
-                    model.AssignedClassName3 = children[2].Classroom.Session.Period + " " + children[2].Classroom.Grade.GetDisplayName() + " " + children[2].Classroom.Name;
-                    model.ChildName4 = children[3].FirstName + " " + children[3].LastName;
-                    model.AssignedClassName4 = children[3].Classroom.Session.Period + " " + children[3].Classroom.Grade.GetDisplayName() + " " + children[3].Classroom.Name;
-                    model.ChildName5 = children[4].FirstName + " " + children[4].LastName;
-                    model.AssignedClassName5 = children[4].Classroom.Session.Period + " " + children[4].Classroom.Grade.GetDisplayName() + " " + children[4].Classroom.Name;
-                    model.ChildName6 = children[5].FirstName + " " + children[5].LastName;
-                    model.AssignedClassName6 = children[5].Classroom.Session.Period + " " + children[5].Classroom.Grade.GetDisplayName() + " " + children[5].Classroom.Name;
-                    model.ChildName7 = children[6].FirstName + " " + children[6].LastName;
-                    model.AssignedClassName7 = children[6].Classroom.Session.Period + " " + children[6].Classroom.Grade.GetDisplayName() + " " + children[6].Classroom.Name;
-                    model.ChildName8 = children[7].FirstName + " " + children[7].LastName;
-                    model.AssignedClassName8 = children[7].Classroom.Session.Period + " " + children[7].Classroom.Grade.GetDisplayName() + " " + children[7].Classroom.Name;
-                    model.ChildName9 = children[8].FirstName + " " + children[8].LastName;
-                    model.AssignedClassName9 = children[8].Classroom.Session.Period + " " + children[8].Classroom.Grade.GetDisplayName() + " " + children[8].Classroom.Name;
-                    model.ChildName10 = "";
-                    model.AssignedClassName10 = "";
-                }
-
-                if (childcount == 10)
-                {
-                    model.ChildName1 = children[0].FirstName + " " + children[0].LastName;
-                    model.AssignedClassName1 = children[0].Classroom.Session.Period + " " + children[0].Classroom.Grade.GetDisplayName() + " " + children[0].Classroom.Name;
-                    model.ChildName2 = children[1].FirstName + " " + children[1].LastName;
-                    model.AssignedClassName2 = children[1].Classroom.Session.Period + " " + children[1].Classroom.Grade.GetDisplayName() + " " + children[1].Classroom.Name;
-                    model.ChildName3 = children[2].FirstName + " " + children[2].LastName;
-                    model.AssignedClassName3 = children[2].Classroom.Session.Period + " " + children[2].Classroom.Grade.GetDisplayName() + " " + children[2].Classroom.Name;
-                    model.ChildName4 = children[3].FirstName + " " + children[3].LastName;
-                    model.AssignedClassName4 = children[3].Classroom.Session.Period + " " + children[3].Classroom.Grade.GetDisplayName() + " " + children[3].Classroom.Name;
-                    model.ChildName5 = children[4].FirstName + " " + children[4].LastName;
-                    model.AssignedClassName5 = children[4].Classroom.Session.Period + " " + children[4].Classroom.Grade.GetDisplayName() + " " + children[4].Classroom.Name;
-                    model.ChildName6 = children[5].FirstName + " " + children[5].LastName;
-                    model.AssignedClassName6 = children[5].Classroom.Session.Period + " " + children[5].Classroom.Grade.GetDisplayName() + " " + children[5].Classroom.Name;
-                    model.ChildName7 = children[6].FirstName + " " + children[6].LastName;
-                    model.AssignedClassName7 = children[6].Classroom.Session.Period + " " + children[6].Classroom.Grade.GetDisplayName() + " " + children[6].Classroom.Name;
-                    model.ChildName8 = children[7].FirstName + " " + children[7].LastName;
-                    model.AssignedClassName8 = children[7].Classroom.Session.Period + " " + children[7].Classroom.Grade.GetDisplayName() + " " + children[7].Classroom.Name;
-                    model.ChildName9 = children[8].FirstName + " " + children[8].LastName;
-                    model.AssignedClassName9 = children[8].Classroom.Session.Period + " " + children[8].Classroom.Grade.GetDisplayName() + " " + children[8].Classroom.Name;
-                    model.ChildName10 = children[9].FirstName + " " + children[9].LastName;
-                    model.AssignedClassName10 = children[9].Classroom.Session.Period + " " + children[9].Classroom.Grade.GetDisplayName() + " " + children[9].Classroom.Name;
-                }
+                model.ChildName1 = childNames[0];
+                model.ChildPassword1 = childPasswords[0];
+                model.AssignedClassName1 = childAssignments[0];
+                model.ChildName2 = childNames[1];
+                model.ChildPassword2 = childPasswords[1];
+                model.AssignedClassName2 = childAssignments[1];
+                model.ChildName3 = childNames[2];
+                model.ChildPassword3 = childPasswords[2];
+                model.AssignedClassName3 = childAssignments[2];
+                model.ChildName4 = childNames[3];
+                model.ChildPassword4 = childPasswords[3];
+                model.AssignedClassName4 = childAssignments[3];
+                model.ChildName5 = childNames[4];
+                model.ChildPassword5 = childPasswords[4];
+                model.AssignedClassName5 = childAssignments[4];
+                model.ChildName6 = childNames[5];
+                model.ChildPassword6 = childPasswords[5];
+                model.AssignedClassName6 = childAssignments[5];
+                model.ChildName7 = childNames[6];
+                model.ChildPassword7 = childPasswords[6];
+                model.AssignedClassName7 = childAssignments[6];
+                model.ChildName8 = childNames[7];
+                model.ChildPassword8 = childPasswords[7];
+                model.AssignedClassName8 = childAssignments[7];
+                model.ChildName9 = childNames[8];
+                model.ChildPassword9 = childPasswords[8];
+                model.AssignedClassName9 = childAssignments[8];
+                model.ChildName10 = childNames[9];
+                model.ChildPassword10 = childPasswords[9];
+                model.AssignedClassName10 = childAssignments[9];
 
                 models.Add(model);
             }
